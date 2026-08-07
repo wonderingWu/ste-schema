@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://wonderingWu.github.io/ste-schema/v0.1/schema.json",
+    "$id": "https://wonderingWu.github.io/ste-schema/v0.1/schema.zh.json",
     "title": "STE Schema v0.1 (SpatioTemporal Entity)",
     "description": "一个地点的时空快照。兼容 OSM/OHM tag 命名，时间为一等公民。本 schema 无法校验的规则见仓库 README『应用层校验清单』，通过 schema 校验≠数据干净。",
     "type": "object",

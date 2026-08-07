@@ -8,7 +8,7 @@
  */
 import { readFileSync } from 'node:fs';
 
-const IGNORED_KEYS = new Set(['description', 'title', 'examples']);
+const IGNORED_KEYS = new Set(['description', 'title', 'examples', '$id']); // $id: each document has its own canonical URI
 
 const [, , enPath, zhPath] = process.argv;
 if (!enPath || !zhPath) {
