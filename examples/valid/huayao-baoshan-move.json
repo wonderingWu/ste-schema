@@ -1,0 +1,39 @@
+{
+  "ste_id": "963ad449-559c-41b1-8bf2-f9f88f40fbda",
+  "ste_version": "0.1",
+  "name": {
+    "primary": "华曜宝山实验学校",
+    "aliases": [
+      "原华二宝山实验学校"
+    ]
+  },
+  "coordinates": {
+    "lat": 33.9320392,
+    "lon": 118.2153102
+  },
+  "tags": {
+    "amenity": "school",
+    "ste:disappearance": "搬迁",
+    "city": "上海"
+  },
+  "timeline": [
+    {
+      "start_date": "2018",
+      "end_date": "2025",
+      "name": "华曜宝山实验学校",
+      "type": "school",
+      "status": "active",
+      "description": "整体迁至盘古路新校区，面积扩大一倍。",
+      "confidence": 0.7
+    },
+    {
+      "start_date": "2025",
+      "end_date": "2025",
+      "name": "华曜宝山实验学校",
+      "type": "school",
+      "status": "demolished",
+      "description": "搬迁：原校址关闭，整体迁至盘古路新校区，面积扩大一倍。",
+      "confidence": 0.7
+    }
+  ]
+}

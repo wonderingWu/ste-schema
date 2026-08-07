@@ -1,0 +1,39 @@
+{
+  "ste_id": "4502b578-40cc-4dab-8b0d-0747278b903f",
+  "ste_version": "0.1",
+  "name": {
+    "primary": "通州区第四中学",
+    "aliases": [
+      "首师大附中通州实验学校"
+    ]
+  },
+  "coordinates": {
+    "lat": 39.909,
+    "lon": 116.656
+  },
+  "tags": {
+    "amenity": "school",
+    "ste:disappearance": "更名/升级",
+    "city": "北京",
+    "note": "坐标回退到通州区区中心（地理编码未命中），需人工精化"
+  },
+  "timeline": [
+    {
+      "start_date": "1950",
+      "end_date": "2026",
+      "name": "通州区第四中学",
+      "type": "school",
+      "status": "active",
+      "description": "恢复高中部并入首师大附中教育集团。",
+      "confidence": 0.7
+    },
+    {
+      "start_date": "2026",
+      "name": "首师大附中通州实验学校",
+      "type": "school",
+      "status": "active",
+      "description": "更名/升级为「首师大附中通州实验学校」。恢复高中部并入首师大附中教育集团。",
+      "confidence": 0.7
+    }
+  ]
+}

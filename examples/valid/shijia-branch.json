@@ -1,0 +1,39 @@
+{
+  "ste_id": "7926f46e-28c4-444a-8292-917117570f49",
+  "ste_version": "0.1",
+  "name": {
+    "primary": "史家小学分校",
+    "aliases": [
+      "老校址"
+    ]
+  },
+  "coordinates": {
+    "lat": 39.9169964,
+    "lon": 116.4125409
+  },
+  "tags": {
+    "amenity": "school",
+    "ste:disappearance": "停办",
+    "city": "北京"
+  },
+  "timeline": [
+    {
+      "start_date": "1946",
+      "end_date": "2010",
+      "name": "史家小学分校",
+      "type": "school",
+      "status": "active",
+      "description": "因老城区更新，分校校舍拆除。",
+      "confidence": 0.7
+    },
+    {
+      "start_date": "2010",
+      "end_date": "2010",
+      "name": "史家小学分校",
+      "type": "school",
+      "status": "demolished",
+      "description": "停办：因老城区更新，分校校舍拆除。",
+      "confidence": 0.7
+    }
+  ]
+}

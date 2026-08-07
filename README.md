@@ -85,6 +85,15 @@ Rules that JSON Schema cannot express. **Passing schema validation ≠ clean dat
 - Goal：any existing OHM tool（Overpass API, JOSM）can partially recognize STE data
 - STE is a **superset** of OSM/OHM, not a parallel universe
 
+## Live Demo
+
+[**消失的母校 · Disappeared Alma Maters**](https://wonderingWu.github.io/ste-schema/demo/) — a working map demo powered entirely by STE v0.1 data:
+
+- **77 real entities** built from curated CSV data of disappeared/renamed/relocated schools in Beijing & Shanghai (1950s–2026)
+- Each school is a STE entity: stable UUID, WGS84 coordinates (OSM geocoded), full `timeline[]` snapshots (opened → renamed/moved/demolished → resumed)
+- All data passes `v0.1/schema.json` (see `demo/data/schools.json`; 5 representative samples in `examples/valid/`)
+- Regenerate anytime: `node scripts/build-schools.mjs` (CSV → STE) then `node scripts/build-demo.mjs` (inject into demo page)
+
 ## Local Validation
 
 ```bash

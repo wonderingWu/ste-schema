@@ -1,0 +1,39 @@
+{
+  "ste_id": "a27b98c1-d48b-470c-8098-2b9c10610cde",
+  "ste_version": "0.1",
+  "name": {
+    "primary": "北京八中",
+    "aliases": [
+      "老八中"
+    ]
+  },
+  "coordinates": {
+    "lat": 39.9322341,
+    "lon": 116.4109734
+  },
+  "tags": {
+    "amenity": "school",
+    "ste:disappearance": "停办",
+    "city": "北京"
+  },
+  "timeline": [
+    {
+      "start_date": "1950",
+      "end_date": "2000",
+      "name": "北京八中",
+      "type": "school",
+      "status": "active",
+      "description": "新中国首批重点中学之一，因东城区教育布局调整与校舍老化停办。",
+      "confidence": 0.7
+    },
+    {
+      "start_date": "2000",
+      "end_date": "2000",
+      "name": "北京八中",
+      "type": "school",
+      "status": "demolished",
+      "description": "停办：新中国首批重点中学之一，因东城区教育布局调整与校舍老化停办。",
+      "confidence": 0.7
+    }
+  ]
+}

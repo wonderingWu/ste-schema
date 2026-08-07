@@ -1,0 +1,47 @@
+{
+  "ste_id": "070c3771-1456-4247-84d9-7d8259c35c8d",
+  "ste_version": "0.1",
+  "name": {
+    "primary": "北京九十九中",
+    "aliases": [
+      "老校址"
+    ]
+  },
+  "coordinates": {
+    "lat": 31.3689191,
+    "lon": 108.5161417
+  },
+  "tags": {
+    "amenity": "school",
+    "ste:disappearance": "停办→恢复",
+    "city": "北京"
+  },
+  "timeline": [
+    {
+      "start_date": "1980",
+      "end_date": "2010",
+      "name": "北京九十九中",
+      "type": "school",
+      "status": "active",
+      "description": "因生源减少停办多年，2026 年恢复招生。",
+      "confidence": 0.7
+    },
+    {
+      "start_date": "2010",
+      "end_date": "2010",
+      "name": "北京九十九中",
+      "type": "school",
+      "status": "demolished",
+      "description": "停办期间：因生源减少停办多年，2026 年恢复招生。",
+      "confidence": 0.7
+    },
+    {
+      "start_date": "2026",
+      "name": "北京九十九中",
+      "type": "school",
+      "status": "active",
+      "description": "恢复招生（2026 年）。因生源减少停办多年，2026 年恢复招生。",
+      "confidence": 0.7
+    }
+  ]
+}

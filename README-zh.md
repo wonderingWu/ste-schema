@@ -84,6 +84,15 @@ JSON Schema 表达不了的规则，由应用层保证。**通过 schema 校验 
 - 目标是：任何现有 OHM 工具（Overpass API、JOSM）能部分识别 STE 数据
 - STE 是 OSM/OHM 的**超集**，不是平行宇宙
 
+## 在线 Demo
+
+[**消失的母校**](https://wonderingWu.github.io/ste-schema/demo/) —— 完全由 STE v0.1 数据驱动的可用地图 Demo：
+
+- **77 个真实实体**，由北京/上海消失、停办、搬迁、更名中小学的整理数据构建（1950s–2026）
+- 每所学校是一个 STE 实体：稳定 UUID、WGS84 坐标（OSM 地理编码）、完整 `timeline[]` 快照（开办 → 更名/搬迁/停办 → 恢复）
+- 全部数据通过 `v0.1/schema.json` 校验（见 `demo/data/schools.json`；5 个代表样例在 `examples/valid/`）
+- 随时可重新生成：`node scripts/build-schools.mjs`（CSV → STE）再 `node scripts/build-demo.mjs`（注入 Demo 页面）
+
 ## 本地验证
 
 ```bash
