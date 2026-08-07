@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>消失的母校 · Memo-Map 4D（STE Schema v0.1）</title>
+<title>消失的母校 · 时间轴版（STE Schema v0.1）</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 :root{
@@ -14,18 +14,23 @@
 *{box-sizing:border-box}
 html,body,#app{height:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-button,input,select{font-family:inherit}
+button,input,select,textarea{font-family:inherit}
 #app{display:flex;flex-direction:column;overflow:hidden}
 .serif{font-family:'Noto Serif SC','Songti SC','STSong','SimSun',serif}
 .mono{font-family:ui-monospace,'Cascadia Mono',Consolas,monospace}
 
 /* ---------- 顶栏 ---------- */
-header{position:relative;z-index:1150;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 20px;border-bottom:1px solid rgba(43,38,32,.1);background:var(--paper);flex:none;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px}
-.brand .sealbox{width:38px;height:38px;border-radius:6px;background:var(--seal);color:var(--paper-light);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;box-shadow:0 2px 6px rgba(43,38,32,.3)}
-.brand h1{margin:0;font-size:18px;line-height:1.2}
-.brand h1 .sub{margin-left:8px;font-size:12px;font-weight:400;color:var(--ink-faint)}
-.head-right{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--ink-faint);flex-wrap:wrap}
+header{position:relative;z-index:1150;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;border-bottom:1px solid rgba(43,38,32,.1);background:var(--paper);flex:none;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .sealbox{width:34px;height:34px;border-radius:6px;background:var(--seal);color:var(--paper-light);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;box-shadow:0 2px 6px rgba(43,38,32,.3)}
+.brand h1{margin:0;font-size:16px;line-height:1.2}
+.brand h1 .sub{margin-left:8px;font-size:11px;font-weight:400;color:var(--ink-faint)}
+.head-right{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-faint);flex-wrap:wrap}
+.btn{border:1px solid rgba(43,38,32,.2);background:var(--paper-light);color:var(--ink);border-radius:9999px;padding:5px 12px;font-size:12px;cursor:pointer;transition:all .12s}
+.btn:hover{background:var(--ink);color:var(--paper-light)}
+.btn.primary{background:var(--seal);color:var(--paper-light);border-color:var(--seal-dark)}
+.btn.primary:hover{background:var(--seal-dark)}
+.btn:disabled{opacity:.45;cursor:default}
 .badge-schema{display:flex;align-items:center;gap:6px;background:rgba(51,101,109,.1);color:var(--teal);border-radius:9999px;padding:4px 10px;border:1px solid rgba(51,101,109,.25)}
 .badge-schema a{color:var(--teal);text-decoration:none}
 .badge-schema a:hover{text-decoration:underline}
@@ -37,114 +42,121 @@ main{position:relative;flex:1;overflow:hidden}
 
 /* 标记 */
 .mm-icon{background:transparent;border:none}
-.mm-marker{position:relative;width:30px;height:30px}
-.mm-marker-count{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--paper-light);border:2px solid var(--ink);border-radius:9999px;font-family:'Noto Serif SC',serif;font-weight:700;font-size:12px;color:var(--ink);box-shadow:0 2px 8px rgba(43,38,32,.28);transition:transform .15s}
-.mm-marker:hover .mm-marker-count{transform:scale(1.15)}
-.mm-marker--gone .mm-marker-count{border-color:var(--seal);color:var(--seal)}
+.mm-marker{position:relative;width:34px;height:34px}
+.mm-marker-count{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--paper-light);border:2px solid var(--ink);border-radius:9999px;font-family:'Noto Serif SC',serif;font-weight:700;font-size:13px;color:var(--ink);box-shadow:0 2px 8px rgba(43,38,32,.28);transition:transform .15s}
+.mm-marker:hover .mm-marker-count{transform:scale(1.14)}
 .mm-marker--alive .mm-marker-count{border-color:var(--ok);color:var(--ok)}
-.mm-marker--resumed .mm-marker-count{border-color:var(--gold);color:var(--gold)}
+.mm-marker--dead .mm-marker-count{border-color:var(--seal);color:var(--seal);opacity:.55;filter:grayscale(.5)}
 .mm-marker--sel .mm-marker-count{background:var(--seal);color:var(--paper-light);border-color:#7d2d1b}
-.mm-marker--ghost{opacity:.25;filter:grayscale(.8)}
-.mm-marker-name{position:absolute;top:34px;left:50%;transform:translateX(-50%);white-space:nowrap;background:rgba(251,247,236,.94);border:1px solid rgba(43,38,32,.28);border-radius:9999px;padding:1px 8px;font-size:11px;letter-spacing:.03em;box-shadow:0 1px 4px rgba(43,38,32,.16);pointer-events:none}
+.mm-marker-name{position:absolute;top:38px;left:50%;transform:translateX(-50%);white-space:nowrap;background:rgba(251,247,236,.94);border:1px solid rgba(43,38,32,.28);border-radius:9999px;padding:1px 8px;font-size:11px;letter-spacing:.03em;box-shadow:0 1px 4px rgba(43,38,32,.16);pointer-events:none}
+.mm-marker-name.ghost{display:none}
 
-/* 面板通用 */
+/* 用户位置 */
+.you-marker{width:14px;height:14px;background:#3b82c4;border:3px solid #fff;border-radius:9999px;box-shadow:0 0 0 2px rgba(59,130,196,.5),0 2px 8px rgba(0,0,0,.3)}
+
+/* 浮动层通用 */
 .panel{background:radial-gradient(1200px 400px at 20% -10%,rgba(255,252,240,.9),transparent 60%),rgba(251,247,236,.97);border:1px solid rgba(43,38,32,.18);box-shadow:0 10px 40px rgba(43,38,32,.18),0 2px 8px rgba(43,38,32,.1);backdrop-filter:blur(6px);border-radius:16px}
 .scroll::-webkit-scrollbar{width:8px;height:8px}
 .scroll::-webkit-scrollbar-thumb{background:rgba(43,38,32,.25);border-radius:8px}
 .scroll::-webkit-scrollbar-track{background:transparent}
 
-/* 顶部筛选 chips */
-#filters{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:1050;display:flex;align-items:center;gap:4px;background:rgba(251,247,236,.95);border:1px solid rgba(43,38,32,.1);border-radius:9999px;padding:4px;box-shadow:0 2px 10px rgba(43,38,32,.12);backdrop-filter:blur(6px);max-width:calc(100vw - 24px);overflow-x:auto;scrollbar-width:none}
-#filters::-webkit-scrollbar{display:none}
-#filters .lbl{padding-left:8px;font-size:10px;letter-spacing:.15em;color:var(--ink-faint);white-space:nowrap}
-#filters button{border:none;background:none;cursor:pointer;border-radius:9999px;padding:4px 12px;font-size:12px;color:var(--ink-soft);white-space:nowrap}
-#filters button.on{background:var(--seal);color:var(--paper-light)}
-
 /* 图例 */
-#legend{position:absolute;top:12px;right:16px;z-index:1050;padding:10px 14px;font-size:11px;line-height:1.8;color:var(--ink-soft)}
+#legend{position:absolute;top:12px;right:14px;z-index:1050;padding:8px 12px;font-size:11px;line-height:1.8;color:var(--ink-soft)}
 #legend h4{margin:0 0 2px;font-size:12px;color:var(--ink)}
 .leg-dot{display:inline-block;width:10px;height:10px;border-radius:9999px;border:2px solid var(--ink);background:var(--paper-light);margin-right:6px;vertical-align:-1px}
-.leg-dot--gone{border-color:var(--seal);color:var(--seal);background:var(--seal)}
-.leg-dot--alive{border-color:var(--ok);color:var(--ok);background:var(--ok)}
-.leg-dot--resumed{border-color:var(--gold);color:var(--gold);background:var(--gold)}
+.leg-dot--alive{border-color:var(--ok);background:var(--ok)}
+.leg-dot--dead{border-color:var(--seal);background:var(--seal);opacity:.55}
+.leg-dot--you{border-color:#3b82c4;background:#3b82c4}
+#locHint{position:absolute;top:12px;left:14px;z-index:1050;padding:6px 12px;font-size:11px;color:var(--ink-soft);display:none}
+#locHint.show{display:block}
 
-/* 左侧控制面板 */
-#ctrl{position:absolute;top:60px;left:16px;bottom:16px;width:290px;z-index:1040;display:flex;flex-direction:column;overflow:hidden;transition:transform .25s ease}
-#ctrl.collapsed{transform:translateX(calc(-100% - 24px))}
-#ctrl-head{padding:12px 14px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(43,38,32,.08)}
-#ctrl-head h3{margin:0;font-size:14px}
-#ctrl-head .x{background:none;border:none;cursor:pointer;color:var(--ink-faint);font-size:14px;padding:2px 6px}
-#ctrl-body{flex:1;overflow-y:auto;padding:10px 12px}
-.group-title{font-size:10px;letter-spacing:.2em;color:var(--ink-faint);margin:12px 0 6px;text-transform:uppercase}
-.seg{display:flex;gap:4px;flex-wrap:wrap}
-.seg button{border:1px solid rgba(43,38,32,.18);background:var(--paper-light);border-radius:9999px;padding:3px 10px;font-size:12px;cursor:pointer;color:var(--ink-soft)}
-.seg button.on{background:var(--ink);color:var(--paper-light);border-color:var(--ink)}
-#search{width:100%;margin-top:8px;padding:6px 10px;border:1px solid rgba(43,38,32,.2);border-radius:9999px;background:var(--paper-light);font-size:12px;color:var(--ink);outline:none}
-#search:focus{border-color:var(--teal)}
-.school-list{margin-top:10px;display:flex;flex-direction:column;gap:4px}
-.school-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:12px;border:1px solid transparent;transition:background .12s}
-.school-item:hover{background:rgba(43,38,32,.05)}
-.school-item.sel{background:rgba(179,69,46,.08);border-color:rgba(179,69,46,.3)}
-.school-item .dot{width:8px;height:8px;border-radius:9999px;flex:none}
-.dot--gone{background:var(--seal)}
-.dot--alive{background:var(--ok)}
-.dot--resumed{background:var(--gold)}
-.school-item .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.school-item .yr{color:var(--ink-faint);font-size:11px;flex:none}
-.school-item .badge{font-size:10px;padding:1px 6px;border-radius:9999px;background:rgba(43,38,32,.07);color:var(--ink-soft);flex:none}
-.school-item .badge.k-gone{background:rgba(179,69,46,.1);color:var(--seal)}
-.school-item .badge.k-move{background:rgba(169,127,47,.12);color:var(--gold)}
-.school-item .badge.k-rename{background:rgba(51,101,109,.12);color:var(--teal)}
-.collapse-btn{position:absolute;top:60px;left:306px;z-index:1040;border:1px solid rgba(43,38,32,.15);background:var(--paper-light);color:var(--ink-soft);border-radius:0 10px 10px 0;padding:8px 6px;cursor:pointer;font-size:12px;box-shadow:0 2px 8px rgba(43,38,32,.12);transition:left .25s ease}
-.collapse-btn.open{left:16px;border-radius:10px}
-#stats{position:absolute;bottom:16px;left:16px;z-index:1030;padding:8px 14px;font-size:11px;color:var(--ink-soft);background:rgba(251,247,236,.92);border:1px solid rgba(43,38,32,.12);border-radius:12px;box-shadow:0 2px 8px rgba(43,38,32,.1)}
-#stats b{color:var(--ink);font-weight:600}
-#stats .sep{color:var(--ink-faint)}
+/* ---------- 底部时间轴 ---------- */
+#timeline{position:absolute;left:50%;transform:translateX(-50%);bottom:16px;z-index:1060;width:min(680px,calc(100vw - 24px));padding:10px 16px 12px}
+#tlTop{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:2px}
+#tlYear{font-size:26px;font-weight:700;font-family:'Noto Serif SC',serif;color:var(--ink);line-height:1}
+#tlYear small{font-size:12px;font-weight:400;color:var(--ink-faint);margin-left:4px}
+#tlHint{font-size:11px;color:var(--ink-faint)}
+#tlRange{width:100%;-webkit-appearance:none;appearance:none;height:28px;background:transparent;cursor:pointer;margin:0}
+#tlRange::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:linear-gradient(to right,var(--paper-dark),var(--ink))}
+#tlRange::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:9999px;background:var(--seal);border:3px solid var(--paper-light);box-shadow:0 1px 6px rgba(43,38,32,.4);margin-top:-6px}
+#tlRange::-moz-range-track{height:6px;border-radius:3px;background:var(--paper-dark)}
+#tlRange::-moz-range-thumb{width:16px;height:16px;border-radius:9999px;background:var(--seal);border:3px solid var(--paper-light);box-shadow:0 1px 6px rgba(43,38,32,.4)}
+#tlEras{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-faint);margin-top:-6px;user-select:none}
+#tlEras b{color:var(--ink-soft);font-weight:600}
+#tlPlay{position:absolute;right:14px;top:-34px;border:none;background:rgba(179,69,46,.12);color:var(--seal);border-radius:9999px;padding:4px 12px;font-size:11px;cursor:pointer;border:1px solid rgba(179,69,46,.25)}
+#tlPlay:hover{background:rgba(179,69,46,.22)}
 
-/* 详情抽屉 */
-#detail{position:absolute;right:16px;top:60px;bottom:16px;width:380px;z-index:1040;display:none;flex-direction:column;overflow:hidden}
-#detail.show{display:flex;animation:slideIn .28s cubic-bezier(.2,.8,.25,1) both}
-@keyframes slideIn{from{transform:translateX(30px);opacity:0}to{transform:none;opacity:1}}
-#detail-head{padding:14px 16px 10px;border-bottom:1px solid rgba(43,38,32,.08)}
-#detail-head .kicker{font-size:10px;letter-spacing:.2em;color:var(--ink-faint)}
-#detail-head h2{margin:2px 0 4px;font-size:17px}
-#detail-head .aliases{font-size:11px;color:var(--ink-soft)}
-#detail-head .steid{font-size:10px;color:var(--ink-faint);word-break:break-all;margin-top:4px;user-select:all}
-#detail-head .x{position:absolute;top:10px;right:12px;background:none;border:none;cursor:pointer;color:var(--ink-faint);font-size:16px;padding:4px}
-#detail-body{flex:1;overflow-y:auto;padding:12px 16px 20px}
-.tl{position:relative;padding-left:22px}
-.tl::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:rgba(43,38,32,.14)}
-.tl-item{position:relative;padding:0 0 16px}
-.tl-item::before{content:'';position:absolute;left:-19px;top:5px;width:10px;height:10px;border-radius:9999px;background:var(--paper-light);border:2px solid var(--ink)}
+/* ---------- 学校卡片 ---------- */
+#card{position:absolute;right:14px;top:64px;bottom:86px;width:340px;z-index:1045;display:none;flex-direction:column;overflow:hidden}
+#card.show{display:flex;animation:slideIn .25s cubic-bezier(.2,.8,.25,1) both}
+@keyframes slideIn{from{transform:translateX(26px);opacity:0}to{transform:none;opacity:1}}
+#card-head{padding:14px 16px 10px;border-bottom:1px solid rgba(43,38,32,.08);position:relative}
+#card-head .kicker{font-size:10px;letter-spacing:.18em;color:var(--ink-faint)}
+#card-head h2{margin:2px 0 2px;font-size:16px}
+#card-head .steid{font-size:9.5px;color:var(--ink-faint);word-break:break-all;user-select:all}
+#card-head .x{position:absolute;top:8px;right:10px;background:none;border:none;cursor:pointer;color:var(--ink-faint);font-size:15px;padding:4px}
+#card-body{flex:1;overflow-y:auto;padding:12px 16px 16px}
+#curSnap{border-left:3px solid var(--seal);padding:2px 0 2px 12px;margin-bottom:12px}
+#curSnap .when{font-size:10px;color:var(--ink-faint);letter-spacing:.12em}
+#curSnap .what{font-size:13px;font-weight:600;margin-top:2px}
+#curSnap .st{display:inline-block;font-size:10px;padding:1px 8px;border-radius:9999px;margin-left:6px;vertical-align:1px;background:rgba(74,103,65,.12);color:var(--ok)}
+#curSnap .st.dead{background:rgba(179,69,46,.12);color:var(--seal)}
+#curSnap .desc{font-size:12px;line-height:1.65;color:var(--ink-soft);margin-top:4px}
+.subtitle{font-size:10px;letter-spacing:.2em;color:var(--ink-faint);margin:12px 0 6px}
+.tl{position:relative;padding-left:20px}
+.tl::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:rgba(43,38,32,.14)}
+.tl-item{position:relative;padding:0 0 12px;cursor:pointer}
+.tl-item::before{content:'';position:absolute;left:-15px;top:4px;width:9px;height:9px;border-radius:9999px;background:var(--paper-light);border:2px solid var(--ink);transition:all .12s}
+.tl-item.cur::before{background:var(--seal);border-color:var(--seal);transform:scale(1.35)}
 .tl-item.st-active::before{border-color:var(--ok)}
 .tl-item.st-demolished::before{border-color:var(--seal);background:var(--seal)}
-.tl-item.st-under_construction::before{border-color:var(--gold)}
-.tl-item.st-proposed::before{border-color:var(--gold);border-style:dashed}
-.tl-range{font-size:12px;font-weight:600;color:var(--ink)}
-.tl-status{display:inline-block;font-size:10px;padding:1px 8px;border-radius:9999px;margin-left:6px;vertical-align:1px}
+.tl-range{font-size:11.5px;font-weight:600}
+.tl-name{font-size:11.5px;color:var(--ink-soft);margin-top:1px}
+.tl-status{display:inline-block;font-size:9.5px;padding:0 7px;border-radius:9999px;margin-left:5px;vertical-align:1px}
 .tl-status.st-active{background:rgba(74,103,65,.12);color:var(--ok)}
 .tl-status.st-demolished{background:rgba(179,69,46,.12);color:var(--seal)}
-.tl-status.st-under_construction{background:rgba(169,127,47,.14);color:var(--gold)}
-.tl-status.st-proposed{background:rgba(169,127,47,.14);color:var(--gold)}
-.tl-name{font-size:12px;color:var(--ink-soft);margin:2px 0}
-.tl-desc{font-size:12px;line-height:1.65;color:var(--ink-soft)}
-.tl-conf{font-size:11px;color:var(--ink-faint);margin-top:3px}
-.conf-bar{display:inline-block;width:54px;height:5px;border-radius:3px;background:rgba(43,38,32,.1);vertical-align:1px;overflow:hidden}
-.conf-bar i{display:block;height:100%;background:var(--teal);border-radius:3px}
-.tags{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-size:11px;padding:2px 10px;border-radius:9999px;background:rgba(43,38,32,.06);color:var(--ink-soft)}
-.tag kbd{font-family:inherit;font-weight:600}
-.note-box{margin-top:10px;font-size:11px;line-height:1.6;color:var(--gold);background:rgba(169,127,47,.08);border:1px solid rgba(169,127,47,.25);border-radius:8px;padding:8px 10px}
-.data-foot{margin-top:14px;padding-top:10px;border-top:1px dashed rgba(43,38,32,.15);font-size:10px;color:var(--ink-faint);line-height:1.7}
+/* 用户贡献 */
+#contribs{display:flex;flex-direction:column;gap:8px}
+.contrib{border:1px dashed rgba(43,38,32,.22);border-radius:10px;padding:8px 10px;font-size:11.5px;line-height:1.6;color:var(--ink-soft)}
+.contrib img{width:100%;border-radius:6px;margin-top:6px;border:1px solid rgba(43,38,32,.12)}
+.contrib .c-head{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.contrib .c-type{font-size:9.5px;padding:0 7px;border-radius:9999px;background:rgba(51,101,109,.12);color:var(--teal)}
+.contrib .c-year{font-size:10.5px;font-weight:600;color:var(--ink)}
+.contrib .c-rm{margin-left:auto;border:none;background:none;color:var(--ink-faint);cursor:pointer;font-size:11px;padding:2px 4px}
+.contrib .c-rm:hover{color:var(--seal)}
+#contribEmpty{font-size:11px;color:var(--ink-faint);border:1px dashed rgba(43,38,32,.15);border-radius:10px;padding:10px;text-align:center}
 
-/* 移动端适配 */
+/* 采集表单 modal */
+#modal{position:fixed;inset:0;z-index:1200;background:rgba(43,38,32,.42);display:none;align-items:center;justify-content:center;padding:16px}
+#modal.show{display:flex}
+#modalBox{width:min(420px,100%);max-height:88vh;overflow-y:auto;padding:18px 20px}
+#modalBox h3{margin:0 0 4px;font-size:15px}
+#modalBox .sub{font-size:11px;color:var(--ink-faint);margin-bottom:12px}
+.fld{margin-bottom:10px}
+.fld label{display:block;font-size:11px;color:var(--ink-soft);margin-bottom:4px}
+.fld input[type=text],.fld input[type=number],.fld textarea,.fld select{width:100%;padding:7px 10px;border:1px solid rgba(43,38,32,.22);border-radius:8px;background:var(--paper-light);font-size:12.5px;color:var(--ink);outline:none}
+.fld textarea{min-height:64px;resize:vertical}
+.fld input:focus,.fld textarea:focus{border-color:var(--teal)}
+.fld .err{color:var(--seal);font-size:10.5px;margin-top:3px;display:none}
+.fld.invalid input,.fld.invalid textarea{border-color:var(--seal)}
+.fld.invalid .err{display:block}
+.seg2{display:flex;gap:4px}
+.seg2 button{flex:1;border:1px solid rgba(43,38,32,.18);background:var(--paper-light);border-radius:9999px;padding:6px 8px;font-size:12px;cursor:pointer;color:var(--ink-soft)}
+.seg2 button.on{background:var(--ink);color:var(--paper-light);border-color:var(--ink)}
+#imgPreview{margin-top:8px;display:none}
+#imgPreview img{width:100%;border-radius:8px;border:1px solid rgba(43,38,32,.15)}
+#imgPreview.show{display:block}
+.modal-actions{display:flex;gap:8px;margin-top:14px}
+.modal-actions .btn{flex:1;padding:8px}
+#toast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%);z-index:1300;background:var(--ink);color:var(--paper-light);font-size:12px;padding:8px 18px;border-radius:9999px;opacity:0;pointer-events:none;transition:opacity .25s;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+#toast.show{opacity:1}
+
+/* 移动端 */
 @media (max-width:760px){
-  #ctrl{left:8px;width:calc(100vw - 16px);top:auto;bottom:0;height:45vh;border-radius:16px 16px 0 0}
-  .collapse-btn{display:none}
-  #detail{right:8px;left:8px;width:auto;top:auto;bottom:0;height:55vh;border-radius:16px 16px 0 0}
+  #card{right:8px;left:8px;width:auto;top:auto;bottom:92px;height:52vh;border-radius:14px}
+  #timeline{bottom:10px;width:calc(100vw - 16px)}
   #legend{display:none}
-  #filters{top:8px;max-width:calc(100vw - 16px)}
-  #stats{display:none}
+  #locHint{top:auto;bottom:130px}
 }
 </style>
 </head>
@@ -153,280 +165,371 @@ main{position:relative;flex:1;overflow:hidden}
   <header>
     <div class="brand">
       <div class="sealbox serif">忆</div>
-      <h1 class="serif">消失的母校<span class="sub">Memo-Map 4D · 时间记忆地图</span></h1>
+      <h1 class="serif">消失的母校<span class="sub">拖动时间轴，看它一生的变迁</span></h1>
     </div>
     <div class="head-right">
       <span class="badge-schema">数据符合 <a href="https://wonderingWu.github.io/ste-schema/v0.1/schema.json" target="_blank">STE Schema v0.1</a></span>
-      <span id="dataCount"></span>
+      <button class="btn" id="locBtn">📍 定位我</button>
     </div>
   </header>
   <main>
     <div id="map"></div>
 
-    <div id="filters">
-      <span class="lbl">年代</span>
-      <button data-decade="all" class="on">全部</button>
-      <span id="decadeChips"></span>
-      <span class="lbl" style="margin-left:10px">状态</span>
-      <button data-status="all" class="on">全部</button>
-      <button data-status="gone">已消失</button>
-      <button data-status="alive">仍存在</button>
-    </div>
+    <div id="locHint" class="panel" style="display:none">📍 已定位，显示周边学校；未授权则默认北京西城</div>
 
     <div id="legend" class="panel">
       <h4>图例</h4>
-      <div><span class="leg-dot leg-dot--gone"></span>已消失（demolished）</div>
-      <div><span class="leg-dot leg-dot--alive"></span>仍存在（active）</div>
-      <div><span class="leg-dot leg-dot--resumed"></span>停办后恢复</div>
-      <div style="margin-top:6px;color:var(--ink-faint)">数字 = 该年代活跃学校数</div>
+      <div><span class="leg-dot leg-dot--alive"></span>该年代存在</div>
+      <div><span class="leg-dot leg-dot--dead"></span>该年代已消失</div>
+      <div><span class="leg-dot leg-dot--you"></span>你的位置</div>
+      <div style="margin-top:6px;color:var(--ink-faint)">拖动下方时间轴查看变迁</div>
     </div>
 
-    <button class="collapse-btn" id="collapseBtn" title="收起/展开列表">‹</button>
+    <div id="card" class="panel">
+      <button class="x" id="cardClose">✕</button>
+      <div id="card-head"></div>
+      <div id="card-body" class="scroll"></div>
+    </div>
 
-    <div id="ctrl" class="panel">
-      <div id="ctrl-head">
-        <h3>学校名录 <span id="listCount" style="color:var(--ink-faint);font-weight:400"></span></h3>
-        <button class="x" id="ctrlClose">✕</button>
+    <div id="timeline" class="panel">
+      <div id="tlTop">
+        <div id="tlYear">2026<small>年</small></div>
+        <div id="tlHint">← 拖动时间轴，地图与详情随之变化</div>
+        <button id="tlPlay">▶ 播放</button>
       </div>
-      <div id="ctrl-body" class="scroll">
-        <div class="group-title">城市</div>
-        <div class="seg" id="citySeg">
-          <button data-city="all" class="on">全部</button>
-          <button data-city="北京">北京</button>
-          <button data-city="上海">上海</button>
-        </div>
-        <div class="group-title">消失类型</div>
-        <div class="seg" id="kindSeg">
-          <button data-kind="all" class="on">全部</button>
-        </div>
-        <div class="group-title">搜索</div>
-        <input id="search" placeholder="输入校名查找…" />
-        <div class="school-list" id="schoolList"></div>
-      </div>
+      <input type="range" id="tlRange" min="1890" max="2026" value="2026" step="1" />
+      <div id="tlEras"></div>
     </div>
 
-    <div id="detail" class="panel">
-      <button class="x" id="detailClose">✕</button>
-      <div id="detail-head"></div>
-      <div id="detail-body" class="scroll"></div>
-    </div>
-
-    <div id="stats"><b id="stCount"></b> 所学校 <span class="sep">·</span> <b id="stGone"></b> 已消失 <span class="sep">·</span> <b id="stAlive"></b> 仍存在 <span class="sep">·</span> 坐标 <b id="stGeo"></b> 已定位</div>
+    <div id="toast"></div>
   </main>
 </div>
+
+<div id="modal">
+  <div id="modalBox" class="panel">
+    <h3 class="serif">添加变迁 / 记忆</h3>
+    <div class="sub">贡献将保存在本浏览器（localStorage），作为该学校的补充时间事实</div>
+    <div class="fld">
+      <label>类型</label>
+      <div class="seg2" id="typeSeg">
+        <button data-t="fact" class="on">变迁事实</button>
+        <button data-t="text">文字记忆</button>
+        <button data-t="photo">图片</button>
+      </div>
+    </div>
+    <div class="fld" id="yearFld">
+      <label>年份（必填，如 1958）</label>
+      <input type="number" id="fYear" min="1800" max="2099" placeholder="1958" />
+      <div class="err">请填写有效年份</div>
+    </div>
+    <div class="fld" id="contentFld">
+      <label id="contentLabel">变迁事实内容（必填）</label>
+      <textarea id="fContent" placeholder="如：这一年学校西迁至西安…"></textarea>
+      <div class="err">请填写内容</div>
+    </div>
+    <div class="fld" id="imgFld" style="display:none">
+      <label>选择图片（可选）</label>
+      <input type="file" id="fImg" accept="image/*" />
+      <div id="imgPreview"><img id="fImgPreview" alt="预览" /></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="modalCancel">取消</button>
+      <button class="btn primary" id="modalSave">保存贡献</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 'use strict';
-/* ============ 数据（由 build-demo.mjs 注入，符合 STE Schema v0.1） ============ */
+/* ============ 数据（build-demo.mjs 注入，符合 STE Schema v0.1） ============ */
 const SCHOOLS = __STE_DATA__;
+const TL_MIN = __TL_MIN__;
+const TL_MAX = __TL_MAX__;
+const STATUS_ZH = { active:'存在', demolished:'已消失', under_construction:'在建', proposed:'规划' };
 
 /* ============ 工具 ============ */
 const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-const fmtYear = (y) => y == null ? '至今' : y;
-const KIND_LABEL = { '停办':'停办', '停办（老址停办）':'停办', '停办→恢复':'恢复', '停办（部分）':'停办', '更名/升级':'更名', '升级':'升级', '更名/并入':'更名', '搬迁':'搬迁', '搬迁（老址停办）':'搬迁', '搬迁/扩建':'搬迁', '合并':'合并', '停招':'停招', '停招（转制公办）':'转制' };
-const KIND_CLS = { '停办':'k-gone', '恢复':'k-rename', '更名':'k-rename', '升级':'k-rename', '搬迁':'k-move', '合并':'k-gone', '停招':'k-move', '转制':'k-rename' };
-const STATUS_ZH = { active:'存在', demolished:'已消失', under_construction:'在建', proposed:'规划' };
+const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+const LS_KEY = (id) => 'ste-contrib-' + id;
 
-/* 学校当前状态: gone / alive / resumed */
-function schoolState(e) {
-  const last = e.timeline[e.timeline.length - 1];
-  if (last.status === 'active' && last.end_date == null) {
-    const kind = String(e.tags['ste:disappearance'] || '');
-    return kind.includes('恢复') ? 'resumed' : 'alive';
-  }
-  return 'gone';
+/* 快照区间（end=null → 至今） */
+function covers(sn, year) {
+  const s = parseInt(sn.start_date, 10);
+  const e = sn.end_date ? parseInt(sn.end_date, 10) : TL_MAX;
+  return year >= s && year <= e;
 }
-function schoolYearRange(e) {
-  const s = e.timeline[0].start_date;
-  const last = e.timeline[e.timeline.length - 1];
-  const e2 = last.end_date ?? last.start_date;
-  return s === e2 ? s : s + '–' + e2;
+/* 某年某校的生效快照 */
+function snapAt(e, year) {
+  return e.timeline.find((sn) => covers(sn, year)) || null;
 }
-/* 在年代 decade（如 1970，表示 1970-1979）是否活跃 */
-function aliveIn(e, decade) {
-  if (decade === 'all') return true;
-  return e.timeline.some((sn) => sn.status === 'active' && parseInt(sn.start_date, 10) <= decade + 9 && (sn.end_date == null || parseInt(sn.end_date, 10) >= decade));
+/* 某年某校是否存在 */
+function aliveAt(e, year) {
+  const sn = snapAt(e, year);
+  return sn ? sn.status === 'active' : false;
 }
-function kindOf(e) { return String(e.tags['ste:disappearance'] || '未知').replace(/（.*?）/g, ''); }
+function activeNameAt(e, year) {
+  const sn = snapAt(e, year);
+  return sn ? sn.name : null;
+}
 
 /* ============ 状态 ============ */
-const S = { decade: 'all', status: 'all', city: 'all', kind: 'all', query: '', sel: null };
-let map = null, markerLayer = null, detailLayer = null;
+const S = { year: TL_MAX, sel: null, you: null, playing: false };
+let map = null, markerLayer = null, youLayer = null, playTimer = null;
 
 /* ============ 地图 ============ */
-function initMap() {
-  map = L.map('map', { zoomControl: true }).setView([34.5, 114.5], 5);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
-  }).addTo(map);
+function initMap(center, zoom) {
+  map = L.map('map', { zoomControl: true }).setView(center, zoom);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OSM' }).addTo(map);
   markerLayer = L.layerGroup().addTo(map);
+  youLayer = L.layerGroup().addTo(map);
 }
 
 function markerIcon(e, sel) {
-  const st = schoolState(e);
-  const cls = sel ? 'mm-marker--sel' : (st === 'gone' ? 'mm-marker--gone' : st === 'resumed' ? 'mm-marker--resumed' : 'mm-marker--alive');
-  const count = sel ? '×' : String(e.timeline.length);
+  const alive = aliveAt(e, S.year);
+  const cls = sel ? 'mm-marker--sel' : (alive ? 'mm-marker--alive' : 'mm-marker--dead');
+  const nm = activeNameAt(e, S.year) || e.name.primary;
   return L.divIcon({
     className: 'mm-icon',
-    html: '<div class="mm-marker ' + cls + '"><div class="mm-marker-count">' + count + '</div><div class="mm-marker-name">' + esc(e.name.primary) + '</div></div>',
-    iconSize: [30, 30], iconAnchor: [15, 15],
+    html: '<div class="mm-marker ' + cls + '"><div class="mm-marker-count">' + esc(e.name.primary[0]) + '</div><div class="mm-marker-name' + (S.year === TL_MAX ? '' : ' ghost') + '">' + esc(nm) + '</div></div>',
+    iconSize: [34, 34], iconAnchor: [17, 17],
   });
 }
 
 function renderMarkers() {
   markerLayer.clearLayers();
-  const visible = visibleSchools();
-  for (const e of visible) {
+  for (const e of SCHOOLS) {
     const m = L.marker([e.coordinates.lat, e.coordinates.lon], { icon: markerIcon(e, S.sel === e.ste_id) });
-    m.on('click', () => openDetail(e));
+    m.on('click', () => openCard(e));
     markerLayer.addLayer(m);
   }
-  if (visible.length === 1) map.setView([visible[0].coordinates.lat, visible[0].coordinates.lon], 12);
-  else if (visible.length > 0) {
-    const bounds = L.latLngBounds(visible.map((e) => [e.coordinates.lat, e.coordinates.lon]));
-    map.fitBounds(bounds, { padding: [60, 60], maxZoom: 12 });
-  } else {
-    map.setView([34.5, 114.5], 5);
-  }
 }
 
-/* ============ 筛选 ============ */
-function visibleSchools() {
-  return SCHOOLS.filter((e) => {
-    if (S.decade !== 'all' && !aliveIn(e, S.decade)) return false;
-    if (S.status === 'gone' && schoolState(e) === 'alive') return false;
-    if (S.status === 'alive' && schoolState(e) !== 'alive') return false;
-    if (S.city !== 'all' && e.tags.city !== S.city) return false;
-    if (S.kind !== 'all' && kindOf(e) !== S.kind) return false;
-    if (S.query && !(e.name.primary + ' ' + (e.name.aliases || []).join(' ')).includes(S.query)) return false;
-    return true;
-  });
+function setYou(pos) {
+  youLayer.clearLayers();
+  if (!pos) return;
+  S.you = pos;
+  L.marker([pos.lat, pos.lon], { icon: L.divIcon({ className: '', html: '<div class="you-marker"></div>', iconSize: [14, 14], iconAnchor: [7, 7] }) }).addTo(youLayer);
 }
 
-function renderList() {
-  const v = visibleSchools();
-  const box = $('schoolList');
-  box.innerHTML = '';
-  for (const e of v) {
-    const st = schoolState(e);
-    const kind = kindOf(e);
-    const div = document.createElement('div');
-    div.className = 'school-item' + (S.sel === e.ste_id ? ' sel' : '');
-    div.innerHTML =
-      '<span class="dot dot--' + st + '"></span>' +
-      '<span class="nm">' + esc(e.name.primary) + '</span>' +
-      '<span class="badge ' + (KIND_CLS[kind] || '') + '">' + esc(KIND_LABEL[e.tags['ste:disappearance']] || kind) + '</span>' +
-      '<span class="yr">' + schoolYearRange(e) + '</span>';
-    div.onclick = () => openDetail(e);
-    box.appendChild(div);
-  }
-  $('listCount').textContent = '(' + v.length + '/' + SCHOOLS.length + ')';
+function locate() {
+  if (!navigator.geolocation) { toast('此浏览器不支持定位'); return; }
+  const btn = $('locBtn');
+  btn.disabled = true; btn.textContent = '定位中…';
+  navigator.geolocation.getCurrentPosition(
+    (p) => {
+      const pos = { lat: p.coords.latitude, lon: p.coords.longitude };
+      setYou(pos);
+      map.setView([pos.lat, pos.lon], 13);
+      $('locHint').style.display = 'block';
+      toast('已定位，显示你周边的学校');
+      btn.disabled = false; btn.textContent = '📍 重新定位';
+    },
+    (err) => {
+      toast('定位失败（' + (err.code === 1 ? '未授权' : '不可用') + '），已显示默认区域');
+      btn.disabled = false; btn.textContent = '📍 定位我';
+    },
+    { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 },
+  );
 }
 
-function renderStats() {
-  $('dataCount').textContent = SCHOOLS.length + ' 所学校 · ' + new Set(SCHOOLS.map((e) => e.tags.city)).size + ' 城';
-  $('stCount').textContent = SCHOOLS.length;
-  $('stGone').textContent = SCHOOLS.filter((e) => schoolState(e) === 'gone').length;
-  $('stAlive').textContent = SCHOOLS.filter((e) => schoolState(e) !== 'gone').length;
-  $('stGeo').textContent = SCHOOLS.filter((e) => !(e.tags && e.tags.note)).length;
+/* ============ 时间轴 ============ */
+function buildEras() {
+  const box = $('tlEras');
+  const n = 6;
+  const step = Math.max(1, Math.round((TL_MAX - TL_MIN) / n / 10) * 10);
+  const parts = [];
+  for (let y = TL_MIN; y <= TL_MAX; y += step) parts.push('<b>' + y + '</b>');
+  box.innerHTML = parts.join('') + '<b>' + TL_MAX + '</b>';
 }
-
-/* ============ 详情 ============ */
-function openDetail(e) {
-  S.sel = e.ste_id;
-  $('detailClose').style.display = 'block';
-  const head = $('detail-head');
-  const kind = kindOf(e);
-  const st = schoolState(e);
-  head.innerHTML =
-    '<div class="kicker">' + esc(e.tags.city) + ' · ' + esc(e.tags['ste:disappearance'] || '') + ' · ' + esc(kind) + '</div>' +
-    '<h2 class="serif">' + esc(e.name.primary) + '</h2>' +
-    (e.name.aliases && e.name.aliases.length ? '<div class="aliases">别称：' + e.name.aliases.map(esc).join(' / ') + '</div>' : '') +
-    '<div class="steid mono">' + e.ste_id + '</div>';
-  let body = '<div class="tl">';
-  for (const sn of e.timeline) {
-    const pct = Math.round((sn.confidence ?? 0.7) * 100);
-    body +=
-      '<div class="tl-item st-' + esc(sn.status) + '">' +
-      '<div class="tl-range">' + esc(sn.start_date) + ' → ' + esc(fmtYear(sn.end_date)) + ' <span class="tl-status st-' + esc(sn.status) + '">' + (STATUS_ZH[sn.status] || sn.status) + '</span></div>' +
-      '<div class="tl-name">' + esc(sn.name) + '</div>' +
-      (sn.description ? '<div class="tl-desc">' + esc(sn.description) + '</div>' : '') +
-      (sn.confidence != null ? '<div class="tl-conf">置信度 ' + pct + '% <span class="conf-bar"><i style="width:' + pct + '%"></i></span></div>' : '') +
-      '</div>';
-  }
-  body += '</div>';
-  body += '<div class="tags">' + Object.entries(e.tags || {}).map(([k, v]) => '<span class="tag"><kbd>' + esc(k) + '</kbd>=<span class="mono">' + esc(v) + '</span></span>').join('') + '</div>';
-  if (e.tags && e.tags.note) {
-    body += '<div class="note-box">⚠️ ' + esc(e.tags.note) + '</div>';
-  }
-  body += '<div class="data-foot">STE Schema v0.1 · ste_id 为稳定 UUID · timeline 快照按时间升序 · 停办/搬迁/更名以快照状态表达<br/>schema: <span class="mono">wonderingWu.github.io/ste-schema/v0.1/schema.json</span></div>';
-  $('detail-body').innerHTML = body;
-  $('detail').classList.add('show');
+function setYear(y, opts = {}) {
+  S.year = y;
+  $('tlRange').value = y;
+  $('tlYear').innerHTML = y + '<small>年</small>';
   renderMarkers();
-  renderList();
+  if (S.sel) renderCard(S.sel, opts.silent);
+  if (!opts.silent && S.sel) {
+    const sn = snapAt(S.sel, y);
+    toast(sn ? y + ' 年：' + sn.name + '（' + (STATUS_ZH[sn.status] || sn.status) + '）' : y + ' 年：暂无记录');
+  }
+}
+function play() {
+  if (S.playing) { S.playing = false; $('tlPlay').textContent = '▶ 播放'; clearInterval(playTimer); return; }
+  S.playing = true;
+  $('tlPlay').textContent = '⏸ 暂停';
+  if (S.year >= TL_MAX) setYear(TL_MIN, { silent: true });
+  playTimer = setInterval(() => {
+    if (S.year >= TL_MAX) { S.playing = false; $('tlPlay').textContent = '▶ 播放'; clearInterval(playTimer); return; }
+    setYear(S.year + 1, { silent: true });
+  }, 260);
 }
 
-function closeDetail() {
-  $('detail').classList.remove('show');
+/* ============ 学校卡片 ============ */
+function loadContribs(steId) {
+  try { return JSON.parse(localStorage.getItem(LS_KEY(steId)) || '[]'); } catch { return []; }
+}
+function saveContribs(steId, list) {
+  localStorage.setItem(LS_KEY(steId), JSON.stringify(list));
+}
+
+function openCard(e) {
+  S.sel = e;
+  renderCard(e);
+  $('card').classList.add('show');
+}
+function closeCard() {
+  $('card').classList.remove('show');
   S.sel = null;
   renderMarkers();
-  renderList();
+}
+function renderCard(e, silent) {
+  const head = $('card-head');
+  head.innerHTML =
+    '<div class="kicker">' + esc(e.tags.city || '') + ' · ' + esc(e.tags['ste:disappearance'] || '') + '</div>' +
+    '<h2 class="serif">' + esc(e.name.primary) + '</h2>' +
+    '<div class="steid mono">' + e.ste_id + '</div>';
+  const body = $('card-body');
+  const sn = snapAt(e, S.year);
+  let h = '';
+  if (sn) {
+    const dead = sn.status !== 'active';
+    h += '<div id="curSnap"><div class="when">' + S.year + ' 年 · 该年代快照</div>' +
+      '<div class="what">' + esc(sn.name) + '<span class="st' + (dead ? ' dead' : '') + '">' + (STATUS_ZH[sn.status] || sn.status) + '</span></div>' +
+      (sn.description ? '<div class="desc">' + esc(sn.description) + '</div>' : '') + '</div>';
+  } else {
+    h += '<div id="curSnap"><div class="when">' + S.year + ' 年</div><div class="what">此年代无记录<span class="st dead">未知</span></div></div>';
+  }
+  h += '<div class="subtitle">完整时间线（点击定位到该年代）</div><div class="tl">';
+  for (const s of e.timeline) {
+    const cur = covers(s, S.year);
+    const dead = s.status !== 'active';
+    h += '<div class="tl-item st-' + esc(s.status) + (cur ? ' cur' : '') + '" data-y="' + esc(s.start_date) + '">' +
+      '<div class="tl-range">' + esc(s.start_date) + ' → ' + (s.end_date ? esc(s.end_date) : '至今') +
+      '<span class="tl-status st-' + esc(s.status) + '">' + (STATUS_ZH[s.status] || s.status) + '</span></div>' +
+      '<div class="tl-name">' + esc(s.name) + '</div></div>';
+  }
+  h += '</div>';
+
+  /* 用户贡献 */
+  const contribs = loadContribs(e.ste_id);
+  h += '<div class="subtitle">记忆与补充（本浏览器保存）</div>';
+  if (contribs.length === 0) {
+    h += '<div id="contribEmpty">还没有贡献。点击下方按钮，添加图片、文字或变迁事实</div>';
+  } else {
+    h += '<div id="contribs">';
+    for (const c of contribs) {
+      h += '<div class="contrib"><div class="c-head"><span class="c-type">' + esc(c.type === 'photo' ? '图片' : c.type === 'text' ? '文字' : '变迁') + '</span><span class="c-year">' + esc(c.year || '?') + ' 年</span>' +
+        '<button class="c-rm" data-id="' + esc(c.id) + '">删除</button></div>' +
+        (c.content ? '<div>' + esc(c.content) + '</div>' : '') +
+        (c.image ? '<img src="' + c.image + '" alt="贡献图片" />' : '') + '</div>';
+    }
+    h += '</div>';
+  }
+  h += '<div style="margin-top:12px"><button class="btn primary" id="addBtn" style="width:100%">＋ 添加图片 / 文字 / 变迁事实</button></div>';
+  h += '<div class="data-foot" style="margin-top:12px;padding-top:10px;border-top:1px dashed rgba(43,38,32,.15);font-size:10px;color:var(--ink-faint);line-height:1.7">' +
+    'STE Schema v0.1 · 快照由 schema 定义（start_date/end_date/name/status）· 坐标 OSM 地理编码<br/>schema: <span class="mono">wonderingWu.github.io/ste-schema/v0.1/schema.json</span></div>';
+  body.innerHTML = h;
+
+  body.querySelectorAll('.tl-item').forEach((el) => (el.onclick = () => setYear(parseInt(el.dataset.y, 10))));
+  body.querySelectorAll('.c-rm').forEach((el) => (el.onclick = () => removeContrib(e.ste_id, el.dataset.id)));
+  $('addBtn').onclick = () => openModal(e);
+}
+
+/* ============ 采集 ============ */
+const FORM = { type: 'fact' };
+function openModal(e) {
+  FORM.ste = e;
+  $('modal').classList.add('show');
+  resetForm();
+}
+function resetForm() {
+  FORM.type = 'fact';
+  $('fYear').value = S.year;
+  $('fContent').value = '';
+  $('fImg').value = '';
+  $('imgPreview').classList.remove('show');
+  $('imgFld').style.display = 'none';
+  $('contentLabel').textContent = '变迁事实内容（必填）';
+  $('fContent').placeholder = '如：这一年学校西迁至西安…';
+  syncTypeSeg();
+}
+function syncTypeSeg() {
+  document.querySelectorAll('#typeSeg button').forEach((b) => b.classList.toggle('on', b.dataset.t === FORM.type));
+  const showImg = FORM.type === 'photo';
+  $('imgFld').style.display = showImg ? 'block' : 'none';
+  $('contentLabel').textContent = FORM.type === 'fact' ? '变迁事实内容（必填）' : FORM.type === 'text' ? '文字记忆（必填）' : '图片说明（选填）';
+  $('fContent').placeholder = FORM.type === 'fact' ? '如：这一年学校西迁至西安…' : FORM.type === 'text' ? '写下你或家人的记忆…' : '这张照片拍的什么？';
+}
+function closeModal() { $('modal').classList.remove('show'); }
+
+function saveContribution() {
+  const year = parseInt($('fYear').value, 10);
+  const content = $('fContent').value.trim();
+  let invalid = false;
+  $('yearFld').classList.toggle('invalid', !(year >= 1800 && year <= 2099));
+  if (!(year >= 1800 && year <= 2099)) invalid = true;
+  $('contentFld').classList.toggle('invalid', FORM.type !== 'photo' && !content);
+  if (FORM.type !== 'photo' && !content) invalid = true;
+  if (invalid) return;
+  const img = $('fImgPreview').src || null;
+  const list = loadContribs(FORM.ste.ste_id);
+  list.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), type: FORM.type, year: year || null, content: content || null, image: img, createdAt: new Date().toISOString() });
+  saveContribs(FORM.ste.ste_id, list);
+  closeModal();
+  renderCard(FORM.ste);
+  toast('已保存贡献到本浏览器');
+}
+function removeContrib(steId, id) {
+  const list = loadContribs(steId).filter((c) => c.id !== id);
+  saveContribs(steId, list);
+  if (S.sel) renderCard(S.sel);
+  toast('已删除');
+}
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tm);
+  t._tm = setTimeout(() => t.classList.remove('show'), 2600);
 }
 
 /* ============ 绑定 ============ */
-function bindFilters() {
-  const chipsBox = $('decadeChips');
-  const years = [];
-  for (const e of SCHOOLS) for (const sn of e.timeline) {
-    const y = parseInt(sn.start_date, 10);
-    if (!isNaN(y)) years.push(Math.floor(y / 10) * 10);
-    if (sn.end_date) { const y2 = parseInt(sn.end_date, 10); if (!isNaN(y2)) years.push(Math.floor(y2 / 10) * 10); }
-  }
-  const range = [Math.min(...years), Math.max(...years)];
-  for (let d = range[0]; d <= range[1]; d += 10) {
-    const b = document.createElement('button');
-    b.textContent = d + 's';
-    b.dataset.decade = String(d);
-    b.onclick = () => { S.decade = d; syncFilterUI(); renderMarkers(); renderList(); };
-    chipsBox.appendChild(b);
-  }
-
-  const kinds = new Set(SCHOOLS.map((e) => kindOf(e)));
-  const seg = $('kindSeg');
-  for (const k of kinds) {
-    const b = document.createElement('button');
-    b.textContent = k;
-    b.dataset.kind = k;
-    b.onclick = () => { S.kind = k; syncFilterUI(); renderMarkers(); renderList(); };
-    seg.appendChild(b);
-  }
-
-  document.querySelectorAll('#filters [data-decade]').forEach((b) => (b.onclick = () => { S.decade = b.dataset.decade === 'all' ? 'all' : parseInt(b.dataset.decade, 10); syncFilterUI(); renderMarkers(); renderList(); }));
-  document.querySelectorAll('#filters [data-status]').forEach((b) => (b.onclick = () => { S.status = b.dataset.status; syncFilterUI(); renderMarkers(); renderList(); }));
-  document.querySelectorAll('#citySeg [data-city]').forEach((b) => (b.onclick = () => { S.city = b.dataset.city; syncFilterUI(); renderMarkers(); renderList(); }));
-  document.querySelectorAll('#kindSeg [data-kind]').forEach((b) => (b.onclick = () => { S.kind = b.dataset.kind; syncFilterUI(); renderMarkers(); renderList(); }));
-  $('search').oninput = (ev) => { S.query = ev.target.value.trim(); renderMarkers(); renderList(); };
-  $('ctrlClose').onclick = collapseCtrl;
-  $('collapseBtn').onclick = () => { const c = $('ctrl'); const open = c.classList.contains('collapsed'); c.classList.toggle('collapsed'); $('collapseBtn').classList.toggle('open', open); $('collapseBtn').textContent = open ? '‹' : '›'; };
-  $('detailClose').onclick = closeDetail;
-}
-
-function syncFilterUI() {
-  const sel = (sel, val) => { document.querySelectorAll(sel).forEach((b) => b.classList.toggle('on', b.dataset.decade === String(val) || b.dataset.status === val || b.dataset.city === val || b.dataset.kind === val)); };
-  sel('#filters [data-decade]', S.decade);
-  sel('#filters [data-status]', S.status);
-  sel('#citySeg [data-city]', S.city);
-  sel('#kindSeg [data-kind]', S.kind);
-}
+$('tlRange').oninput = (ev) => setYear(parseInt(ev.target.value, 10), { silent: true });
+$('tlPlay').onclick = play;
+$('locBtn').onclick = locate;
+$('cardClose').onclick = closeCard;
+$('modalCancel').onclick = closeModal;
+$('modalSave').onclick = saveContribution;
+$('fImg').onchange = (ev) => {
+  const f = ev.target.files[0];
+  if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => { $('fImgPreview').src = rd.result; $('imgPreview').classList.add('show'); };
+  rd.readAsDataURL(f);
+};
+document.querySelectorAll('#typeSeg button').forEach((b) => (b.onclick = () => { FORM.type = b.dataset.t; syncTypeSeg(); }));
+document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') { closeModal(); closeCard(); } });
 
 /* ============ 启动 ============ */
-initMap();
-bindFilters();
-renderStats();
-renderMarkers();
-renderList();
+function boot() {
+  buildEras();
+  if (SCHOOLS.length > 0) {
+    const c = SCHOOLS[0].coordinates;
+    initMap([c.lat, c.lon], 14);
+  } else {
+    initMap([39.91, 116.40], 5);
+  }
+  renderMarkers();
+  setYear(TL_MAX, { silent: true });
+  /* 尝试定位；失败保持默认视图（示例学校周边） */
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (p) => { setYou({ lat: p.coords.latitude, lon: p.coords.longitude }); $('locHint').style.display = 'block'; },
+      () => {}, { timeout: 6000, maximumAge: 120000 },
+    );
+  }
+}
+boot();
 </script>
 </body>
 </html>

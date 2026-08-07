@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>消失的母校 · Memo-Map 4D（STE Schema v0.1）</title>
+<title>消失的母校 · 时间轴版（STE Schema v0.1）</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 :root{
@@ -14,18 +14,23 @@
 *{box-sizing:border-box}
 html,body,#app{height:100%}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-button,input,select{font-family:inherit}
+button,input,select,textarea{font-family:inherit}
 #app{display:flex;flex-direction:column;overflow:hidden}
 .serif{font-family:'Noto Serif SC','Songti SC','STSong','SimSun',serif}
 .mono{font-family:ui-monospace,'Cascadia Mono',Consolas,monospace}
 
 /* ---------- 顶栏 ---------- */
-header{position:relative;z-index:1150;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:10px 20px;border-bottom:1px solid rgba(43,38,32,.1);background:var(--paper);flex:none;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:12px}
-.brand .sealbox{width:38px;height:38px;border-radius:6px;background:var(--seal);color:var(--paper-light);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;box-shadow:0 2px 6px rgba(43,38,32,.3)}
-.brand h1{margin:0;font-size:18px;line-height:1.2}
-.brand h1 .sub{margin-left:8px;font-size:12px;font-weight:400;color:var(--ink-faint)}
-.head-right{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--ink-faint);flex-wrap:wrap}
+header{position:relative;z-index:1150;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 16px;border-bottom:1px solid rgba(43,38,32,.1);background:var(--paper);flex:none;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .sealbox{width:34px;height:34px;border-radius:6px;background:var(--seal);color:var(--paper-light);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;box-shadow:0 2px 6px rgba(43,38,32,.3)}
+.brand h1{margin:0;font-size:16px;line-height:1.2}
+.brand h1 .sub{margin-left:8px;font-size:11px;font-weight:400;color:var(--ink-faint)}
+.head-right{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--ink-faint);flex-wrap:wrap}
+.btn{border:1px solid rgba(43,38,32,.2);background:var(--paper-light);color:var(--ink);border-radius:9999px;padding:5px 12px;font-size:12px;cursor:pointer;transition:all .12s}
+.btn:hover{background:var(--ink);color:var(--paper-light)}
+.btn.primary{background:var(--seal);color:var(--paper-light);border-color:var(--seal-dark)}
+.btn.primary:hover{background:var(--seal-dark)}
+.btn:disabled{opacity:.45;cursor:default}
 .badge-schema{display:flex;align-items:center;gap:6px;background:rgba(51,101,109,.1);color:var(--teal);border-radius:9999px;padding:4px 10px;border:1px solid rgba(51,101,109,.25)}
 .badge-schema a{color:var(--teal);text-decoration:none}
 .badge-schema a:hover{text-decoration:underline}
@@ -37,114 +42,121 @@ main{position:relative;flex:1;overflow:hidden}
 
 /* 标记 */
 .mm-icon{background:transparent;border:none}
-.mm-marker{position:relative;width:30px;height:30px}
-.mm-marker-count{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--paper-light);border:2px solid var(--ink);border-radius:9999px;font-family:'Noto Serif SC',serif;font-weight:700;font-size:12px;color:var(--ink);box-shadow:0 2px 8px rgba(43,38,32,.28);transition:transform .15s}
-.mm-marker:hover .mm-marker-count{transform:scale(1.15)}
-.mm-marker--gone .mm-marker-count{border-color:var(--seal);color:var(--seal)}
+.mm-marker{position:relative;width:34px;height:34px}
+.mm-marker-count{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--paper-light);border:2px solid var(--ink);border-radius:9999px;font-family:'Noto Serif SC',serif;font-weight:700;font-size:13px;color:var(--ink);box-shadow:0 2px 8px rgba(43,38,32,.28);transition:transform .15s}
+.mm-marker:hover .mm-marker-count{transform:scale(1.14)}
 .mm-marker--alive .mm-marker-count{border-color:var(--ok);color:var(--ok)}
-.mm-marker--resumed .mm-marker-count{border-color:var(--gold);color:var(--gold)}
+.mm-marker--dead .mm-marker-count{border-color:var(--seal);color:var(--seal);opacity:.55;filter:grayscale(.5)}
 .mm-marker--sel .mm-marker-count{background:var(--seal);color:var(--paper-light);border-color:#7d2d1b}
-.mm-marker--ghost{opacity:.25;filter:grayscale(.8)}
-.mm-marker-name{position:absolute;top:34px;left:50%;transform:translateX(-50%);white-space:nowrap;background:rgba(251,247,236,.94);border:1px solid rgba(43,38,32,.28);border-radius:9999px;padding:1px 8px;font-size:11px;letter-spacing:.03em;box-shadow:0 1px 4px rgba(43,38,32,.16);pointer-events:none}
+.mm-marker-name{position:absolute;top:38px;left:50%;transform:translateX(-50%);white-space:nowrap;background:rgba(251,247,236,.94);border:1px solid rgba(43,38,32,.28);border-radius:9999px;padding:1px 8px;font-size:11px;letter-spacing:.03em;box-shadow:0 1px 4px rgba(43,38,32,.16);pointer-events:none}
+.mm-marker-name.ghost{display:none}
 
-/* 面板通用 */
+/* 用户位置 */
+.you-marker{width:14px;height:14px;background:#3b82c4;border:3px solid #fff;border-radius:9999px;box-shadow:0 0 0 2px rgba(59,130,196,.5),0 2px 8px rgba(0,0,0,.3)}
+
+/* 浮动层通用 */
 .panel{background:radial-gradient(1200px 400px at 20% -10%,rgba(255,252,240,.9),transparent 60%),rgba(251,247,236,.97);border:1px solid rgba(43,38,32,.18);box-shadow:0 10px 40px rgba(43,38,32,.18),0 2px 8px rgba(43,38,32,.1);backdrop-filter:blur(6px);border-radius:16px}
 .scroll::-webkit-scrollbar{width:8px;height:8px}
 .scroll::-webkit-scrollbar-thumb{background:rgba(43,38,32,.25);border-radius:8px}
 .scroll::-webkit-scrollbar-track{background:transparent}
 
-/* 顶部筛选 chips */
-#filters{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:1050;display:flex;align-items:center;gap:4px;background:rgba(251,247,236,.95);border:1px solid rgba(43,38,32,.1);border-radius:9999px;padding:4px;box-shadow:0 2px 10px rgba(43,38,32,.12);backdrop-filter:blur(6px);max-width:calc(100vw - 24px);overflow-x:auto;scrollbar-width:none}
-#filters::-webkit-scrollbar{display:none}
-#filters .lbl{padding-left:8px;font-size:10px;letter-spacing:.15em;color:var(--ink-faint);white-space:nowrap}
-#filters button{border:none;background:none;cursor:pointer;border-radius:9999px;padding:4px 12px;font-size:12px;color:var(--ink-soft);white-space:nowrap}
-#filters button.on{background:var(--seal);color:var(--paper-light)}
-
 /* 图例 */
-#legend{position:absolute;top:12px;right:16px;z-index:1050;padding:10px 14px;font-size:11px;line-height:1.8;color:var(--ink-soft)}
+#legend{position:absolute;top:12px;right:14px;z-index:1050;padding:8px 12px;font-size:11px;line-height:1.8;color:var(--ink-soft)}
 #legend h4{margin:0 0 2px;font-size:12px;color:var(--ink)}
 .leg-dot{display:inline-block;width:10px;height:10px;border-radius:9999px;border:2px solid var(--ink);background:var(--paper-light);margin-right:6px;vertical-align:-1px}
-.leg-dot--gone{border-color:var(--seal);color:var(--seal);background:var(--seal)}
-.leg-dot--alive{border-color:var(--ok);color:var(--ok);background:var(--ok)}
-.leg-dot--resumed{border-color:var(--gold);color:var(--gold);background:var(--gold)}
+.leg-dot--alive{border-color:var(--ok);background:var(--ok)}
+.leg-dot--dead{border-color:var(--seal);background:var(--seal);opacity:.55}
+.leg-dot--you{border-color:#3b82c4;background:#3b82c4}
+#locHint{position:absolute;top:12px;left:14px;z-index:1050;padding:6px 12px;font-size:11px;color:var(--ink-soft);display:none}
+#locHint.show{display:block}
 
-/* 左侧控制面板 */
-#ctrl{position:absolute;top:60px;left:16px;bottom:16px;width:290px;z-index:1040;display:flex;flex-direction:column;overflow:hidden;transition:transform .25s ease}
-#ctrl.collapsed{transform:translateX(calc(-100% - 24px))}
-#ctrl-head{padding:12px 14px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(43,38,32,.08)}
-#ctrl-head h3{margin:0;font-size:14px}
-#ctrl-head .x{background:none;border:none;cursor:pointer;color:var(--ink-faint);font-size:14px;padding:2px 6px}
-#ctrl-body{flex:1;overflow-y:auto;padding:10px 12px}
-.group-title{font-size:10px;letter-spacing:.2em;color:var(--ink-faint);margin:12px 0 6px;text-transform:uppercase}
-.seg{display:flex;gap:4px;flex-wrap:wrap}
-.seg button{border:1px solid rgba(43,38,32,.18);background:var(--paper-light);border-radius:9999px;padding:3px 10px;font-size:12px;cursor:pointer;color:var(--ink-soft)}
-.seg button.on{background:var(--ink);color:var(--paper-light);border-color:var(--ink)}
-#search{width:100%;margin-top:8px;padding:6px 10px;border:1px solid rgba(43,38,32,.2);border-radius:9999px;background:var(--paper-light);font-size:12px;color:var(--ink);outline:none}
-#search:focus{border-color:var(--teal)}
-.school-list{margin-top:10px;display:flex;flex-direction:column;gap:4px}
-.school-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:12px;border:1px solid transparent;transition:background .12s}
-.school-item:hover{background:rgba(43,38,32,.05)}
-.school-item.sel{background:rgba(179,69,46,.08);border-color:rgba(179,69,46,.3)}
-.school-item .dot{width:8px;height:8px;border-radius:9999px;flex:none}
-.dot--gone{background:var(--seal)}
-.dot--alive{background:var(--ok)}
-.dot--resumed{background:var(--gold)}
-.school-item .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.school-item .yr{color:var(--ink-faint);font-size:11px;flex:none}
-.school-item .badge{font-size:10px;padding:1px 6px;border-radius:9999px;background:rgba(43,38,32,.07);color:var(--ink-soft);flex:none}
-.school-item .badge.k-gone{background:rgba(179,69,46,.1);color:var(--seal)}
-.school-item .badge.k-move{background:rgba(169,127,47,.12);color:var(--gold)}
-.school-item .badge.k-rename{background:rgba(51,101,109,.12);color:var(--teal)}
-.collapse-btn{position:absolute;top:60px;left:306px;z-index:1040;border:1px solid rgba(43,38,32,.15);background:var(--paper-light);color:var(--ink-soft);border-radius:0 10px 10px 0;padding:8px 6px;cursor:pointer;font-size:12px;box-shadow:0 2px 8px rgba(43,38,32,.12);transition:left .25s ease}
-.collapse-btn.open{left:16px;border-radius:10px}
-#stats{position:absolute;bottom:16px;left:16px;z-index:1030;padding:8px 14px;font-size:11px;color:var(--ink-soft);background:rgba(251,247,236,.92);border:1px solid rgba(43,38,32,.12);border-radius:12px;box-shadow:0 2px 8px rgba(43,38,32,.1)}
-#stats b{color:var(--ink);font-weight:600}
-#stats .sep{color:var(--ink-faint)}
+/* ---------- 底部时间轴 ---------- */
+#timeline{position:absolute;left:50%;transform:translateX(-50%);bottom:16px;z-index:1060;width:min(680px,calc(100vw - 24px));padding:10px 16px 12px}
+#tlTop{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:2px}
+#tlYear{font-size:26px;font-weight:700;font-family:'Noto Serif SC',serif;color:var(--ink);line-height:1}
+#tlYear small{font-size:12px;font-weight:400;color:var(--ink-faint);margin-left:4px}
+#tlHint{font-size:11px;color:var(--ink-faint)}
+#tlRange{width:100%;-webkit-appearance:none;appearance:none;height:28px;background:transparent;cursor:pointer;margin:0}
+#tlRange::-webkit-slider-runnable-track{height:6px;border-radius:3px;background:linear-gradient(to right,var(--paper-dark),var(--ink))}
+#tlRange::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:9999px;background:var(--seal);border:3px solid var(--paper-light);box-shadow:0 1px 6px rgba(43,38,32,.4);margin-top:-6px}
+#tlRange::-moz-range-track{height:6px;border-radius:3px;background:var(--paper-dark)}
+#tlRange::-moz-range-thumb{width:16px;height:16px;border-radius:9999px;background:var(--seal);border:3px solid var(--paper-light);box-shadow:0 1px 6px rgba(43,38,32,.4)}
+#tlEras{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-faint);margin-top:-6px;user-select:none}
+#tlEras b{color:var(--ink-soft);font-weight:600}
+#tlPlay{position:absolute;right:14px;top:-34px;border:none;background:rgba(179,69,46,.12);color:var(--seal);border-radius:9999px;padding:4px 12px;font-size:11px;cursor:pointer;border:1px solid rgba(179,69,46,.25)}
+#tlPlay:hover{background:rgba(179,69,46,.22)}
 
-/* 详情抽屉 */
-#detail{position:absolute;right:16px;top:60px;bottom:16px;width:380px;z-index:1040;display:none;flex-direction:column;overflow:hidden}
-#detail.show{display:flex;animation:slideIn .28s cubic-bezier(.2,.8,.25,1) both}
-@keyframes slideIn{from{transform:translateX(30px);opacity:0}to{transform:none;opacity:1}}
-#detail-head{padding:14px 16px 10px;border-bottom:1px solid rgba(43,38,32,.08)}
-#detail-head .kicker{font-size:10px;letter-spacing:.2em;color:var(--ink-faint)}
-#detail-head h2{margin:2px 0 4px;font-size:17px}
-#detail-head .aliases{font-size:11px;color:var(--ink-soft)}
-#detail-head .steid{font-size:10px;color:var(--ink-faint);word-break:break-all;margin-top:4px;user-select:all}
-#detail-head .x{position:absolute;top:10px;right:12px;background:none;border:none;cursor:pointer;color:var(--ink-faint);font-size:16px;padding:4px}
-#detail-body{flex:1;overflow-y:auto;padding:12px 16px 20px}
-.tl{position:relative;padding-left:22px}
-.tl::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:rgba(43,38,32,.14)}
-.tl-item{position:relative;padding:0 0 16px}
-.tl-item::before{content:'';position:absolute;left:-19px;top:5px;width:10px;height:10px;border-radius:9999px;background:var(--paper-light);border:2px solid var(--ink)}
+/* ---------- 学校卡片 ---------- */
+#card{position:absolute;right:14px;top:64px;bottom:86px;width:340px;z-index:1045;display:none;flex-direction:column;overflow:hidden}
+#card.show{display:flex;animation:slideIn .25s cubic-bezier(.2,.8,.25,1) both}
+@keyframes slideIn{from{transform:translateX(26px);opacity:0}to{transform:none;opacity:1}}
+#card-head{padding:14px 16px 10px;border-bottom:1px solid rgba(43,38,32,.08);position:relative}
+#card-head .kicker{font-size:10px;letter-spacing:.18em;color:var(--ink-faint)}
+#card-head h2{margin:2px 0 2px;font-size:16px}
+#card-head .steid{font-size:9.5px;color:var(--ink-faint);word-break:break-all;user-select:all}
+#card-head .x{position:absolute;top:8px;right:10px;background:none;border:none;cursor:pointer;color:var(--ink-faint);font-size:15px;padding:4px}
+#card-body{flex:1;overflow-y:auto;padding:12px 16px 16px}
+#curSnap{border-left:3px solid var(--seal);padding:2px 0 2px 12px;margin-bottom:12px}
+#curSnap .when{font-size:10px;color:var(--ink-faint);letter-spacing:.12em}
+#curSnap .what{font-size:13px;font-weight:600;margin-top:2px}
+#curSnap .st{display:inline-block;font-size:10px;padding:1px 8px;border-radius:9999px;margin-left:6px;vertical-align:1px;background:rgba(74,103,65,.12);color:var(--ok)}
+#curSnap .st.dead{background:rgba(179,69,46,.12);color:var(--seal)}
+#curSnap .desc{font-size:12px;line-height:1.65;color:var(--ink-soft);margin-top:4px}
+.subtitle{font-size:10px;letter-spacing:.2em;color:var(--ink-faint);margin:12px 0 6px}
+.tl{position:relative;padding-left:20px}
+.tl::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:rgba(43,38,32,.14)}
+.tl-item{position:relative;padding:0 0 12px;cursor:pointer}
+.tl-item::before{content:'';position:absolute;left:-15px;top:4px;width:9px;height:9px;border-radius:9999px;background:var(--paper-light);border:2px solid var(--ink);transition:all .12s}
+.tl-item.cur::before{background:var(--seal);border-color:var(--seal);transform:scale(1.35)}
 .tl-item.st-active::before{border-color:var(--ok)}
 .tl-item.st-demolished::before{border-color:var(--seal);background:var(--seal)}
-.tl-item.st-under_construction::before{border-color:var(--gold)}
-.tl-item.st-proposed::before{border-color:var(--gold);border-style:dashed}
-.tl-range{font-size:12px;font-weight:600;color:var(--ink)}
-.tl-status{display:inline-block;font-size:10px;padding:1px 8px;border-radius:9999px;margin-left:6px;vertical-align:1px}
+.tl-range{font-size:11.5px;font-weight:600}
+.tl-name{font-size:11.5px;color:var(--ink-soft);margin-top:1px}
+.tl-status{display:inline-block;font-size:9.5px;padding:0 7px;border-radius:9999px;margin-left:5px;vertical-align:1px}
 .tl-status.st-active{background:rgba(74,103,65,.12);color:var(--ok)}
 .tl-status.st-demolished{background:rgba(179,69,46,.12);color:var(--seal)}
-.tl-status.st-under_construction{background:rgba(169,127,47,.14);color:var(--gold)}
-.tl-status.st-proposed{background:rgba(169,127,47,.14);color:var(--gold)}
-.tl-name{font-size:12px;color:var(--ink-soft);margin:2px 0}
-.tl-desc{font-size:12px;line-height:1.65;color:var(--ink-soft)}
-.tl-conf{font-size:11px;color:var(--ink-faint);margin-top:3px}
-.conf-bar{display:inline-block;width:54px;height:5px;border-radius:3px;background:rgba(43,38,32,.1);vertical-align:1px;overflow:hidden}
-.conf-bar i{display:block;height:100%;background:var(--teal);border-radius:3px}
-.tags{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-size:11px;padding:2px 10px;border-radius:9999px;background:rgba(43,38,32,.06);color:var(--ink-soft)}
-.tag kbd{font-family:inherit;font-weight:600}
-.note-box{margin-top:10px;font-size:11px;line-height:1.6;color:var(--gold);background:rgba(169,127,47,.08);border:1px solid rgba(169,127,47,.25);border-radius:8px;padding:8px 10px}
-.data-foot{margin-top:14px;padding-top:10px;border-top:1px dashed rgba(43,38,32,.15);font-size:10px;color:var(--ink-faint);line-height:1.7}
+/* 用户贡献 */
+#contribs{display:flex;flex-direction:column;gap:8px}
+.contrib{border:1px dashed rgba(43,38,32,.22);border-radius:10px;padding:8px 10px;font-size:11.5px;line-height:1.6;color:var(--ink-soft)}
+.contrib img{width:100%;border-radius:6px;margin-top:6px;border:1px solid rgba(43,38,32,.12)}
+.contrib .c-head{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.contrib .c-type{font-size:9.5px;padding:0 7px;border-radius:9999px;background:rgba(51,101,109,.12);color:var(--teal)}
+.contrib .c-year{font-size:10.5px;font-weight:600;color:var(--ink)}
+.contrib .c-rm{margin-left:auto;border:none;background:none;color:var(--ink-faint);cursor:pointer;font-size:11px;padding:2px 4px}
+.contrib .c-rm:hover{color:var(--seal)}
+#contribEmpty{font-size:11px;color:var(--ink-faint);border:1px dashed rgba(43,38,32,.15);border-radius:10px;padding:10px;text-align:center}
 
-/* 移动端适配 */
+/* 采集表单 modal */
+#modal{position:fixed;inset:0;z-index:1200;background:rgba(43,38,32,.42);display:none;align-items:center;justify-content:center;padding:16px}
+#modal.show{display:flex}
+#modalBox{width:min(420px,100%);max-height:88vh;overflow-y:auto;padding:18px 20px}
+#modalBox h3{margin:0 0 4px;font-size:15px}
+#modalBox .sub{font-size:11px;color:var(--ink-faint);margin-bottom:12px}
+.fld{margin-bottom:10px}
+.fld label{display:block;font-size:11px;color:var(--ink-soft);margin-bottom:4px}
+.fld input[type=text],.fld input[type=number],.fld textarea,.fld select{width:100%;padding:7px 10px;border:1px solid rgba(43,38,32,.22);border-radius:8px;background:var(--paper-light);font-size:12.5px;color:var(--ink);outline:none}
+.fld textarea{min-height:64px;resize:vertical}
+.fld input:focus,.fld textarea:focus{border-color:var(--teal)}
+.fld .err{color:var(--seal);font-size:10.5px;margin-top:3px;display:none}
+.fld.invalid input,.fld.invalid textarea{border-color:var(--seal)}
+.fld.invalid .err{display:block}
+.seg2{display:flex;gap:4px}
+.seg2 button{flex:1;border:1px solid rgba(43,38,32,.18);background:var(--paper-light);border-radius:9999px;padding:6px 8px;font-size:12px;cursor:pointer;color:var(--ink-soft)}
+.seg2 button.on{background:var(--ink);color:var(--paper-light);border-color:var(--ink)}
+#imgPreview{margin-top:8px;display:none}
+#imgPreview img{width:100%;border-radius:8px;border:1px solid rgba(43,38,32,.15)}
+#imgPreview.show{display:block}
+.modal-actions{display:flex;gap:8px;margin-top:14px}
+.modal-actions .btn{flex:1;padding:8px}
+#toast{position:fixed;left:50%;bottom:120px;transform:translateX(-50%);z-index:1300;background:var(--ink);color:var(--paper-light);font-size:12px;padding:8px 18px;border-radius:9999px;opacity:0;pointer-events:none;transition:opacity .25s;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+#toast.show{opacity:1}
+
+/* 移动端 */
 @media (max-width:760px){
-  #ctrl{left:8px;width:calc(100vw - 16px);top:auto;bottom:0;height:45vh;border-radius:16px 16px 0 0}
-  .collapse-btn{display:none}
-  #detail{right:8px;left:8px;width:auto;top:auto;bottom:0;height:55vh;border-radius:16px 16px 0 0}
+  #card{right:8px;left:8px;width:auto;top:auto;bottom:92px;height:52vh;border-radius:14px}
+  #timeline{bottom:10px;width:calc(100vw - 16px)}
   #legend{display:none}
-  #filters{top:8px;max-width:calc(100vw - 16px)}
-  #stats{display:none}
+  #locHint{top:auto;bottom:130px}
 }
 </style>
 </head>
@@ -153,280 +165,371 @@ main{position:relative;flex:1;overflow:hidden}
   <header>
     <div class="brand">
       <div class="sealbox serif">忆</div>
-      <h1 class="serif">消失的母校<span class="sub">Memo-Map 4D · 时间记忆地图</span></h1>
+      <h1 class="serif">消失的母校<span class="sub">拖动时间轴，看它一生的变迁</span></h1>
     </div>
     <div class="head-right">
       <span class="badge-schema">数据符合 <a href="https://wonderingWu.github.io/ste-schema/v0.1/schema.json" target="_blank">STE Schema v0.1</a></span>
-      <span id="dataCount"></span>
+      <button class="btn" id="locBtn">📍 定位我</button>
     </div>
   </header>
   <main>
     <div id="map"></div>
 
-    <div id="filters">
-      <span class="lbl">年代</span>
-      <button data-decade="all" class="on">全部</button>
-      <span id="decadeChips"></span>
-      <span class="lbl" style="margin-left:10px">状态</span>
-      <button data-status="all" class="on">全部</button>
-      <button data-status="gone">已消失</button>
-      <button data-status="alive">仍存在</button>
-    </div>
+    <div id="locHint" class="panel" style="display:none">📍 已定位，显示周边学校；未授权则默认北京西城</div>
 
     <div id="legend" class="panel">
       <h4>图例</h4>
-      <div><span class="leg-dot leg-dot--gone"></span>已消失（demolished）</div>
-      <div><span class="leg-dot leg-dot--alive"></span>仍存在（active）</div>
-      <div><span class="leg-dot leg-dot--resumed"></span>停办后恢复</div>
-      <div style="margin-top:6px;color:var(--ink-faint)">数字 = 该年代活跃学校数</div>
+      <div><span class="leg-dot leg-dot--alive"></span>该年代存在</div>
+      <div><span class="leg-dot leg-dot--dead"></span>该年代已消失</div>
+      <div><span class="leg-dot leg-dot--you"></span>你的位置</div>
+      <div style="margin-top:6px;color:var(--ink-faint)">拖动下方时间轴查看变迁</div>
     </div>
 
-    <button class="collapse-btn" id="collapseBtn" title="收起/展开列表">‹</button>
+    <div id="card" class="panel">
+      <button class="x" id="cardClose">✕</button>
+      <div id="card-head"></div>
+      <div id="card-body" class="scroll"></div>
+    </div>
 
-    <div id="ctrl" class="panel">
-      <div id="ctrl-head">
-        <h3>学校名录 <span id="listCount" style="color:var(--ink-faint);font-weight:400"></span></h3>
-        <button class="x" id="ctrlClose">✕</button>
+    <div id="timeline" class="panel">
+      <div id="tlTop">
+        <div id="tlYear">2026<small>年</small></div>
+        <div id="tlHint">← 拖动时间轴，地图与详情随之变化</div>
+        <button id="tlPlay">▶ 播放</button>
       </div>
-      <div id="ctrl-body" class="scroll">
-        <div class="group-title">城市</div>
-        <div class="seg" id="citySeg">
-          <button data-city="all" class="on">全部</button>
-          <button data-city="北京">北京</button>
-          <button data-city="上海">上海</button>
-        </div>
-        <div class="group-title">消失类型</div>
-        <div class="seg" id="kindSeg">
-          <button data-kind="all" class="on">全部</button>
-        </div>
-        <div class="group-title">搜索</div>
-        <input id="search" placeholder="输入校名查找…" />
-        <div class="school-list" id="schoolList"></div>
-      </div>
+      <input type="range" id="tlRange" min="1890" max="2026" value="2026" step="1" />
+      <div id="tlEras"></div>
     </div>
 
-    <div id="detail" class="panel">
-      <button class="x" id="detailClose">✕</button>
-      <div id="detail-head"></div>
-      <div id="detail-body" class="scroll"></div>
-    </div>
-
-    <div id="stats"><b id="stCount"></b> 所学校 <span class="sep">·</span> <b id="stGone"></b> 已消失 <span class="sep">·</span> <b id="stAlive"></b> 仍存在 <span class="sep">·</span> 坐标 <b id="stGeo"></b> 已定位</div>
+    <div id="toast"></div>
   </main>
 </div>
+
+<div id="modal">
+  <div id="modalBox" class="panel">
+    <h3 class="serif">添加变迁 / 记忆</h3>
+    <div class="sub">贡献将保存在本浏览器（localStorage），作为该学校的补充时间事实</div>
+    <div class="fld">
+      <label>类型</label>
+      <div class="seg2" id="typeSeg">
+        <button data-t="fact" class="on">变迁事实</button>
+        <button data-t="text">文字记忆</button>
+        <button data-t="photo">图片</button>
+      </div>
+    </div>
+    <div class="fld" id="yearFld">
+      <label>年份（必填，如 1958）</label>
+      <input type="number" id="fYear" min="1800" max="2099" placeholder="1958" />
+      <div class="err">请填写有效年份</div>
+    </div>
+    <div class="fld" id="contentFld">
+      <label id="contentLabel">变迁事实内容（必填）</label>
+      <textarea id="fContent" placeholder="如：这一年学校西迁至西安…"></textarea>
+      <div class="err">请填写内容</div>
+    </div>
+    <div class="fld" id="imgFld" style="display:none">
+      <label>选择图片（可选）</label>
+      <input type="file" id="fImg" accept="image/*" />
+      <div id="imgPreview"><img id="fImgPreview" alt="预览" /></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" id="modalCancel">取消</button>
+      <button class="btn primary" id="modalSave">保存贡献</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 'use strict';
-/* ============ 数据（由 build-demo.mjs 注入，符合 STE Schema v0.1） ============ */
-const SCHOOLS = [ { "ste_id": "a27b98c1-d48b-470c-8098-2b9c10610cde", "ste_version": "0.1", "name": { "primary": "北京八中", "aliases": [ "老八中" ] }, "coordinates": { "lat": 39.9322341, "lon": 116.4109734 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "北京" }, "timeline": [ { "start_date": "1950", "end_date": "2000", "name": "北京八中", "type": "school", "status": "active", "description": "新中国首批重点中学之一，因东城区教育布局调整与校舍老化停办。", "confidence": 0.7 }, { "start_date": "2000", "end_date": "2000", "name": "北京八中", "type": "school", "status": "demolished", "description": "停办：新中国首批重点中学之一，因东城区教育布局调整与校舍老化停办。", "confidence": 0.7 } ] }, { "ste_id": "015b40ef-963d-4f84-83a9-009807e5b671", "ste_version": "0.1", "name": { "primary": "北京九中", "aliases": [ "老九中" ] }, "coordinates": { "lat": 32.0435852, "lon": 118.7789021 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "北京" }, "timeline": [ { "start_date": "1950", "end_date": "1990", "name": "北京九中", "type": "school", "status": "active", "description": "曾为北京市重点中学，因城区更新与校舍危旧停办。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "北京九中", "type": "school", "status": "demolished", "description": "停办：曾为北京市重点中学，因城区更新与校舍危旧停办。", "confidence": 0.7 } ] }, { "ste_id": "b5f2fd56-02c3-4e6a-81da-860ca47da312", "ste_version": "0.1", "name": { "primary": "北京十一中", "aliases": [ "老十一中" ] }, "coordinates": { "lat": 39.928, "lon": 116.416 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "北京", "note": "坐标回退到东城区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1950", "end_date": "1990", "name": "北京十一中", "type": "school", "status": "active", "description": "老牌重点校，因教育资源整合停办。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "北京十一中", "type": "school", "status": "demolished", "description": "停办：老牌重点校，因教育资源整合停办。", "confidence": 0.7 } ] }, { "ste_id": "097662b6-9e0f-456e-862d-7276ac70f66f", "ste_version": "0.1", "name": { "primary": "北京十三中", "aliases": [ "老十三中" ] }, "coordinates": { "lat": 39.928, "lon": 116.416 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "北京", "note": "坐标回退到东城区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1950", "end_date": "2000", "name": "北京十三中", "type": "school", "status": "active", "description": "老城区改造导致校舍拆除，学校停办。", "confidence": 0.7 }, { "start_date": "2000", "end_date": "2000", "name": "北京十三中", "type": "school", "status": "demolished", "description": "停办：老城区改造导致校舍拆除，学校停办。", "confidence": 0.7 } ] }, { "ste_id": "00f2f413-0ad3-47bb-8f48-cae12d4ea4c0", "ste_version": "0.1", "name": { "primary": "北京十四中", "aliases": [ "老十四中" ] }, "coordinates": { "lat": 39.912, "lon": 116.366 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "北京", "note": "坐标回退到西城区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1950", "end_date": "1990", "name": "北京十四中", "type": "school", "status": "active", "description": "曾为重点校，因城市更新停办。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "北京十四中", "type": "school", "status": "demolished", "description": "停办：曾为重点校，因城市更新停办。", "confidence": 0.7 } ] }, { "ste_id": "93fe43de-8df0-4189-896b-d9c1c0ddac60", "ste_version": "0.1", "name": { "primary": "北京十五中", "aliases": [ "老十五中" ] }, "coordinates": { "lat": 39.928, "lon": 116.416 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "北京", "note": "坐标回退到东城区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1950", "end_date": "1990", "name": "北京十五中", "type": "school", "status": "active", "description": "因老城区改造与校舍拆迁停办。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "北京十五中", "type": "school", "status": "demolished", "description": "停办：因老城区改造与校舍拆迁停办。", "confidence": 0.7 } ] }, { "ste_id": "e26d8213-0722-45b0-8868-1b85c194a2f0", "ste_version": "0.1", "name": { "primary": "北京十六中", "aliases": [ "老十六中" ] }, "coordinates": { "lat": 39.912, "lon": 116.366 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "北京", "note": "坐标回退到西城区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1950", "end_date": "1990", "name": "北京十六中", "type": "school", "status": "active", "description": "因城市规划调整停办。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "北京十六中", "type": "school", "status": "demolished", "description": "停办：因城市规划调整停办。", "confidence": 0.7 } ] }, { "ste_id": "77092edf-d123-46d9-8121-887301ad8c6e", "ste_version": "0.1", "name": { "primary": "北京十九中", "aliases": [ "老校址" ] }, "coordinates": { "lat": 39.959, "lon": 116.298 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁（老址停办）", "city": "北京", "note": "坐标回退到海淀区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1950", "end_date": "2000", "name": "北京十九中", "type": "school", "status": "active", "description": "老校址停办后迁至阳春光华校区，与人大附中合作办学。", "confidence": 0.7 }, { "start_date": "2000", "end_date": "2000", "name": "北京十九中", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，老校址停办后迁至阳春光华校区，与人大附中合作办学。", "confidence": 0.7 } ] }, { "ste_id": "070c3771-1456-4247-84d9-7d8259c35c8d", "ste_version": "0.1", "name": { "primary": "北京九十九中", "aliases": [ "老校址" ] }, "coordinates": { "lat": 31.3689191, "lon": 108.5161417 }, "tags": { "amenity": "school", "ste:disappearance": "停办→恢复", "city": "北京" }, "timeline": [ { "start_date": "1980", "end_date": "2010", "name": "北京九十九中", "type": "school", "status": "active", "description": "因生源减少停办多年，2026 年恢复招生。", "confidence": 0.7 }, { "start_date": "2010", "end_date": "2010", "name": "北京九十九中", "type": "school", "status": "demolished", "description": "停办期间：因生源减少停办多年，2026 年恢复招生。", "confidence": 0.7 }, { "start_date": "2026", "name": "北京九十九中", "type": "school", "status": "active", "description": "恢复招生（2026 年）。因生源减少停办多年，2026 年恢复招生。", "confidence": 0.7 } ] }, { "ste_id": "7926f46e-28c4-444a-8292-917117570f49", "ste_version": "0.1", "name": { "primary": "史家小学分校", "aliases": [ "老校址" ] }, "coordinates": { "lat": 39.9169964, "lon": 116.4125409 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "北京" }, "timeline": [ { "start_date": "1946", "end_date": "2010", "name": "史家小学分校", "type": "school", "status": "active", "description": "因老城区更新，分校校舍拆除。", "confidence": 0.7 }, { "start_date": "2010", "end_date": "2010", "name": "史家小学分校", "type": "school", "status": "demolished", "description": "停办：因老城区更新，分校校舍拆除。", "confidence": 0.7 } ] }, { "ste_id": "4d7be311-92b1-40a0-8ba2-ba328f61adb1", "ste_version": "0.1", "name": { "primary": "府学胡同小学部分校区" }, "coordinates": { "lat": 39.9343093, "lon": 116.4066834 }, "tags": { "amenity": "school", "ste:disappearance": "停办（部分）", "city": "北京" }, "timeline": [ { "start_date": "1906", "end_date": "2000", "name": "府学胡同小学部分校区", "type": "school", "status": "active", "description": "老城区改造导致部分校区停办。", "confidence": 0.7 }, { "start_date": "2000", "end_date": "2000", "name": "府学胡同小学部分校区", "type": "school", "status": "demolished", "description": "停办：老城区改造导致部分校区停办。", "confidence": 0.7 } ] }, { "ste_id": "4cc11512-07f4-4be7-8840-17551697c3a4", "ste_version": "0.1", "name": { "primary": "西城实验小学部分校区" }, "coordinates": { "lat": 39.912, "lon": 116.366 }, "tags": { "amenity": "school", "ste:disappearance": "停办（部分）", "city": "北京", "note": "坐标回退到西城区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1950", "end_date": "2000", "name": "西城实验小学部分校区", "type": "school", "status": "active", "description": "因旧城改造停办。", "confidence": 0.7 }, { "start_date": "2000", "end_date": "2000", "name": "西城实验小学部分校区", "type": "school", "status": "demolished", "description": "停办：因旧城改造停办。", "confidence": 0.7 } ] }, { "ste_id": "e1b04b5b-106c-427c-8ec3-1d78ae42c8c1", "ste_version": "0.1", "name": { "primary": "海淀区振兴小学", "aliases": [ "民办" ] }, "coordinates": { "lat": 39.959, "lon": 116.298 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "北京", "note": "坐标回退到海淀区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1990", "end_date": "2024", "name": "海淀区振兴小学", "type": "school", "status": "active", "description": "办学许可被废止，学校停止办学。", "confidence": 0.7 }, { "start_date": "2024", "end_date": "2024", "name": "海淀区振兴小学", "type": "school", "status": "demolished", "description": "停办：办学许可被废止，学校停止办学。", "confidence": 0.7 } ] }, { "ste_id": "d6c6f487-91d1-4a4a-815b-0696cb40d3a1", "ste_version": "0.1", "name": { "primary": "稻香湖学校未来城校区", "aliases": [ "昌平" ] }, "coordinates": { "lat": 39.928, "lon": 116.416 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "北京", "note": "坐标回退到东城区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "2018", "end_date": "2026", "name": "稻香湖学校未来城校区", "type": "school", "status": "active", "description": "占地 148 亩的高端民办学校，因未获资质与运营成本停办，学生迁往海淀主校区。", "confidence": 0.7 }, { "start_date": "2026", "end_date": "2026", "name": "稻香湖学校未来城校区", "type": "school", "status": "demolished", "description": "停办：占地 148 亩的高端民办学校，因未获资质与运营成本停办，学生迁往海淀主校区。", "confidence": 0.7 } ] }, { "ste_id": "4502b578-40cc-4dab-8b0d-0747278b903f", "ste_version": "0.1", "name": { "primary": "通州区第四中学", "aliases": [ "首师大附中通州实验学校" ] }, "coordinates": { "lat": 39.909, "lon": 116.656 }, "tags": { "amenity": "school", "ste:disappearance": "更名/升级", "city": "北京", "note": "坐标回退到通州区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1950", "end_date": "2026", "name": "通州区第四中学", "type": "school", "status": "active", "description": "恢复高中部并入首师大附中教育集团。", "confidence": 0.7 }, { "start_date": "2026", "name": "首师大附中通州实验学校", "type": "school", "status": "active", "description": "更名/升级为「首师大附中通州实验学校」。恢复高中部并入首师大附中教育集团。", "confidence": 0.7 } ] }, { "ste_id": "040d6df5-a756-438d-8bb1-908b8bdfcaa8", "ste_version": "0.1", "name": { "primary": "龙旺庄小学", "aliases": [ "龙旺庄学校" ] }, "coordinates": { "lat": 39.9283026, "lon": 116.6827786 }, "tags": { "amenity": "school", "ste:disappearance": "升级", "city": "北京" }, "timeline": [ { "start_date": "1990", "end_date": "2026", "name": "龙旺庄小学", "type": "school", "status": "active", "description": "从小学升级为九年一贯制学校。", "confidence": 0.7 }, { "start_date": "2026", "name": "龙旺庄学校", "type": "school", "status": "active", "description": "更名/升级为「龙旺庄学校」。从小学升级为九年一贯制学校。", "confidence": 0.7 } ] }, { "ste_id": "70458692-78c0-400a-82ec-64f1e7129d24", "ste_version": "0.1", "name": { "primary": "运河中学附属小学", "aliases": [ "运河中学附属学校" ] }, "coordinates": { "lat": 39.8809529, "lon": 116.6926086 }, "tags": { "amenity": "school", "ste:disappearance": "升级", "city": "北京" }, "timeline": [ { "start_date": "1990", "end_date": "2026", "name": "运河中学附属小学", "type": "school", "status": "active", "description": "从小学升级为九年一贯制学校。", "confidence": 0.7 }, { "start_date": "2026", "name": "运河中学附属学校", "type": "school", "status": "active", "description": "更名/升级为「运河中学附属学校」。从小学升级为九年一贯制学校。", "confidence": 0.7 } ] }, { "ste_id": "9ac332f7-b79e-4c48-89c0-0a4a1a30f2e2", "ste_version": "0.1", "name": { "primary": "丰台五小望园校区", "aliases": [ "培元小学" ] }, "coordinates": { "lat": 30.9345961, "lon": 121.4797542 }, "tags": { "amenity": "school", "ste:disappearance": "更名/并入", "city": "北京" }, "timeline": [ { "start_date": "1990", "end_date": "2026", "name": "丰台五小望园校区", "type": "school", "status": "active", "description": "校区更名并加入十二中教育集团。", "confidence": 0.7 }, { "start_date": "2026", "name": "培元小学", "type": "school", "status": "active", "description": "更名/升级为「培元小学」。校区更名并加入十二中教育集团。", "confidence": 0.7 } ] }, { "ste_id": "0d5d0270-e827-4b6f-8110-d0808c6cb946", "ste_version": "0.1", "name": { "primary": "丰台五小京铁校区", "aliases": [ "培元小学北校区" ] }, "coordinates": { "lat": 39.8929983, "lon": 116.2765149 }, "tags": { "amenity": "school", "ste:disappearance": "更名/并入", "city": "北京" }, "timeline": [ { "start_date": "1990", "end_date": "2026", "name": "丰台五小京铁校区", "type": "school", "status": "active", "description": "校区更名并加入十二中教育集团。", "confidence": 0.7 }, { "start_date": "2026", "name": "培元小学北校区", "type": "school", "status": "active", "description": "更名/升级为「培元小学北校区」。校区更名并加入十二中教育集团。", "confidence": 0.7 } ] }, { "ste_id": "0195e79a-7d17-4c5e-89d8-ef4c50755609", "ste_version": "0.1", "name": { "primary": "兴华中学海户校区", "aliases": [ "大兴" ] }, "coordinates": { "lat": 39.8506537, "lon": 116.3940324 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁/扩建", "city": "北京" }, "timeline": [ { "start_date": "2000", "end_date": "2026", "name": "兴华中学海户校区", "type": "school", "status": "active", "description": "新校区启用，形成“一校三址”。", "confidence": 0.7 }, { "start_date": "2026", "end_date": "2026", "name": "兴华中学海户校区", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，新校区启用，形成“一校三址”。", "confidence": 0.7 } ] }, { "ste_id": "1e736a2c-143c-4a43-83c2-010121e2b47f", "ste_version": "0.1", "name": { "primary": "北京朝阳职业学校", "aliases": [ "由三校合并" ] }, "coordinates": { "lat": 39.921, "lon": 116.443 }, "tags": { "amenity": "school", "ste:disappearance": "合并", "city": "北京", "note": "坐标回退到朝阳区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1980", "end_date": "2026", "name": "北京朝阳职业学校", "type": "school", "status": "active", "description": "劲松职业高中、求实职业学校、电气工程学校三校合并为大型职业学校。", "confidence": 0.7 }, { "start_date": "2026", "name": "北京朝阳职业学校", "type": "school", "status": "active", "description": "更名/升级为「北京朝阳职业学校」。劲松职业高中、求实职业学校、电气工程学校三校合并为大型职业学校。", "confidence": 0.7 } ] }, { "ste_id": "b8b66c36-f684-470b-88fe-3ff315dd2b40", "ste_version": "0.1", "name": { "primary": "嘉定区徐行镇民办育红小学" }, "coordinates": { "lat": 31.4181495, "lon": 121.2758415 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海" }, "timeline": [ { "start_date": "1997", "end_date": "2022", "name": "嘉定区徐行镇民办育红小学", "type": "school", "status": "active", "description": "进城务工随迁子女学校，2022 年嘉定教育局批准终止办学。", "confidence": 0.7 }, { "start_date": "2022", "end_date": "2022", "name": "嘉定区徐行镇民办育红小学", "type": "school", "status": "demolished", "description": "停办：进城务工随迁子女学校，2022 年嘉定教育局批准终止办学。", "confidence": 0.7 } ] }, { "ste_id": "fdda1169-d206-44f6-8c3c-ab13a42d48c4", "ste_version": "0.1", "name": { "primary": "宝山区大场镇民办申华小学" }, "coordinates": { "lat": 31.405, "lon": 121.489 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海", "note": "坐标回退到宝山区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "2006", "end_date": "2022", "name": "宝山区大场镇民办申华小学", "type": "school", "status": "active", "description": "以足球见长，因办学许可注销终止办学。", "confidence": 0.7 }, { "start_date": "2022", "end_date": "2022", "name": "宝山区大场镇民办申华小学", "type": "school", "status": "demolished", "description": "停办：以足球见长，因办学许可注销终止办学。", "confidence": 0.7 } ] }, { "ste_id": "ab3d10ff-344c-468b-83b4-88bc88392296", "ste_version": "0.1", "name": { "primary": "宝山区民办惠民小学" }, "coordinates": { "lat": 31.4220763, "lon": 121.41711 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海" }, "timeline": [ { "start_date": "2008", "end_date": "2022", "name": "宝山区民办惠民小学", "type": "school", "status": "active", "description": "农民工子女学校，因办学许可注销停办。", "confidence": 0.7 }, { "start_date": "2022", "end_date": "2022", "name": "宝山区民办惠民小学", "type": "school", "status": "demolished", "description": "停办：农民工子女学校，因办学许可注销停办。", "confidence": 0.7 } ] }, { "ste_id": "71d06197-b94b-4779-8074-b08e418c122e", "ste_version": "0.1", "name": { "primary": "浦东新区民办阳光小学" }, "coordinates": { "lat": 31.222, "lon": 121.544 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海", "note": "坐标回退到浦东新区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "2022", "end_date": "2022", "name": "浦东新区民办阳光小学", "type": "school", "status": "demolished", "description": "成立年份不详，民办小学，2022 年经审查准予终止办学。", "confidence": 0.7 } ] }, { "ste_id": "821d8686-9265-48bc-8d16-10ca5645dfc7", "ste_version": "0.1", "name": { "primary": "浦东新区民办皖蓼小学" }, "coordinates": { "lat": 31.222, "lon": 121.544 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海", "note": "坐标回退到浦东新区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "2022", "end_date": "2022", "name": "浦东新区民办皖蓼小学", "type": "school", "status": "demolished", "description": "成立年份不详，民办小学，2022 年终止办学。", "confidence": 0.7 } ] }, { "ste_id": "14025ef3-8132-4afc-8330-979066df863f", "ste_version": "0.1", "name": { "primary": "松江区联庄小学" }, "coordinates": { "lat": 31.1186287, "lon": 121.265339 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海" }, "timeline": [ { "start_date": "2024", "end_date": "2024", "name": "松江区联庄小学", "type": "school", "status": "demolished", "description": "成立年份不详，招收随迁子女的小学，因生源减少终止办学。", "confidence": 0.7 } ] }, { "ste_id": "3e1b549b-2636-439c-8e95-bcaba8a73545", "ste_version": "0.1", "name": { "primary": "松江区打铁桥村小学" }, "coordinates": { "lat": 31.03, "lon": 121.227 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海", "note": "坐标回退到松江区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "2024", "end_date": "2024", "name": "松江区打铁桥村小学", "type": "school", "status": "demolished", "description": "成立年份不详，随迁子女小学，官方公布终止办学。", "confidence": 0.7 } ] }, { "ste_id": "2808b788-ff6c-4af2-853d-c43ec1e3500d", "ste_version": "0.1", "name": { "primary": "松江区北干山小学" }, "coordinates": { "lat": 31.03, "lon": 121.227 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海", "note": "坐标回退到松江区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "2024", "end_date": "2024", "name": "松江区北干山小学", "type": "school", "status": "demolished", "description": "成立年份不详，随迁子女小学，因生源减少停办。", "confidence": 0.7 } ] }, { "ste_id": "288bd63d-b4b4-47cb-8b8a-debf29e3fc12", "ste_version": "0.1", "name": { "primary": "松江区花桥村小学" }, "coordinates": { "lat": 31.03, "lon": 121.227 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海", "note": "坐标回退到松江区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "2024", "end_date": "2024", "name": "松江区花桥村小学", "type": "school", "status": "demolished", "description": "成立年份不详，随迁子女小学，2024 年终止办学。", "confidence": 0.7 } ] }, { "ste_id": "ee980c49-5a09-4a23-85cd-758467296703", "ste_version": "0.1", "name": { "primary": "奉城二中", "aliases": [ "奉贤区" ] }, "coordinates": { "lat": 30.9114473, "lon": 121.6413683 }, "tags": { "amenity": "school", "ste:disappearance": "停招（停办）", "city": "上海" }, "timeline": [ { "start_date": "2026", "end_date": "2026", "name": "奉城二中", "type": "school", "status": "demolished", "description": "成立年份不详，停招后学生划入曙光中学。", "confidence": 0.7 } ] }, { "ste_id": "ed458949-bd70-4cf3-8511-b00e56670b5b", "ste_version": "0.1", "name": { "primary": "上海科技大学附属学校" }, "coordinates": { "lat": 31.1702339, "lon": 121.6041427 }, "tags": { "amenity": "school", "ste:disappearance": "停招（转制公办）", "city": "上海" }, "timeline": [ { "start_date": "2019", "end_date": "2022", "name": "上海科技大学附属学校", "type": "school", "status": "active", "description": "停招（学校实体仍在）：原民办九年一贯制，2022 年起停止招生并转为公办。", "confidence": 0.7 } ] }, { "ste_id": "1f4a8ce3-f7ee-4b05-8ec3-2e7987af706a", "ste_version": "0.1", "name": { "primary": "上海民办日日学校", "aliases": [ "更名为华远学校" ] }, "coordinates": { "lat": 31.3326426, "lon": 121.4469687 }, "tags": { "amenity": "school", "ste:disappearance": "停招", "city": "上海" }, "timeline": [ { "start_date": "1990", "end_date": "2022", "name": "上海民办日日学校", "type": "school", "status": "active", "description": "停招（学校实体仍在）：曾属同济大学附属存志学校集团，2022 年暂停招生。", "confidence": 0.7 } ] }, { "ste_id": "04c2ae5e-f9d4-4322-83ca-a7ff58cd06ce", "ste_version": "0.1", "name": { "primary": "上海民办东方阶梯双语学校" }, "coordinates": { "lat": 31.222, "lon": 121.544 }, "tags": { "amenity": "school", "ste:disappearance": "停招", "city": "上海", "note": "坐标回退到浦东新区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1993", "end_date": "2022", "name": "上海民办东方阶梯双语学校", "type": "school", "status": "active", "description": "停招（学校实体仍在）：九年一贯制双语学校，小班化教学，2022 年小学部暂停招生。", "confidence": 0.7 } ] }, { "ste_id": "94e04783-ac7f-415a-8aeb-1d7956c2ef20", "ste_version": "0.1", "name": { "primary": "上海民办新金童小学" }, "coordinates": { "lat": 31.222, "lon": 121.544 }, "tags": { "amenity": "school", "ste:disappearance": "停招", "city": "上海", "note": "坐标回退到浦东新区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1993", "end_date": "2022", "name": "上海民办新金童小学", "type": "school", "status": "active", "description": "停招（学校实体仍在）：民办小学，2022 年暂停招生。", "confidence": 0.7 } ] }, { "ste_id": "85401dd6-6f95-4b74-8321-36b24ed041b6", "ste_version": "0.1", "name": { "primary": "新和中学", "aliases": [ "静安区" ] }, "coordinates": { "lat": 31.2841775, "lon": 121.4285417 }, "tags": { "amenity": "school", "ste:disappearance": "停招", "city": "上海" }, "timeline": [ { "start_date": "2026", "end_date": "2026", "name": "新和中学", "type": "school", "status": "demolished", "description": "成立年份不详，2026 年停止招生，反映民办教育调整趋势。", "confidence": 0.7 } ] }, { "ste_id": "e4f15aff-8e51-4ee2-826e-78d89de3f92f", "ste_version": "0.1", "name": { "primary": "子长学校小学部与初中部", "aliases": [ "普陀区" ] }, "coordinates": { "lat": 31.25, "lon": 121.396 }, "tags": { "amenity": "school", "ste:disappearance": "停招", "city": "上海", "note": "坐标回退到普陀区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "2026", "end_date": "2026", "name": "子长学校小学部与初中部", "type": "school", "status": "demolished", "description": "成立年份不详，学生划入普陀区教育学院附属学校。", "confidence": 0.7 } ] }, { "ste_id": "2d0be2e0-f72b-448c-87e4-37235d007ee4", "ste_version": "0.1", "name": { "primary": "真如文英中心小学", "aliases": [ "普陀区" ] }, "coordinates": { "lat": 31.2503361, "lon": 121.3998011 }, "tags": { "amenity": "school", "ste:disappearance": "停招", "city": "上海" }, "timeline": [ { "start_date": "2026", "end_date": "2026", "name": "真如文英中心小学", "type": "school", "status": "demolished", "description": "成立年份不详，学生进入上师大附属第二实验学校。", "confidence": 0.7 } ] }, { "ste_id": "d23ab085-6d82-40f8-8e13-06e3dc4f6df8", "ste_version": "0.1", "name": { "primary": "文达学校初中部", "aliases": [ "普陀区" ] }, "coordinates": { "lat": 31.25, "lon": 121.396 }, "tags": { "amenity": "school", "ste:disappearance": "停招", "city": "上海", "note": "坐标回退到普陀区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "2026", "end_date": "2026", "name": "文达学校初中部", "type": "school", "status": "demolished", "description": "成立年份不详，初中部停止招生。", "confidence": 0.7 } ] }, { "ste_id": "270e5b38-a9d3-49e7-834c-fb05f2f06526", "ste_version": "0.1", "name": { "primary": "平凉路第三小学", "aliases": [ "杨浦区" ] }, "coordinates": { "lat": 31.2805988, "lon": 121.5521488 }, "tags": { "amenity": "school", "ste:disappearance": "停招", "city": "上海" }, "timeline": [ { "start_date": "2026", "end_date": "2026", "name": "平凉路第三小学", "type": "school", "status": "demolished", "description": "成立年份不详，学生划入上师大附属杨浦滨江实验小学。", "confidence": 0.7 } ] }, { "ste_id": "34cd51cc-76ce-4b4a-8745-23a31a878784", "ste_version": "0.1", "name": { "primary": "霍山路小学", "aliases": [ "虹口区" ] }, "coordinates": { "lat": 31.2569153, "lon": 121.507122 }, "tags": { "amenity": "school", "ste:disappearance": "停招", "city": "上海" }, "timeline": [ { "start_date": "2026", "end_date": "2026", "name": "霍山路小学", "type": "school", "status": "demolished", "description": "成立年份不详，学生并入长青学校。", "confidence": 0.7 } ] }, { "ste_id": "963ad449-559c-41b1-8bf2-f9f88f40fbda", "ste_version": "0.1", "name": { "primary": "华曜宝山实验学校", "aliases": [ "原华二宝山实验学校" ] }, "coordinates": { "lat": 33.9320392, "lon": 118.2153102 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海" }, "timeline": [ { "start_date": "2018", "end_date": "2025", "name": "华曜宝山实验学校", "type": "school", "status": "active", "description": "整体迁至盘古路新校区，面积扩大一倍。", "confidence": 0.7 }, { "start_date": "2025", "end_date": "2025", "name": "华曜宝山实验学校", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，整体迁至盘古路新校区，面积扩大一倍。", "confidence": 0.7 } ] }, { "ste_id": "00c75c84-44c6-446f-8b5b-f45db4fae36f", "ste_version": "0.1", "name": { "primary": "华二前滩学校初中部" }, "coordinates": { "lat": 31.1495165, "lon": 121.4688444 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海" }, "timeline": [ { "start_date": "2018", "end_date": "2025", "name": "华二前滩学校初中部", "type": "school", "status": "active", "description": "初中部迁入林耀路新校区，新增 AI、生物科技课程。", "confidence": 0.7 }, { "start_date": "2025", "end_date": "2025", "name": "华二前滩学校初中部", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，初中部迁入林耀路新校区，新增 AI、生物科技课程。", "confidence": 0.7 } ] }, { "ste_id": "b187298d-f82a-4ff1-85f3-3fe06fab8f58", "ste_version": "0.1", "name": { "primary": "圣华紫竹双语学校" }, "coordinates": { "lat": 31.0393769, "lon": 121.4337191 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海" }, "timeline": [ { "start_date": "2025", "end_date": "2025", "name": "圣华紫竹双语学校", "type": "school", "status": "demolished", "description": "成立年份不详，整体迁入兰香湖教育园区，总投资 18 亿。", "confidence": 0.7 } ] }, { "ste_id": "03f0b0ec-e0a1-4b90-8a74-6e2506f2051d", "ste_version": "0.1", "name": { "primary": "华东师大二附中松江实验学校" }, "coordinates": { "lat": 31.03, "lon": 121.227 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海", "note": "坐标回退到松江区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "2021", "end_date": "2025", "name": "华东师大二附中松江实验学校", "type": "school", "status": "active", "description": "迁入江川南二路新校区，强化科创实验室。", "confidence": 0.7 }, { "start_date": "2025", "end_date": "2025", "name": "华东师大二附中松江实验学校", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，迁入江川南二路新校区，强化科创实验室。", "confidence": 0.7 } ] }, { "ste_id": "d4c7ca72-3277-4e2c-8511-030d8fd7064d", "ste_version": "0.1", "name": { "primary": "松江爱菊学校" }, "coordinates": { "lat": 31.0485229, "lon": 121.1470065 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海" }, "timeline": [ { "start_date": "2023", "end_date": "2025", "name": "松江爱菊学校", "type": "school", "status": "active", "description": "迁入文俊东路新校区，规划 100 个班。", "confidence": 0.7 }, { "start_date": "2025", "end_date": "2025", "name": "松江爱菊学校", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，迁入文俊东路新校区，规划 100 个班。", "confidence": 0.7 } ] }, { "ste_id": "921b7243-48b2-4d5d-8cf8-c3098bf1515b", "ste_version": "0.1", "name": { "primary": "上师大附中宝山分校" }, "coordinates": { "lat": 31.397224, "lon": 121.4750613 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海" }, "timeline": [ { "start_date": "2025", "end_date": "2025", "name": "上师大附中宝山分校", "type": "school", "status": "demolished", "description": "成立年份不详，迁入弘卓路新校区，距离达 17 公里。", "confidence": 0.7 } ] }, { "ste_id": "6927fdb4-bc3c-4667-8043-dadac1b8c7fd", "ste_version": "0.1", "name": { "primary": "华政附属松江高中" }, "coordinates": { "lat": 31.222, "lon": 121.544 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海", "note": "坐标回退到浦东新区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "2022", "end_date": "2025", "name": "华政附属松江高中", "type": "school", "status": "active", "description": "迁入广轩路新校区，强化法学特色。", "confidence": 0.7 }, { "start_date": "2025", "end_date": "2025", "name": "华政附属松江高中", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，迁入广轩路新校区，强化法学特色。", "confidence": 0.7 } ] }, { "ste_id": "b5d00bf8-b098-4130-8d21-8aa40863564b", "ste_version": "0.1", "name": { "primary": "华理附属浦东科技高中" }, "coordinates": { "lat": 31.1959974, "lon": 121.6704614 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海" }, "timeline": [ { "start_date": "2024", "end_date": "2025", "name": "华理附属浦东科技高中", "type": "school", "status": "active", "description": "迁入惠南镇新校区，打造数理拔尖人才平台。", "confidence": 0.7 }, { "start_date": "2025", "end_date": "2025", "name": "华理附属浦东科技高中", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，迁入惠南镇新校区，打造数理拔尖人才平台。", "confidence": 0.7 } ] }, { "ste_id": "d842f4ba-64be-49f2-8ac2-58e16038a328", "ste_version": "0.1", "name": { "primary": "交大附属嘉定实验学校" }, "coordinates": { "lat": 47.3576213, "lon": 132.5329846 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海" }, "timeline": [ { "start_date": "2023", "end_date": "2025", "name": "交大附属嘉定实验学校", "type": "school", "status": "active", "description": "小学部与初中部分别迁入麦积路与封周路新校区。", "confidence": 0.7 }, { "start_date": "2025", "end_date": "2025", "name": "交大附属嘉定实验学校", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，小学部与初中部分别迁入麦积路与封周路新校区。", "confidence": 0.7 } ] }, { "ste_id": "717a5509-50c5-4e30-8fd8-185b5ecf4a94", "ste_version": "0.1", "name": { "primary": "安亭初级中学" }, "coordinates": { "lat": 31.2868432, "lon": 121.2305461 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海" }, "timeline": [ { "start_date": "2025", "end_date": "2025", "name": "安亭初级中学", "type": "school", "status": "demolished", "description": "成立年份不详，迁入硕望路新校区，规划 24 个班。", "confidence": 0.7 } ] }, { "ste_id": "c9128407-2fdc-4816-8df2-f187b7746761", "ste_version": "0.1", "name": { "primary": "嘉一实验高中" }, "coordinates": { "lat": 31.4076161, "lon": 121.2501946 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁（推迟）", "city": "上海" }, "timeline": [ { "start_date": "2022", "end_date": "2025", "name": "嘉一实验高中", "type": "school", "status": "active", "description": "原计划迁入嘉定新城，因规划调整暂缓。", "confidence": 0.7 }, { "start_date": "2025", "end_date": "2025", "name": "嘉一实验高中", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，原计划迁入嘉定新城，因规划调整暂缓。", "confidence": 0.7 } ] }, { "ste_id": "3046d71b-3e1c-48aa-8b1b-8575bca3fd85", "ste_version": "0.1", "name": { "primary": "市三女中", "aliases": [ "由多所教会女校合并" ] }, "coordinates": { "lat": 31.229511, "lon": 121.4435152 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海" }, "timeline": [ { "start_date": "1952", "end_date": "1966", "name": "市三女中", "type": "school", "status": "active", "description": "文革期间停办，后恢复但校名与体系变化巨大。", "confidence": 0.7 }, { "start_date": "1966", "end_date": "1966", "name": "市三女中", "type": "school", "status": "demolished", "description": "停办：文革期间停办，后恢复但校名与体系变化巨大。", "confidence": 0.7 } ] }, { "ste_id": "dd12a8c9-24a1-4391-8d0c-cc100c5b9c0c", "ste_version": "0.1", "name": { "primary": "市四中", "aliases": [ "原圣芳济男中部分校区" ] }, "coordinates": { "lat": 31.264, "lon": 121.505 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海", "note": "坐标回退到虹口区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1952", "end_date": "1966", "name": "市四中", "type": "school", "status": "active", "description": "文革期间停办，后并入其他学校。", "confidence": 0.7 }, { "start_date": "1966", "end_date": "1966", "name": "市四中", "type": "school", "status": "demolished", "description": "停办：文革期间停办，后并入其他学校。", "confidence": 0.7 } ] }, { "ste_id": "49be9ad2-edb0-42d8-86a3-6eed16ab894b", "ste_version": "0.1", "name": { "primary": "市五中", "aliases": [ "原租界学校合并而成" ] }, "coordinates": { "lat": 31.2119321, "lon": 121.4649243 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海" }, "timeline": [ { "start_date": "1952", "end_date": "1966", "name": "市五中", "type": "school", "status": "active", "description": "文革期间停办。", "confidence": 0.7 }, { "start_date": "1966", "end_date": "1966", "name": "市五中", "type": "school", "status": "demolished", "description": "停办：文革期间停办。", "confidence": 0.7 } ] }, { "ste_id": "13b24a6f-aa08-4d59-8b57-56c12a05a71d", "ste_version": "0.1", "name": { "primary": "市六中", "aliases": [ "原教会学校合并" ] }, "coordinates": { "lat": 31.188, "lon": 121.437 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海", "note": "坐标回退到徐汇区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1952", "end_date": "1966", "name": "市六中", "type": "school", "status": "active", "description": "文革期间停办。", "confidence": 0.7 }, { "start_date": "1966", "end_date": "1966", "name": "市六中", "type": "school", "status": "demolished", "description": "停办：文革期间停办。", "confidence": 0.7 } ] }, { "ste_id": "43e26db0-34ba-4d38-8798-6c2ab8cb39fb", "ste_version": "0.1", "name": { "primary": "市七中" }, "coordinates": { "lat": 33.7762321, "lon": 113.1873222 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海" }, "timeline": [ { "start_date": "1952", "end_date": "1966", "name": "市七中", "type": "school", "status": "active", "description": "文革期间停办。", "confidence": 0.7 }, { "start_date": "1966", "end_date": "1966", "name": "市七中", "type": "school", "status": "demolished", "description": "停办：文革期间停办。", "confidence": 0.7 } ] }, { "ste_id": "76d592e3-5c19-4d6a-8531-1170d3d5e99b", "ste_version": "0.1", "name": { "primary": "市八中" }, "coordinates": { "lat": 34.5670771, "lon": 105.8795222 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海" }, "timeline": [ { "start_date": "1952", "end_date": "1966", "name": "市八中", "type": "school", "status": "active", "description": "文革期间停办。", "confidence": 0.7 }, { "start_date": "1966", "end_date": "1966", "name": "市八中", "type": "school", "status": "demolished", "description": "停办：文革期间停办。", "confidence": 0.7 } ] }, { "ste_id": "37bb62fb-8134-4aa3-87c1-78a513e296c8", "ste_version": "0.1", "name": { "primary": "市九中" }, "coordinates": { "lat": 42.9117925, "lon": 129.5236996 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海" }, "timeline": [ { "start_date": "1952", "end_date": "1966", "name": "市九中", "type": "school", "status": "active", "description": "文革期间停办。", "confidence": 0.7 }, { "start_date": "1966", "end_date": "1966", "name": "市九中", "type": "school", "status": "demolished", "description": "停办：文革期间停办。", "confidence": 0.7 } ] }, { "ste_id": "5bba4d1b-58c8-45d0-8059-0c3aa40e6e53", "ste_version": "0.1", "name": { "primary": "上海市格致中学老校区" }, "coordinates": { "lat": 31.2400733, "lon": 121.4801253 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海" }, "timeline": [ { "start_date": "1874", "end_date": "1990", "name": "上海市格致中学老校区", "type": "school", "status": "active", "description": "上海最早的近代中学之一，老校区因城市更新迁至新校区。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "上海市格致中学老校区", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，上海最早的近代中学之一，老校区因城市更新迁至新校区。", "confidence": 0.7 } ] }, { "ste_id": "bb4dea1f-d180-4f8a-898f-35afd7643c6f", "ste_version": "0.1", "name": { "primary": "上海市大同中学老校区" }, "coordinates": { "lat": 26.65, "lon": 108.295 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海" }, "timeline": [ { "start_date": "1912", "end_date": "1990", "name": "上海市大同中学老校区", "type": "school", "status": "active", "description": "老校区拆迁，学校迁至新址。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "上海市大同中学老校区", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，老校区拆迁，学校迁至新址。", "confidence": 0.7 } ] }, { "ste_id": "a67407c1-ba01-4976-8d66-d9e9dcaaaf5a", "ste_version": "0.1", "name": { "primary": "上海市复兴中学老校区" }, "coordinates": { "lat": 31.231, "lon": 121.485 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海", "note": "坐标回退到黄浦区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1900", "end_date": "1990", "name": "上海市复兴中学老校区", "type": "school", "status": "active", "description": "老校区因旧城改造拆除。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "上海市复兴中学老校区", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，老校区因旧城改造拆除。", "confidence": 0.7 } ] }, { "ste_id": "0a121572-084d-4467-8822-7150e190b92f", "ste_version": "0.1", "name": { "primary": "上海市南洋中学老校区" }, "coordinates": { "lat": 31.188, "lon": 121.437 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海", "note": "坐标回退到徐汇区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1901", "end_date": "1990", "name": "上海市南洋中学老校区", "type": "school", "status": "active", "description": "老校区拆迁，迁至新址。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "上海市南洋中学老校区", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，老校区拆迁，迁至新址。", "confidence": 0.7 } ] }, { "ste_id": "654d6296-2f33-4cd9-87e6-72e12c9b1b4e", "ste_version": "0.1", "name": { "primary": "上海市向明中学老校区" }, "coordinates": { "lat": 31.231, "lon": 121.485 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海", "note": "坐标回退到黄浦区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1906", "end_date": "1990", "name": "上海市向明中学老校区", "type": "school", "status": "active", "description": "老校区因城市更新拆除。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "上海市向明中学老校区", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，老校区因城市更新拆除。", "confidence": 0.7 } ] }, { "ste_id": "f65bfc73-dd8a-4a1f-8f2b-d527043365ac", "ste_version": "0.1", "name": { "primary": "上海市震旦中学", "aliases": [ "原教会学校" ] }, "coordinates": { "lat": 31.188, "lon": 121.437 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海", "note": "坐标回退到徐汇区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1900", "end_date": "1980", "name": "上海市震旦中学", "type": "school", "status": "active", "description": "改革开放后未恢复原校名，校址被其他学校使用。", "confidence": 0.7 }, { "start_date": "1980", "end_date": "1980", "name": "上海市震旦中学", "type": "school", "status": "demolished", "description": "停办：改革开放后未恢复原校名，校址被其他学校使用。", "confidence": 0.7 } ] }, { "ste_id": "d18a457b-2a88-414b-8ab2-baa5adda2385", "ste_version": "0.1", "name": { "primary": "上海市光明中学老校区" }, "coordinates": { "lat": 31.26, "lon": 121.526 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海", "note": "坐标回退到杨浦区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1950", "end_date": "1990", "name": "上海市光明中学老校区", "type": "school", "status": "active", "description": "老校区拆迁。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "上海市光明中学老校区", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，老校区拆迁。", "confidence": 0.7 } ] }, { "ste_id": "b4a8b346-12b8-4174-8023-a2f00eeff6a1", "ste_version": "0.1", "name": { "primary": "上海市控江中学老校区" }, "coordinates": { "lat": 31.26, "lon": 121.526 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海", "note": "坐标回退到杨浦区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1950", "end_date": "1990", "name": "上海市控江中学老校区", "type": "school", "status": "active", "description": "老校区拆迁。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "上海市控江中学老校区", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，老校区拆迁。", "confidence": 0.7 } ] }, { "ste_id": "4747e333-c223-487a-8bde-82aca9d46b51", "ste_version": "0.1", "name": { "primary": "上海市延安中学老校区" }, "coordinates": { "lat": 31.22, "lon": 121.424 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海", "note": "坐标回退到长宁区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1950", "end_date": "1990", "name": "上海市延安中学老校区", "type": "school", "status": "active", "description": "老校区拆迁。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "上海市延安中学老校区", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，老校区拆迁。", "confidence": 0.7 } ] }, { "ste_id": "58bc9a2a-13a3-4d4e-8e3c-e66f822bd9db", "ste_version": "0.1", "name": { "primary": "上海市西南位育中学老校区" }, "coordinates": { "lat": 31.1814077, "lon": 121.412838 }, "tags": { "amenity": "school", "ste:disappearance": "搬迁", "city": "上海" }, "timeline": [ { "start_date": "1950", "end_date": "1990", "name": "上海市西南位育中学老校区", "type": "school", "status": "active", "description": "老校区拆迁。", "confidence": 0.7 }, { "start_date": "1990", "end_date": "1990", "name": "上海市西南位育中学老校区", "type": "school", "status": "demolished", "description": "搬迁：原校址关闭，老校区拆迁。", "confidence": 0.7 } ] }, { "ste_id": "a4c2646a-0531-4c15-82c2-fd3783771e80", "ste_version": "0.1", "name": { "primary": "圣约翰大学附属中学" }, "coordinates": { "lat": 31.2686927, "lon": 121.4778296 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海" }, "timeline": [ { "start_date": "1879", "end_date": "1952", "name": "圣约翰大学附属中学", "type": "school", "status": "active", "description": "美国圣公会创办，上海最早的现代中学之一，1952 年被并入公办体系。", "confidence": 0.7 }, { "start_date": "1952", "end_date": "1952", "name": "圣约翰大学附属中学", "type": "school", "status": "demolished", "description": "停办：美国圣公会创办，上海最早的现代中学之一，1952 年被并入公办体系。", "confidence": 0.7 } ] }, { "ste_id": "088bfecf-ff48-41f7-8690-e79628e8c759", "ste_version": "0.1", "name": { "primary": "中西女中麦泰尔女子中学", "aliases": [ "McTyeire School" ] }, "coordinates": { "lat": 31.229511, "lon": 121.4435152 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海" }, "timeline": [ { "start_date": "1892", "end_date": "1952", "name": "中西女中麦泰尔女子中学", "type": "school", "status": "active", "description": "著名教会女校，宋庆龄、宋美龄等毕业，1952 年并入市三女中。", "confidence": 0.7 }, { "start_date": "1952", "end_date": "1952", "name": "中西女中麦泰尔女子中学", "type": "school", "status": "demolished", "description": "停办：著名教会女校，宋庆龄、宋美龄等毕业，1952 年并入市三女中。", "confidence": 0.7 } ] }, { "ste_id": "681afd6e-c1bc-43b2-8fae-9c5695fac8e4", "ste_version": "0.1", "name": { "primary": "圣玛利亚女中", "aliases": [ "St. Mary's Hall" ] }, "coordinates": { "lat": 31.1980664, "lon": 121.4356193 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海" }, "timeline": [ { "start_date": "1881", "end_date": "1952", "name": "圣玛利亚女中", "type": "school", "status": "active", "description": "美国圣公会女子学校，1952 年并入市三女中。", "confidence": 0.7 }, { "start_date": "1952", "end_date": "1952", "name": "圣玛利亚女中", "type": "school", "status": "demolished", "description": "停办：美国圣公会女子学校，1952 年并入市三女中。", "confidence": 0.7 } ] }, { "ste_id": "50edae1c-ce5e-47b3-8644-fae32ed18be9", "ste_version": "0.1", "name": { "primary": "圣依纳爵中学", "aliases": [ "徐汇中学前身" ] }, "coordinates": { "lat": 31.1955404, "lon": 121.4343816 }, "tags": { "amenity": "school", "ste:disappearance": "更名", "city": "上海" }, "timeline": [ { "start_date": "1850", "end_date": "1952", "name": "圣依纳爵中学", "type": "school", "status": "active", "description": "法国耶稣会学校，1952 年改名为“徐汇中学”。", "confidence": 0.7 }, { "start_date": "1952", "name": "圣依纳爵中学", "type": "school", "status": "active", "description": "更名/升级为「圣依纳爵中学」。法国耶稣会学校，1952 年改名为“徐汇中学”。", "confidence": 0.7 } ] }, { "ste_id": "c76ac571-f053-425e-87a5-e7a9a0a720e9", "ste_version": "0.1", "name": { "primary": "圣芳济男中", "aliases": [ "St. Francis Xavier" ] }, "coordinates": { "lat": 31.264, "lon": 121.505 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海", "note": "坐标回退到虹口区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1870", "end_date": "1952", "name": "圣芳济男中", "type": "school", "status": "active", "description": "著名教会男校，1952 年并入公办体系。", "confidence": 0.7 }, { "start_date": "1952", "end_date": "1952", "name": "圣芳济男中", "type": "school", "status": "demolished", "description": "停办：著名教会男校，1952 年并入公办体系。", "confidence": 0.7 } ] }, { "ste_id": "8f8d05a1-ab70-4f90-8c9f-935d2c013e40", "ste_version": "0.1", "name": { "primary": "圣心女子中学" }, "coordinates": { "lat": 31.188, "lon": 121.437 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海", "note": "坐标回退到徐汇区区中心（地理编码未命中），需人工精化" }, "timeline": [ { "start_date": "1910", "end_date": "1952", "name": "圣心女子中学", "type": "school", "status": "active", "description": "法国天主教女子学校，1952 年停办。", "confidence": 0.7 }, { "start_date": "1952", "end_date": "1952", "name": "圣心女子中学", "type": "school", "status": "demolished", "description": "停办：法国天主教女子学校，1952 年停办。", "confidence": 0.7 } ] }, { "ste_id": "4ba85ccc-9e43-4d96-8f2f-03add7e93e5f", "ste_version": "0.1", "name": { "primary": "中法中学", "aliases": [ "Collège Municipal Français" ] }, "coordinates": { "lat": 31.2119321, "lon": 121.4649243 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海" }, "timeline": [ { "start_date": "1920", "end_date": "1956", "name": "中法中学", "type": "school", "status": "active", "description": "法租界公立学校，1956 年撤销。", "confidence": 0.7 }, { "start_date": "1956", "end_date": "1956", "name": "中法中学", "type": "school", "status": "demolished", "description": "停办：法租界公立学校，1956 年撤销。", "confidence": 0.7 } ] }, { "ste_id": "f1bd287c-a69f-40fa-8c82-52ef6dbe7ec3", "ste_version": "0.1", "name": { "primary": "中西中学", "aliases": [ "Shanghai Public School" ] }, "coordinates": { "lat": 31.2119321, "lon": 121.4649243 }, "tags": { "amenity": "school", "ste:disappearance": "停办", "city": "上海" }, "timeline": [ { "start_date": "1900", "end_date": "1956", "name": "中西中学", "type": "school", "status": "active", "description": "租界公立学校，1956 年撤销。", "confidence": 0.7 }, { "start_date": "1956", "end_date": "1956", "name": "中西中学", "type": "school", "status": "demolished", "description": "停办：租界公立学校，1956 年撤销。", "confidence": 0.7 } ] } ];
+/* ============ 数据（build-demo.mjs 注入，符合 STE Schema v0.1） ============ */
+const SCHOOLS = [{"ste_id":"8c4e2f1a-6b3d-4e9c-a1f5-7d2b8c0e4a61","ste_version":"0.1","name":{"primary":"北京师范大学附属中学","zh":"北京师范大学附属中学","aliases":["五城学堂","五城中学堂","北京高师附中","北平师大附中","北师大附中","师大附中"]},"coordinates":{"lat":39.89629,"lon":116.37939},"tags":{"amenity":"school","operator":"北京师范大学","addr:street":"南新华街","addr:housenumber":"18","addr:district":"西城区","website":"https://www.bjsdfz.com","note":"近似坐标（南新华街18号本部），待精化"},"timeline":[{"start_date":"1901","end_date":"1902","name":"五城学堂","type":"school","status":"active","description":"清光绪二十七年（1901年）十一月，清政府创办五城学堂，作为各省学堂的典范，陈璧任首任总督办。这是中国最早的近代中学之一，校址位于宣武门外琉璃厂一带。","confidence":0.92,"sources":["https://news.bnu.edu.cn/zx/bsrw/112820.htm","https://baike.baidu.com/item/北京师范大学附属中学/1525501"]},{"start_date":"1902","end_date":"1912","name":"五城中学堂","type":"school","status":"active","description":"1902年改名五城中学堂。顺天府尹堂和五城察院筹拨2800两银购置图书。中国从此有了'中学'这一概念，此校为中国中学教育之肇始。","confidence":0.9,"sources":["https://baike.baidu.com/item/北京师范大学附属中学/1525501","https://news.bnu.edu.cn/zx/bsrw/112820.htm"]},{"start_date":"1912","end_date":"1923","name":"北京高等师范学校附属中学校","type":"school","status":"active","description":"1912年中华民国成立，京师五城中学堂改为北京高等师范学校附属中学。1908年京师优级师范学堂迁入厂甸五城学堂旧址办学后，此地成为高等师范与附中并存的校园；1918年南新华街开通、1927年和平门开辟，路东为附属中学及附属小学，路西为师范本部。","confidence":0.88,"sources":["https://wwj.beijing.gov.cn/bjww/362760/362767/kycgtg/cbxm/kycgcbxm/368266/index.html","https://dangan.bnu.edu.cn/gzdt/dc7ae207976b4d2792e967e06e7a94b2.html"]},{"start_date":"1923","end_date":"1937","name":"国立北京师范大学附属中学校","type":"school","status":"active","description":"1923年北京高等师范学校改办为国立北京师范大学，附中随之更名。这一时期附中名师云集，钱学森1923-1929年在此就读，深受数学老师影响，晚年多次感念'师大附中时期'打下的基础。","confidence":0.85,"sources":["https://news.bnu.edu.cn/zx/bsrw/112820.htm","https://sdxs.bnu.edu.cn/bnxsz/gybz/63785.html"],"evidence":[{"type":"document","url":"https://news.bnu.edu.cn/zx/bsrw/112820.htm","year":2019}]},{"start_date":"1937","end_date":"1946","name":"国立西北联大师范学院附属中学（西迁）","type":"school","status":"active","description":"1937年抗战爆发，原北平师大附中随校西迁，首至西安；1938年3月改名为'国立西北联大师范学院附属中学'，方永蒸任校长，辗转西安、城固等地坚持办学八年。北平原校址在沦陷期间一度为伪校占用。","confidence":0.82,"sources":["https://m.krzzjn.com/show-944-146377.html","https://wwj.beijing.gov.cn/bjww/362760/362767/kycgtg/cbxm/kycgcbxm/368266/index.html"]},{"start_date":"1946","end_date":"1949","name":"北平师范大学附属中学（复校）","type":"school","status":"active","description":"1945年抗战胜利，西迁师生要求回归复校；1946年7月起陆续返平，在和平门南新华街原址复校。","confidence":0.85,"sources":["https://sdxs.bnu.edu.cn/bnxsz/gybz/63785.html","https://wwj.beijing.gov.cn/bjww/362760/362767/kycgtg/cbxm/kycgcbxm/368266/index.html"]},{"start_date":"1949","name":"北京师范大学附属中学","type":"school","status":"active","description":"1949年后定名北京师范大学附属中学。现本部位于西城区南新华街18号，毗邻琉璃厂文化区，分三址办学，总占地约5万平方米。百年校址未迁，是中国办学历史最悠久、校址延续最完整的中学之一。","confidence":0.95,"sources":["https://www.bjsdfz.com/list-10-1.html","https://baike.baidu.com/item/北京师范大学附属中学/1525501"]}]}];
+const TL_MIN = 1900;
+const TL_MAX = 2026;
+const STATUS_ZH = { active:'存在', demolished:'已消失', under_construction:'在建', proposed:'规划' };
 
 /* ============ 工具 ============ */
 const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-const fmtYear = (y) => y == null ? '至今' : y;
-const KIND_LABEL = { '停办':'停办', '停办（老址停办）':'停办', '停办→恢复':'恢复', '停办（部分）':'停办', '更名/升级':'更名', '升级':'升级', '更名/并入':'更名', '搬迁':'搬迁', '搬迁（老址停办）':'搬迁', '搬迁/扩建':'搬迁', '合并':'合并', '停招':'停招', '停招（转制公办）':'转制' };
-const KIND_CLS = { '停办':'k-gone', '恢复':'k-rename', '更名':'k-rename', '升级':'k-rename', '搬迁':'k-move', '合并':'k-gone', '停招':'k-move', '转制':'k-rename' };
-const STATUS_ZH = { active:'存在', demolished:'已消失', under_construction:'在建', proposed:'规划' };
+const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+const LS_KEY = (id) => 'ste-contrib-' + id;
 
-/* 学校当前状态: gone / alive / resumed */
-function schoolState(e) {
-  const last = e.timeline[e.timeline.length - 1];
-  if (last.status === 'active' && last.end_date == null) {
-    const kind = String(e.tags['ste:disappearance'] || '');
-    return kind.includes('恢复') ? 'resumed' : 'alive';
-  }
-  return 'gone';
+/* 快照区间（end=null → 至今） */
+function covers(sn, year) {
+  const s = parseInt(sn.start_date, 10);
+  const e = sn.end_date ? parseInt(sn.end_date, 10) : TL_MAX;
+  return year >= s && year <= e;
 }
-function schoolYearRange(e) {
-  const s = e.timeline[0].start_date;
-  const last = e.timeline[e.timeline.length - 1];
-  const e2 = last.end_date ?? last.start_date;
-  return s === e2 ? s : s + '–' + e2;
+/* 某年某校的生效快照 */
+function snapAt(e, year) {
+  return e.timeline.find((sn) => covers(sn, year)) || null;
 }
-/* 在年代 decade（如 1970，表示 1970-1979）是否活跃 */
-function aliveIn(e, decade) {
-  if (decade === 'all') return true;
-  return e.timeline.some((sn) => sn.status === 'active' && parseInt(sn.start_date, 10) <= decade + 9 && (sn.end_date == null || parseInt(sn.end_date, 10) >= decade));
+/* 某年某校是否存在 */
+function aliveAt(e, year) {
+  const sn = snapAt(e, year);
+  return sn ? sn.status === 'active' : false;
 }
-function kindOf(e) { return String(e.tags['ste:disappearance'] || '未知').replace(/（.*?）/g, ''); }
+function activeNameAt(e, year) {
+  const sn = snapAt(e, year);
+  return sn ? sn.name : null;
+}
 
 /* ============ 状态 ============ */
-const S = { decade: 'all', status: 'all', city: 'all', kind: 'all', query: '', sel: null };
-let map = null, markerLayer = null, detailLayer = null;
+const S = { year: TL_MAX, sel: null, you: null, playing: false };
+let map = null, markerLayer = null, youLayer = null, playTimer = null;
 
 /* ============ 地图 ============ */
-function initMap() {
-  map = L.map('map', { zoomControl: true }).setView([34.5, 114.5], 5);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
-  }).addTo(map);
+function initMap(center, zoom) {
+  map = L.map('map', { zoomControl: true }).setView(center, zoom);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OSM' }).addTo(map);
   markerLayer = L.layerGroup().addTo(map);
+  youLayer = L.layerGroup().addTo(map);
 }
 
 function markerIcon(e, sel) {
-  const st = schoolState(e);
-  const cls = sel ? 'mm-marker--sel' : (st === 'gone' ? 'mm-marker--gone' : st === 'resumed' ? 'mm-marker--resumed' : 'mm-marker--alive');
-  const count = sel ? '×' : String(e.timeline.length);
+  const alive = aliveAt(e, S.year);
+  const cls = sel ? 'mm-marker--sel' : (alive ? 'mm-marker--alive' : 'mm-marker--dead');
+  const nm = activeNameAt(e, S.year) || e.name.primary;
   return L.divIcon({
     className: 'mm-icon',
-    html: '<div class="mm-marker ' + cls + '"><div class="mm-marker-count">' + count + '</div><div class="mm-marker-name">' + esc(e.name.primary) + '</div></div>',
-    iconSize: [30, 30], iconAnchor: [15, 15],
+    html: '<div class="mm-marker ' + cls + '"><div class="mm-marker-count">' + esc(e.name.primary[0]) + '</div><div class="mm-marker-name' + (S.year === TL_MAX ? '' : ' ghost') + '">' + esc(nm) + '</div></div>',
+    iconSize: [34, 34], iconAnchor: [17, 17],
   });
 }
 
 function renderMarkers() {
   markerLayer.clearLayers();
-  const visible = visibleSchools();
-  for (const e of visible) {
+  for (const e of SCHOOLS) {
     const m = L.marker([e.coordinates.lat, e.coordinates.lon], { icon: markerIcon(e, S.sel === e.ste_id) });
-    m.on('click', () => openDetail(e));
+    m.on('click', () => openCard(e));
     markerLayer.addLayer(m);
   }
-  if (visible.length === 1) map.setView([visible[0].coordinates.lat, visible[0].coordinates.lon], 12);
-  else if (visible.length > 0) {
-    const bounds = L.latLngBounds(visible.map((e) => [e.coordinates.lat, e.coordinates.lon]));
-    map.fitBounds(bounds, { padding: [60, 60], maxZoom: 12 });
-  } else {
-    map.setView([34.5, 114.5], 5);
-  }
 }
 
-/* ============ 筛选 ============ */
-function visibleSchools() {
-  return SCHOOLS.filter((e) => {
-    if (S.decade !== 'all' && !aliveIn(e, S.decade)) return false;
-    if (S.status === 'gone' && schoolState(e) === 'alive') return false;
-    if (S.status === 'alive' && schoolState(e) !== 'alive') return false;
-    if (S.city !== 'all' && e.tags.city !== S.city) return false;
-    if (S.kind !== 'all' && kindOf(e) !== S.kind) return false;
-    if (S.query && !(e.name.primary + ' ' + (e.name.aliases || []).join(' ')).includes(S.query)) return false;
-    return true;
-  });
+function setYou(pos) {
+  youLayer.clearLayers();
+  if (!pos) return;
+  S.you = pos;
+  L.marker([pos.lat, pos.lon], { icon: L.divIcon({ className: '', html: '<div class="you-marker"></div>', iconSize: [14, 14], iconAnchor: [7, 7] }) }).addTo(youLayer);
 }
 
-function renderList() {
-  const v = visibleSchools();
-  const box = $('schoolList');
-  box.innerHTML = '';
-  for (const e of v) {
-    const st = schoolState(e);
-    const kind = kindOf(e);
-    const div = document.createElement('div');
-    div.className = 'school-item' + (S.sel === e.ste_id ? ' sel' : '');
-    div.innerHTML =
-      '<span class="dot dot--' + st + '"></span>' +
-      '<span class="nm">' + esc(e.name.primary) + '</span>' +
-      '<span class="badge ' + (KIND_CLS[kind] || '') + '">' + esc(KIND_LABEL[e.tags['ste:disappearance']] || kind) + '</span>' +
-      '<span class="yr">' + schoolYearRange(e) + '</span>';
-    div.onclick = () => openDetail(e);
-    box.appendChild(div);
-  }
-  $('listCount').textContent = '(' + v.length + '/' + SCHOOLS.length + ')';
+function locate() {
+  if (!navigator.geolocation) { toast('此浏览器不支持定位'); return; }
+  const btn = $('locBtn');
+  btn.disabled = true; btn.textContent = '定位中…';
+  navigator.geolocation.getCurrentPosition(
+    (p) => {
+      const pos = { lat: p.coords.latitude, lon: p.coords.longitude };
+      setYou(pos);
+      map.setView([pos.lat, pos.lon], 13);
+      $('locHint').style.display = 'block';
+      toast('已定位，显示你周边的学校');
+      btn.disabled = false; btn.textContent = '📍 重新定位';
+    },
+    (err) => {
+      toast('定位失败（' + (err.code === 1 ? '未授权' : '不可用') + '），已显示默认区域');
+      btn.disabled = false; btn.textContent = '📍 定位我';
+    },
+    { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 },
+  );
 }
 
-function renderStats() {
-  $('dataCount').textContent = SCHOOLS.length + ' 所学校 · ' + new Set(SCHOOLS.map((e) => e.tags.city)).size + ' 城';
-  $('stCount').textContent = SCHOOLS.length;
-  $('stGone').textContent = SCHOOLS.filter((e) => schoolState(e) === 'gone').length;
-  $('stAlive').textContent = SCHOOLS.filter((e) => schoolState(e) !== 'gone').length;
-  $('stGeo').textContent = SCHOOLS.filter((e) => !(e.tags && e.tags.note)).length;
+/* ============ 时间轴 ============ */
+function buildEras() {
+  const box = $('tlEras');
+  const n = 6;
+  const step = Math.max(1, Math.round((TL_MAX - TL_MIN) / n / 10) * 10);
+  const parts = [];
+  for (let y = TL_MIN; y <= TL_MAX; y += step) parts.push('<b>' + y + '</b>');
+  box.innerHTML = parts.join('') + '<b>' + TL_MAX + '</b>';
 }
-
-/* ============ 详情 ============ */
-function openDetail(e) {
-  S.sel = e.ste_id;
-  $('detailClose').style.display = 'block';
-  const head = $('detail-head');
-  const kind = kindOf(e);
-  const st = schoolState(e);
-  head.innerHTML =
-    '<div class="kicker">' + esc(e.tags.city) + ' · ' + esc(e.tags['ste:disappearance'] || '') + ' · ' + esc(kind) + '</div>' +
-    '<h2 class="serif">' + esc(e.name.primary) + '</h2>' +
-    (e.name.aliases && e.name.aliases.length ? '<div class="aliases">别称：' + e.name.aliases.map(esc).join(' / ') + '</div>' : '') +
-    '<div class="steid mono">' + e.ste_id + '</div>';
-  let body = '<div class="tl">';
-  for (const sn of e.timeline) {
-    const pct = Math.round((sn.confidence ?? 0.7) * 100);
-    body +=
-      '<div class="tl-item st-' + esc(sn.status) + '">' +
-      '<div class="tl-range">' + esc(sn.start_date) + ' → ' + esc(fmtYear(sn.end_date)) + ' <span class="tl-status st-' + esc(sn.status) + '">' + (STATUS_ZH[sn.status] || sn.status) + '</span></div>' +
-      '<div class="tl-name">' + esc(sn.name) + '</div>' +
-      (sn.description ? '<div class="tl-desc">' + esc(sn.description) + '</div>' : '') +
-      (sn.confidence != null ? '<div class="tl-conf">置信度 ' + pct + '% <span class="conf-bar"><i style="width:' + pct + '%"></i></span></div>' : '') +
-      '</div>';
-  }
-  body += '</div>';
-  body += '<div class="tags">' + Object.entries(e.tags || {}).map(([k, v]) => '<span class="tag"><kbd>' + esc(k) + '</kbd>=<span class="mono">' + esc(v) + '</span></span>').join('') + '</div>';
-  if (e.tags && e.tags.note) {
-    body += '<div class="note-box">⚠️ ' + esc(e.tags.note) + '</div>';
-  }
-  body += '<div class="data-foot">STE Schema v0.1 · ste_id 为稳定 UUID · timeline 快照按时间升序 · 停办/搬迁/更名以快照状态表达<br/>schema: <span class="mono">wonderingWu.github.io/ste-schema/v0.1/schema.json</span></div>';
-  $('detail-body').innerHTML = body;
-  $('detail').classList.add('show');
+function setYear(y, opts = {}) {
+  S.year = y;
+  $('tlRange').value = y;
+  $('tlYear').innerHTML = y + '<small>年</small>';
   renderMarkers();
-  renderList();
+  if (S.sel) renderCard(S.sel, opts.silent);
+  if (!opts.silent && S.sel) {
+    const sn = snapAt(S.sel, y);
+    toast(sn ? y + ' 年：' + sn.name + '（' + (STATUS_ZH[sn.status] || sn.status) + '）' : y + ' 年：暂无记录');
+  }
+}
+function play() {
+  if (S.playing) { S.playing = false; $('tlPlay').textContent = '▶ 播放'; clearInterval(playTimer); return; }
+  S.playing = true;
+  $('tlPlay').textContent = '⏸ 暂停';
+  if (S.year >= TL_MAX) setYear(TL_MIN, { silent: true });
+  playTimer = setInterval(() => {
+    if (S.year >= TL_MAX) { S.playing = false; $('tlPlay').textContent = '▶ 播放'; clearInterval(playTimer); return; }
+    setYear(S.year + 1, { silent: true });
+  }, 260);
 }
 
-function closeDetail() {
-  $('detail').classList.remove('show');
+/* ============ 学校卡片 ============ */
+function loadContribs(steId) {
+  try { return JSON.parse(localStorage.getItem(LS_KEY(steId)) || '[]'); } catch { return []; }
+}
+function saveContribs(steId, list) {
+  localStorage.setItem(LS_KEY(steId), JSON.stringify(list));
+}
+
+function openCard(e) {
+  S.sel = e;
+  renderCard(e);
+  $('card').classList.add('show');
+}
+function closeCard() {
+  $('card').classList.remove('show');
   S.sel = null;
   renderMarkers();
-  renderList();
+}
+function renderCard(e, silent) {
+  const head = $('card-head');
+  head.innerHTML =
+    '<div class="kicker">' + esc(e.tags.city || '') + ' · ' + esc(e.tags['ste:disappearance'] || '') + '</div>' +
+    '<h2 class="serif">' + esc(e.name.primary) + '</h2>' +
+    '<div class="steid mono">' + e.ste_id + '</div>';
+  const body = $('card-body');
+  const sn = snapAt(e, S.year);
+  let h = '';
+  if (sn) {
+    const dead = sn.status !== 'active';
+    h += '<div id="curSnap"><div class="when">' + S.year + ' 年 · 该年代快照</div>' +
+      '<div class="what">' + esc(sn.name) + '<span class="st' + (dead ? ' dead' : '') + '">' + (STATUS_ZH[sn.status] || sn.status) + '</span></div>' +
+      (sn.description ? '<div class="desc">' + esc(sn.description) + '</div>' : '') + '</div>';
+  } else {
+    h += '<div id="curSnap"><div class="when">' + S.year + ' 年</div><div class="what">此年代无记录<span class="st dead">未知</span></div></div>';
+  }
+  h += '<div class="subtitle">完整时间线（点击定位到该年代）</div><div class="tl">';
+  for (const s of e.timeline) {
+    const cur = covers(s, S.year);
+    const dead = s.status !== 'active';
+    h += '<div class="tl-item st-' + esc(s.status) + (cur ? ' cur' : '') + '" data-y="' + esc(s.start_date) + '">' +
+      '<div class="tl-range">' + esc(s.start_date) + ' → ' + (s.end_date ? esc(s.end_date) : '至今') +
+      '<span class="tl-status st-' + esc(s.status) + '">' + (STATUS_ZH[s.status] || s.status) + '</span></div>' +
+      '<div class="tl-name">' + esc(s.name) + '</div></div>';
+  }
+  h += '</div>';
+
+  /* 用户贡献 */
+  const contribs = loadContribs(e.ste_id);
+  h += '<div class="subtitle">记忆与补充（本浏览器保存）</div>';
+  if (contribs.length === 0) {
+    h += '<div id="contribEmpty">还没有贡献。点击下方按钮，添加图片、文字或变迁事实</div>';
+  } else {
+    h += '<div id="contribs">';
+    for (const c of contribs) {
+      h += '<div class="contrib"><div class="c-head"><span class="c-type">' + esc(c.type === 'photo' ? '图片' : c.type === 'text' ? '文字' : '变迁') + '</span><span class="c-year">' + esc(c.year || '?') + ' 年</span>' +
+        '<button class="c-rm" data-id="' + esc(c.id) + '">删除</button></div>' +
+        (c.content ? '<div>' + esc(c.content) + '</div>' : '') +
+        (c.image ? '<img src="' + c.image + '" alt="贡献图片" />' : '') + '</div>';
+    }
+    h += '</div>';
+  }
+  h += '<div style="margin-top:12px"><button class="btn primary" id="addBtn" style="width:100%">＋ 添加图片 / 文字 / 变迁事实</button></div>';
+  h += '<div class="data-foot" style="margin-top:12px;padding-top:10px;border-top:1px dashed rgba(43,38,32,.15);font-size:10px;color:var(--ink-faint);line-height:1.7">' +
+    'STE Schema v0.1 · 快照由 schema 定义（start_date/end_date/name/status）· 坐标 OSM 地理编码<br/>schema: <span class="mono">wonderingWu.github.io/ste-schema/v0.1/schema.json</span></div>';
+  body.innerHTML = h;
+
+  body.querySelectorAll('.tl-item').forEach((el) => (el.onclick = () => setYear(parseInt(el.dataset.y, 10))));
+  body.querySelectorAll('.c-rm').forEach((el) => (el.onclick = () => removeContrib(e.ste_id, el.dataset.id)));
+  $('addBtn').onclick = () => openModal(e);
+}
+
+/* ============ 采集 ============ */
+const FORM = { type: 'fact' };
+function openModal(e) {
+  FORM.ste = e;
+  $('modal').classList.add('show');
+  resetForm();
+}
+function resetForm() {
+  FORM.type = 'fact';
+  $('fYear').value = S.year;
+  $('fContent').value = '';
+  $('fImg').value = '';
+  $('imgPreview').classList.remove('show');
+  $('imgFld').style.display = 'none';
+  $('contentLabel').textContent = '变迁事实内容（必填）';
+  $('fContent').placeholder = '如：这一年学校西迁至西安…';
+  syncTypeSeg();
+}
+function syncTypeSeg() {
+  document.querySelectorAll('#typeSeg button').forEach((b) => b.classList.toggle('on', b.dataset.t === FORM.type));
+  const showImg = FORM.type === 'photo';
+  $('imgFld').style.display = showImg ? 'block' : 'none';
+  $('contentLabel').textContent = FORM.type === 'fact' ? '变迁事实内容（必填）' : FORM.type === 'text' ? '文字记忆（必填）' : '图片说明（选填）';
+  $('fContent').placeholder = FORM.type === 'fact' ? '如：这一年学校西迁至西安…' : FORM.type === 'text' ? '写下你或家人的记忆…' : '这张照片拍的什么？';
+}
+function closeModal() { $('modal').classList.remove('show'); }
+
+function saveContribution() {
+  const year = parseInt($('fYear').value, 10);
+  const content = $('fContent').value.trim();
+  let invalid = false;
+  $('yearFld').classList.toggle('invalid', !(year >= 1800 && year <= 2099));
+  if (!(year >= 1800 && year <= 2099)) invalid = true;
+  $('contentFld').classList.toggle('invalid', FORM.type !== 'photo' && !content);
+  if (FORM.type !== 'photo' && !content) invalid = true;
+  if (invalid) return;
+  const img = $('fImgPreview').src || null;
+  const list = loadContribs(FORM.ste.ste_id);
+  list.push({ id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), type: FORM.type, year: year || null, content: content || null, image: img, createdAt: new Date().toISOString() });
+  saveContribs(FORM.ste.ste_id, list);
+  closeModal();
+  renderCard(FORM.ste);
+  toast('已保存贡献到本浏览器');
+}
+function removeContrib(steId, id) {
+  const list = loadContribs(steId).filter((c) => c.id !== id);
+  saveContribs(steId, list);
+  if (S.sel) renderCard(S.sel);
+  toast('已删除');
+}
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tm);
+  t._tm = setTimeout(() => t.classList.remove('show'), 2600);
 }
 
 /* ============ 绑定 ============ */
-function bindFilters() {
-  const chipsBox = $('decadeChips');
-  const years = [];
-  for (const e of SCHOOLS) for (const sn of e.timeline) {
-    const y = parseInt(sn.start_date, 10);
-    if (!isNaN(y)) years.push(Math.floor(y / 10) * 10);
-    if (sn.end_date) { const y2 = parseInt(sn.end_date, 10); if (!isNaN(y2)) years.push(Math.floor(y2 / 10) * 10); }
-  }
-  const range = [Math.min(...years), Math.max(...years)];
-  for (let d = range[0]; d <= range[1]; d += 10) {
-    const b = document.createElement('button');
-    b.textContent = d + 's';
-    b.dataset.decade = String(d);
-    b.onclick = () => { S.decade = d; syncFilterUI(); renderMarkers(); renderList(); };
-    chipsBox.appendChild(b);
-  }
-
-  const kinds = new Set(SCHOOLS.map((e) => kindOf(e)));
-  const seg = $('kindSeg');
-  for (const k of kinds) {
-    const b = document.createElement('button');
-    b.textContent = k;
-    b.dataset.kind = k;
-    b.onclick = () => { S.kind = k; syncFilterUI(); renderMarkers(); renderList(); };
-    seg.appendChild(b);
-  }
-
-  document.querySelectorAll('#filters [data-decade]').forEach((b) => (b.onclick = () => { S.decade = b.dataset.decade === 'all' ? 'all' : parseInt(b.dataset.decade, 10); syncFilterUI(); renderMarkers(); renderList(); }));
-  document.querySelectorAll('#filters [data-status]').forEach((b) => (b.onclick = () => { S.status = b.dataset.status; syncFilterUI(); renderMarkers(); renderList(); }));
-  document.querySelectorAll('#citySeg [data-city]').forEach((b) => (b.onclick = () => { S.city = b.dataset.city; syncFilterUI(); renderMarkers(); renderList(); }));
-  document.querySelectorAll('#kindSeg [data-kind]').forEach((b) => (b.onclick = () => { S.kind = b.dataset.kind; syncFilterUI(); renderMarkers(); renderList(); }));
-  $('search').oninput = (ev) => { S.query = ev.target.value.trim(); renderMarkers(); renderList(); };
-  $('ctrlClose').onclick = collapseCtrl;
-  $('collapseBtn').onclick = () => { const c = $('ctrl'); const open = c.classList.contains('collapsed'); c.classList.toggle('collapsed'); $('collapseBtn').classList.toggle('open', open); $('collapseBtn').textContent = open ? '‹' : '›'; };
-  $('detailClose').onclick = closeDetail;
-}
-
-function syncFilterUI() {
-  const sel = (sel, val) => { document.querySelectorAll(sel).forEach((b) => b.classList.toggle('on', b.dataset.decade === String(val) || b.dataset.status === val || b.dataset.city === val || b.dataset.kind === val)); };
-  sel('#filters [data-decade]', S.decade);
-  sel('#filters [data-status]', S.status);
-  sel('#citySeg [data-city]', S.city);
-  sel('#kindSeg [data-kind]', S.kind);
-}
+$('tlRange').oninput = (ev) => setYear(parseInt(ev.target.value, 10), { silent: true });
+$('tlPlay').onclick = play;
+$('locBtn').onclick = locate;
+$('cardClose').onclick = closeCard;
+$('modalCancel').onclick = closeModal;
+$('modalSave').onclick = saveContribution;
+$('fImg').onchange = (ev) => {
+  const f = ev.target.files[0];
+  if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => { $('fImgPreview').src = rd.result; $('imgPreview').classList.add('show'); };
+  rd.readAsDataURL(f);
+};
+document.querySelectorAll('#typeSeg button').forEach((b) => (b.onclick = () => { FORM.type = b.dataset.t; syncTypeSeg(); }));
+document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') { closeModal(); closeCard(); } });
 
 /* ============ 启动 ============ */
-initMap();
-bindFilters();
-renderStats();
-renderMarkers();
-renderList();
+function boot() {
+  buildEras();
+  if (SCHOOLS.length > 0) {
+    const c = SCHOOLS[0].coordinates;
+    initMap([c.lat, c.lon], 14);
+  } else {
+    initMap([39.91, 116.40], 5);
+  }
+  renderMarkers();
+  setYear(TL_MAX, { silent: true });
+  /* 尝试定位；失败保持默认视图（示例学校周边） */
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (p) => { setYou({ lat: p.coords.latitude, lon: p.coords.longitude }); $('locHint').style.display = 'block'; },
+      () => {}, { timeout: 6000, maximumAge: 120000 },
+    );
+  }
+}
+boot();
 </script>
 </body>
 </html>
