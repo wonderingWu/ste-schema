@@ -1,0 +1,38 @@
+{
+  "ste_id": "not-a-uuid",
+  "ste_version": "0.1",
+  "name": {
+    "primary": "北京师范大学附属中学",
+    "zh": "北京师范大学附属中学",
+    "aliases": ["五城学堂", "五城中学堂", "北京高师附中", "北平师大附中", "北师大附中", "师大附中"]
+  },
+  "coordinates": {
+    "lat": 39.899,
+    "lon": 116.3905
+  },
+  "tags": {
+    "amenity": "school",
+    "operator": "北京师范大学"
+  },
+  "timeline": [
+    {
+      "start_date": "1901",
+      "end_date": "1902",
+      "name": "五城学堂",
+      "type": "school",
+      "status": "active",
+      "description": "清光绪二十七年（1901年）十一月，清政府创办五城学堂。",
+      "confidence": 0.92,
+      "sources": ["https://news.bnu.edu.cn/zx/bsrw/112820.htm"]
+    },
+    {
+      "start_date": "1949",
+      "name": "北京师范大学附属中学",
+      "type": "school",
+      "status": "active",
+      "description": "1949年后定名北京师范大学附属中学。",
+      "confidence": 0.95,
+      "sources": ["https://www.bjsdfz.com/list-10-1.html"]
+    }
+  ]
+}

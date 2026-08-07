@@ -1,0 +1,119 @@
+{
+    "ste_id": "8c4e2f1a-6b3d-4e9c-a1f5-7d2b8c0e4a61",
+    "ste_version": "0.1",
+    "name": {
+      "primary": "北京师范大学附属中学",
+      "zh": "北京师范大学附属中学",
+      "aliases": ["五城学堂", "五城中学堂", "北京高师附中", "北平师大附中", "北师大附中", "师大附中"]
+    },
+    "coordinates": {
+      "lat": 39.8990,
+      "lon": 116.3905
+    },
+    "tags": {
+      "amenity": "school",
+      "operator": "北京师范大学",
+      "addr:street": "南新华街",
+      "addr:housenumber": "18",
+      "addr:district": "西城区",
+      "website": "https://www.bjsdfz.com",
+      "note": "近似坐标（南新华街18号本部），待精化"
+    },
+  
+    "timeline": [
+      {
+        "start_date": "1901",
+        "end_date": "1902",
+        "name": "五城学堂",
+        "type": "school",
+        "status": "active",
+        "description": "清光绪二十七年（1901年）十一月，清政府创办五城学堂，作为各省学堂的典范，陈璧任首任总督办。这是中国最早的近代中学之一，校址位于宣武门外琉璃厂一带。",
+        "confidence": 0.92,
+        "sources": [
+          "https://news.bnu.edu.cn/zx/bsrw/112820.htm",
+          "https://baike.baidu.com/item/北京师范大学附属中学/1525501"
+        ]
+      },
+      {
+        "start_date": "1902",
+        "end_date": "1912",
+        "name": "五城中学堂",
+        "type": "school",
+        "status": "active",
+        "description": "1902年改名五城中学堂。顺天府尹堂和五城察院筹拨2800两银购置图书。中国从此有了'中学'这一概念，此校为中国中学教育之肇始。",
+        "confidence": 0.9,
+        "sources": [
+          "https://baike.baidu.com/item/北京师范大学附属中学/1525501",
+          "https://news.bnu.edu.cn/zx/bsrw/112820.htm"
+        ]
+      },
+      {
+        "start_date": "1912",
+        "end_date": "1923",
+        "name": "北京高等师范学校附属中学校",
+        "type": "school",
+        "status": "active",
+        "description": "1912年中华民国成立，京师五城中学堂改为北京高等师范学校附属中学。1908年京师优级师范学堂迁入厂甸五城学堂旧址办学后，此地成为高等师范与附中并存的校园；1918年南新华街开通、1927年和平门开辟，路东为附属中学及附属小学，路西为师范本部。",
+        "confidence": 0.88,
+        "sources": [
+          "https://wwj.beijing.gov.cn/bjww/362760/362767/kycgtg/cbxm/kycgcbxm/368266/index.html",
+          "https://dangan.bnu.edu.cn/gzdt/dc7ae207976b4d2792e967e06e7a94b2.html"
+        ]
+      },
+      {
+        "start_date": "1923",
+        "end_date": "1937",
+        "name": "国立北京师范大学附属中学校",
+        "type": "school",
+        "status": "active",
+        "description": "1923年北京高等师范学校改办为国立北京师范大学，附中随之更名。这一时期附中名师云集，钱学森1923-1929年在此就读，深受数学老师影响，晚年多次感念'师大附中时期'打下的基础。",
+        "confidence": 0.85,
+        "sources": [
+          "https://news.bnu.edu.cn/zx/bsrw/112820.htm",
+          "https://sdxs.bnu.edu.cn/bnxsz/gybz/63785.html"
+        ],
+        "evidence": [
+          { "type": "document", "url": "https://news.bnu.edu.cn/zx/bsrw/112820.htm", "year": 2019 }
+        ]
+      },
+      {
+        "start_date": "1937",
+        "end_date": "1946",
+        "name": "国立西北联大师范学院附属中学（西迁）",
+        "type": "school",
+        "status": "active",
+        "description": "1937年抗战爆发，原北平师大附中随校西迁，首至西安；1938年3月改名为'国立西北联大师范学院附属中学'，方永蒸任校长，辗转西安、城固等地坚持办学八年。北平原校址在沦陷期间一度为伪校占用。",
+        "confidence": 0.82,
+        "sources": [
+          "https://m.krzzjn.com/show-944-146377.html",
+          "https://wwj.beijing.gov.cn/bjww/362760/362767/kycgtg/cbxm/kycgcbxm/368266/index.html"
+        ]
+      },
+      {
+        "start_date": "1946",
+        "end_date": "1949",
+        "name": "北平师范大学附属中学（复校）",
+        "type": "school",
+        "status": "active",
+        "description": "1945年抗战胜利，西迁师生要求回归复校；1946年7月起陆续返平，在和平门南新华街原址复校。",
+        "confidence": 0.85,
+        "sources": [
+          "https://sdxs.bnu.edu.cn/bnxsz/gybz/63785.html",
+          "https://wwj.beijing.gov.cn/bjww/362760/362767/kycgtg/cbxm/kycgcbxm/368266/index.html"
+        ]
+      },
+      {
+        "start_date": "1949",
+        "name": "北京师范大学附属中学",
+        "type": "school",
+        "status": "active",
+        "description": "1949年后定名北京师范大学附属中学。现本部位于西城区南新华街18号，毗邻琉璃厂文化区，分三址办学，总占地约5万平方米。百年校址未迁，是中国办学历史最悠久、校址延续最完整的中学之一。",
+        "confidence": 0.95,
+        "sources": [
+          "https://www.bjsdfz.com/list-10-1.html",
+          "https://baike.baidu.com/item/北京师范大学附属中学/1525501"
+        ]
+      }
+    ]
+  }
+  

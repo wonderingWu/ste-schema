@@ -1,0 +1,78 @@
+name: Validate STE Schema
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'v*/schema*.json'
+      - 'examples/**'
+      - 'scripts/**'
+      - '.github/workflows/validate.yml'
+  pull_request:
+    paths:
+      - 'v*/schema*.json'
+      - 'examples/**'
+      - 'scripts/**'
+      - '.github/workflows/validate.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install ajv-cli + ajv-formats
+        run: npm install -g ajv-cli@5 ajv-formats@2
+
+      # ---------- Step 1: schema 本身必须能编译 ----------
+      - name: Compile schemas (en + zh)
+        run: |
+          ajv compile --spec=draft7 -c ajv-formats --strict=false \
+            -s v0.1/schema.json
+          ajv compile --spec=draft7 -c ajv-formats --strict=false \
+            -s v0.1/schema.zh.json
+
+      # ---------- Step 2: valid 样例必须全部通过 ----------
+      - name: Validate examples/valid (must all PASS)
+        run: |
+          shopt -s nullglob
+          files=(examples/valid/*.json)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "::warning::No valid examples found — add at least one!"
+            exit 0
+          fi
+          ajv validate --spec=draft7 -c ajv-formats --strict=false \
+            --all-errors --verbose \
+            -s v0.1/schema.json \
+            -d "examples/valid/*.json"
+
+      # ---------- Step 3: invalid 样例必须全部失败（负向测试） ----------
+      - name: Validate examples/invalid (must all FAIL)
+        run: |
+          shopt -s nullglob
+          files=(examples/invalid/*.json)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "::warning::No invalid examples found — negative tests recommended."
+            exit 0
+          fi
+          failed=0
+          for f in "${files[@]}"; do
+            if ajv validate --spec=draft7 -c ajv-formats --strict=false \
+                 -s v0.1/schema.json -d "$f" > /dev/null 2>&1; then
+              echo "::error file=$f::Expected validation to FAIL but it PASSED"
+              failed=1
+            else
+              echo "OK (correctly rejected): $f"
+            fi
+          done
+          exit $failed
+
+      # ---------- Step 4: 中英文版结构一致性 ----------
+      - name: Check en/zh schema parity
+        run: node scripts/check-parity.mjs v0.1/schema.json v0.1/schema.zh.json

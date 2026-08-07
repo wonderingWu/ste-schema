@@ -1,0 +1,172 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://wonderingWu.github.io/ste-schema/v0.1/schema.json",
+    "title": "STE Schema v0.1 (SpatioTemporal Entity)",
+    "description": "A spatiotemporal snapshot of a place. Compatible with OSM/OHM tag naming; time is a first-class citizen. Rules that cannot be expressed in JSON Schema are listed in the repo README under 'Application-level validation'. Passing schema validation does NOT guarantee clean data.",
+    "type": "object",
+    "required": ["ste_id", "ste_version", "name", "coordinates", "timeline"],
+    "additionalProperties": false,
+  
+    "definitions": {
+      "ohm_date": {
+        "type": "string",
+        "description": "OHM-style date: YYYY / YYYY-MM / YYYY-MM-DD. A leading minus sign denotes BCE (e.g. -0221 = 221 BCE). Month limited to 01-12, day to 01-31; calendar validity (e.g. 02-30) must be checked at the application level.",
+        "pattern": "^-?\\d{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12]\\d|3[01]))?)?$"
+      },
+      "non_empty_string": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+  
+    "properties": {
+      "ste_id": {
+        "type": "string",
+        "description": "Globally unique ID, UUID v4 (lowercase)",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+  
+      "ste_version": {
+        "type": "string",
+        "description": "Schema version. Required — enables future migrations; writers must declare it explicitly.",
+        "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",
+        "examples": ["0.1"]
+      },
+  
+      "name": {
+        "type": "object",
+        "description": "Current name. ⚠️ This is a denormalized cache of the currently active timeline snapshot (for search/display). The source of truth is the timeline; on conflict, the timeline wins. Should be derived from the timeline, not hand-written.",
+        "required": ["primary"],
+        "additionalProperties": false,
+        "properties": {
+          "primary": {
+            "allOf": [{ "$ref": "#/definitions/non_empty_string" }],
+            "description": "What it is called now"
+          },
+          "zh": {
+            "allOf": [{ "$ref": "#/definitions/non_empty_string" }],
+            "description": "Chinese name (if any)"
+          },
+          "aliases": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/non_empty_string" },
+            "uniqueItems": true,
+            "description": "Former names / alternative names (for search)"
+          }
+        }
+      },
+  
+      "coordinates": {
+        "type": "object",
+        "description": "WGS84 coordinates",
+        "required": ["lat", "lon"],
+        "additionalProperties": false,
+        "properties": {
+          "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+          "lon": { "type": "number", "minimum": -180, "maximum": 180 }
+        }
+      },
+  
+      "tags": {
+        "type": "object",
+        "description": "Free-form OSM-compatible tags (both keys and values are strings)",
+        "additionalProperties": { "type": "string" },
+        "propertyNames": { "minLength": 1 },
+        "examples": [{ "amenity": "school", "operator": "Board of Education" }]
+      },
+  
+      "timeline": {
+        "type": "array",
+        "description": "The core! Timeline — each snapshot represents a time period. The entity's 'current type' = the type of the currently active snapshot (no longer duplicated at the top level). The application must ensure: snapshots sorted by start_date ascending, non-overlapping periods, and at most one snapshot without end_date (meaning 'until now'). Renames/type changes are expressed by adding a new snapshot whose status remains 'active'.",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "required": ["start_date", "name", "type"],
+          "additionalProperties": false,
+          "properties": {
+            "start_date": { "$ref": "#/definitions/ohm_date" },
+            "end_date": {
+              "allOf": [{ "$ref": "#/definitions/ohm_date" }],
+              "description": "End date; omit = until now (only the last snapshot may omit it, and its status must not be 'demolished')"
+            },
+            "name": {
+              "allOf": [{ "$ref": "#/definitions/non_empty_string" }],
+              "description": "Name during this period"
+            },
+            "type": {
+              "allOf": [{ "$ref": "#/definitions/non_empty_string" }],
+              "description": "Entity type during this period, reusing OSM values (school/building/street/park...)"
+            },
+            "status": {
+              "type": "string",
+              "description": "Status during this period. Note: a 'rename' is an event, not a status — the new snapshot after a rename keeps status 'active'.",
+              "enum": ["active", "demolished", "under_construction", "proposed"]
+            },
+            "description": {
+              "type": "string",
+              "description": "Narrative description of this period (plain language, not an encyclopedia entry)"
+            },
+            "confidence": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Confidence score for this snapshot"
+            },
+            "sources": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/non_empty_string" },
+              "minItems": 1,
+              "description": "Sources (URL / literature / oral history)"
+            },
+            "evidence": {
+              "type": "array",
+              "description": "Evidence chain (v0.1 stores URLs; structured evidence comes in v1)",
+              "items": {
+                "type": "object",
+                "required": ["type"],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["photo", "satellite", "map", "document", "oral", "ai_generated"]
+                  },
+                  "url": { "type": "string", "format": "uri", "minLength": 1 },
+                  "year": { "type": "integer", "minimum": -9999, "maximum": 9999 }
+                },
+                "anyOf": [
+                  { "required": ["url"] },
+                  { "required": ["year"] }
+                ]
+              }
+            }
+          },
+  
+          "allOf": [
+            {
+              "if": {
+                "properties": { "status": { "const": "demolished" } },
+                "required": ["status"]
+              },
+              "then": { "required": ["end_date"] }
+            },
+            {
+              "if": {
+                "properties": {
+                  "evidence": {
+                    "contains": {
+                      "type": "object",
+                      "properties": { "type": { "const": "ai_generated" } },
+                      "required": ["type"]
+                    }
+                  }
+                },
+                "required": ["evidence"]
+              },
+              "then": { "required": ["confidence", "sources"] }
+            }
+          ]
+        }
+      }
+    }
+  }
+  
