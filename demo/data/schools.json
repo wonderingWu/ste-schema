@@ -48,13 +48,14 @@
       ]
     },
     "coordinates": {
-      "lat": 32.0435852,
-      "lon": 118.7789021
+      "lat": 39.912,
+      "lon": 116.366
     },
     "tags": {
       "amenity": "school",
       "ste:disappearance": "停办",
-      "city": "北京"
+      "city": "北京",
+      "note": "坐标修正：已回退西城区区中心，需人工精化"
     },
     "timeline": [
       {
@@ -327,13 +328,14 @@
       ]
     },
     "coordinates": {
-      "lat": 31.3689191,
-      "lon": 108.5161417
+      "lat": 39.959,
+      "lon": 116.298
     },
     "tags": {
       "amenity": "school",
       "ste:disappearance": "停办→恢复",
-      "city": "北京"
+      "city": "北京",
+      "note": "坐标修正：已回退海淀区区中心，需人工精化"
     },
     "timeline": [
       {
@@ -681,13 +683,14 @@
       ]
     },
     "coordinates": {
-      "lat": 30.9345961,
-      "lon": 121.4797542
+      "lat": 39.858,
+      "lon": 116.286
     },
     "tags": {
       "amenity": "school",
       "ste:disappearance": "更名/并入",
-      "city": "北京"
+      "city": "北京",
+      "note": "坐标修正：已回退丰台区区中心，需人工精化"
     },
     "timeline": [
       {
@@ -1436,13 +1439,14 @@
       ]
     },
     "coordinates": {
-      "lat": 33.9320392,
-      "lon": 118.2153102
+      "lat": 31.405,
+      "lon": 121.489
     },
     "tags": {
       "amenity": "school",
       "ste:disappearance": "搬迁",
-      "city": "上海"
+      "city": "上海",
+      "note": "坐标修正：已回退宝山区区中心，需人工精化"
     },
     "timeline": [
       {
@@ -1708,13 +1712,14 @@
       "primary": "交大附属嘉定实验学校"
     },
     "coordinates": {
-      "lat": 47.3576213,
-      "lon": 132.5329846
+      "lat": 31.375,
+      "lon": 121.266
     },
     "tags": {
       "amenity": "school",
       "ste:disappearance": "搬迁",
-      "city": "上海"
+      "city": "上海",
+      "note": "坐标修正：已回退嘉定区区中心，需人工精化"
     },
     "timeline": [
       {
@@ -1965,13 +1970,14 @@
       "primary": "市七中"
     },
     "coordinates": {
-      "lat": 33.7762321,
-      "lon": 113.1873222
+      "lat": 31.222,
+      "lon": 121.544
     },
     "tags": {
       "amenity": "school",
       "ste:disappearance": "停办",
-      "city": "上海"
+      "city": "上海",
+      "note": "坐标修正：原地理编码命中其他城市（33.776,113.187），已回退浦东新区区中心，需人工精化"
     },
     "timeline": [
       {
@@ -2001,13 +2007,14 @@
       "primary": "市八中"
     },
     "coordinates": {
-      "lat": 34.5670771,
-      "lon": 105.8795222
+      "lat": 31.222,
+      "lon": 121.544
     },
     "tags": {
       "amenity": "school",
       "ste:disappearance": "停办",
-      "city": "上海"
+      "city": "上海",
+      "note": "坐标修正：原地理编码命中其他城市（34.567,105.880），已回退浦东新区区中心，需人工精化"
     },
     "timeline": [
       {
@@ -2037,13 +2044,14 @@
       "primary": "市九中"
     },
     "coordinates": {
-      "lat": 42.9117925,
-      "lon": 129.5236996
+      "lat": 31.222,
+      "lon": 121.544
     },
     "tags": {
       "amenity": "school",
       "ste:disappearance": "停办",
-      "city": "上海"
+      "city": "上海",
+      "note": "坐标修正：原地理编码命中其他城市（42.912,129.524），已回退浦东新区区中心，需人工精化"
     },
     "timeline": [
       {
@@ -2109,13 +2117,14 @@
       "primary": "上海市大同中学老校区"
     },
     "coordinates": {
-      "lat": 26.65,
-      "lon": 108.295
+      "lat": 31.231,
+      "lon": 121.485
     },
     "tags": {
       "amenity": "school",
       "ste:disappearance": "搬迁",
-      "city": "上海"
+      "city": "上海",
+      "note": "坐标修正：已回退黄浦区区中心，需人工精化"
     },
     "timeline": [
       {

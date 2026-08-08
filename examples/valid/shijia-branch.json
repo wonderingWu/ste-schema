@@ -8,13 +8,14 @@
     ]
   },
   "coordinates": {
-    "lat": 39.9169964,
-    "lon": 116.4125409
+    "lat": 39.928,
+    "lon": 116.416
   },
   "tags": {
     "amenity": "school",
     "ste:disappearance": "停办",
-    "city": "北京"
+    "city": "北京",
+    "note": "坐标回退到东城区区中心（地理编码未命中），需人工精化"
   },
   "timeline": [
     {

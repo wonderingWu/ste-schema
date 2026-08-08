@@ -71,6 +71,14 @@ const CACHE_FILE = path.join(OUT, 'demo', 'data', 'geo-cache.json');
 let geoCache = {};
 try { if (existsSync(CACHE_FILE)) geoCache = JSON.parse(readFileSync(CACHE_FILE, 'utf8')); } catch { /* ignore */ }
 
+// 城市边界（防重名跨城市错误命中，如"新街口"命中南京）
+const CITY_BBOX = { 北京: [39.4, 115.4, 41.1, 117.5], 上海: [30.6, 120.8, 31.9, 122.1] };
+function inCity(lat, lon, city) {
+  const b = CITY_BBOX[city];
+  if (!b) return true;
+  return lat >= b[0] && lat <= b[2] && lon >= b[1] && lon <= b[3];
+}
+
 function httpGet(url, timeoutMs = 12000) {
   try {
     return execFileSync('curl.exe', ['-s', '-x', PROXY, '-H', 'User-Agent: ste-schema-builder/0.1', url], { encoding: 'utf8', timeout: timeoutMs });
@@ -85,29 +93,34 @@ function streetKeyword(addr) {
   return m ? m[0] : s.trim();
 }
 
-function geocodePhoton(query) {
-  const url = 'https://photon.komoot.io/api/?limit=1&q=' + encodeURIComponent(query);
+function geocodePhoton(query, city) {
+  const url = 'https://photon.komoot.io/api/?limit=3&q=' + encodeURIComponent(query);
   const out = httpGet(url);
   if (!out) return { ok: false };
   try {
     const j = JSON.parse(out);
-    const f = j.features?.[0];
-    if (f && f.geometry?.coordinates && f.properties?.countrycode === 'CN') {
-      return { lat: f.geometry.coordinates[1], lon: f.geometry.coordinates[0], ok: true, label: f.properties.name };
+    for (const f of j.features || []) {
+      const [lon, lat] = f.geometry?.coordinates || [];
+      if (lon != null && lat != null && inCity(lat, lon, city) && f.properties?.countrycode === 'CN') {
+        return { lat, lon, ok: true, label: f.properties.name };
+      }
     }
   } catch { /* fallthrough */ }
   return { ok: false };
 }
 
-function geocodeNominatim(query) {
-  const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' +
+function geocodeNominatim(query, city) {
+  const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=3&q=' +
     encodeURIComponent(query + ' 中国');
   const out = httpGet(url, 8000);
   if (!out) return { ok: false };
   try {
     const arr = JSON.parse(out);
-    if (Array.isArray(arr) && arr.length > 0 && arr[0].lat && arr[0].lon) {
-      return { lat: parseFloat(arr[0].lat), lon: parseFloat(arr[0].lon), ok: true, label: arr[0].display_name?.slice(0, 60) };
+    for (const r of arr) {
+      const lat = parseFloat(r.lat), lon = parseFloat(r.lon);
+      if (lat && lon && inCity(lat, lon, city)) {
+        return { lat, lon, ok: true, label: r.display_name?.slice(0, 60) };
+      }
     }
   } catch { /* fallthrough */ }
   return { ok: false };
@@ -261,8 +274,8 @@ for (const e of entities) {
       if (geoCache[key].ok) okCount++;
     } else {
       const kw = streetKeyword(rawAddr) || e.rec[1];
-      let g = geocodePhoton(kw);
-      if (!g.ok) g = geocodeNominatim(`${rawAddr || e.rec[1]} ${e.city}`);
+      let g = geocodePhoton(kw, e.city);
+      if (!g.ok) g = geocodeNominatim(`${rawAddr || e.rec[1]} ${e.city}`, e.city);
       geos[key] = g;
       geoCache[key] = g;
       if (g.ok) okCount++;

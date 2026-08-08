@@ -8,13 +8,14 @@
     ]
   },
   "coordinates": {
-    "lat": 33.9320392,
-    "lon": 118.2153102
+    "lat": 31.405,
+    "lon": 121.489
   },
   "tags": {
     "amenity": "school",
     "ste:disappearance": "搬迁",
-    "city": "上海"
+    "city": "上海",
+    "note": "坐标回退到宝山区区中心（地理编码未命中），需人工精化"
   },
   "timeline": [
     {

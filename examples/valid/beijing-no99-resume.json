@@ -8,13 +8,14 @@
     ]
   },
   "coordinates": {
-    "lat": 31.3689191,
-    "lon": 108.5161417
+    "lat": 39.959,
+    "lon": 116.298
   },
   "tags": {
     "amenity": "school",
     "ste:disappearance": "停办→恢复",
-    "city": "北京"
+    "city": "北京",
+    "note": "坐标回退到海淀区区中心（地理编码未命中），需人工精化"
   },
   "timeline": [
     {
