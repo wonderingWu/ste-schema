@@ -2,3 +2,5 @@ node_modules/
 *.log
 .DS_Store
 demo/data/geo-cache.json
+
+.openclaw/

@@ -1,172 +1,297 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "https://wonderingWu.github.io/ste-schema/v0.1/schema.zh.json",
-    "title": "STE Schema v0.1 (SpatioTemporal Entity)",
-    "description": "一个地点的时空快照。兼容 OSM/OHM tag 命名，时间为一等公民。本 schema 无法校验的规则见仓库 README『应用层校验清单』，通过 schema 校验≠数据干净。",
-    "type": "object",
-    "required": ["ste_id", "ste_version", "name", "coordinates", "timeline"],
-    "additionalProperties": false,
-  
-    "definitions": {
-      "ohm_date": {
-        "type": "string",
-        "description": "OHM 风格日期：YYYY / YYYY-MM / YYYY-MM-DD，支持负号表示公元前（如 -0221 = 公元前221年）。月份限 01-12，日期限 01-31；历法合法性（如 02-30）需应用层校验。",
-        "pattern": "^-?\\d{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12]\\d|3[01]))?)?$"
-      },
-      "non_empty_string": {
-        "type": "string",
-        "minLength": 1
-      }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://wonderingWu.github.io/ste-schema/v0.1/schema.zh.json",
+  "title": "STE Schema v0.1 (SpatioTemporal Entity)",
+  "description": "一个地点的时空快照。兼容 OSM/OHM tag 命名，时间为一等公民。本 schema 无法校验的规则见仓库 README『应用层校验清单』，通过 schema 校验≠数据干净。",
+  "type": "object",
+  "required": [
+    "ste_id",
+    "ste_version",
+    "name",
+    "coordinates",
+    "timeline"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "ohm_date": {
+      "type": "string",
+      "description": "OHM 风格日期：YYYY / YYYY-MM / YYYY-MM-DD，支持负号表示公元前（如 -0221 = 公元前221年）。月份限 01-12，日期限 01-31；历法合法性（如 02-30）需应用层校验。",
+      "pattern": "^-?\\d{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12]\\d|3[01]))?)?$"
     },
-  
-    "properties": {
-      "ste_id": {
-        "type": "string",
-        "description": "全局唯一 ID，UUID v4（小写）",
-        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
-      },
-  
-      "ste_version": {
-        "type": "string",
-        "description": "Schema 版本号。必填——用于未来版本迁移，写入方必须显式声明。",
-        "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",
-        "examples": ["0.1"]
-      },
-  
-      "name": {
-        "type": "object",
-        "description": "当前名称。⚠️ 这是 timeline 中『当前生效快照』的反规范化缓存（用于搜索/展示），source of truth 是 timeline。冲突时以 timeline 为准，应由 timeline 派生生成，不建议手写。",
-        "required": ["primary"],
-        "additionalProperties": false,
-        "properties": {
-          "primary": {
-            "allOf": [{ "$ref": "#/definitions/non_empty_string" }],
-            "description": "现在叫什么"
-          },
-          "zh": {
-            "allOf": [{ "$ref": "#/definitions/non_empty_string" }],
-            "description": "中文名（如有）"
-          },
-          "aliases": {
-            "type": "array",
-            "items": { "$ref": "#/definitions/non_empty_string" },
-            "uniqueItems": true,
-            "description": "曾用名/别称（搜索用）"
-          }
-        }
-      },
-  
-      "coordinates": {
-        "type": "object",
-        "description": "WGS84 坐标",
-        "required": ["lat", "lon"],
-        "additionalProperties": false,
-        "properties": {
-          "lat": { "type": "number", "minimum": -90, "maximum": 90 },
-          "lon": { "type": "number", "minimum": -180, "maximum": 180 }
-        }
-      },
-  
-      "tags": {
-        "type": "object",
-        "description": "自由 OSM 兼容 tags（key/value 均为字符串）",
-        "additionalProperties": { "type": "string" },
-        "propertyNames": { "minLength": 1 },
-        "examples": [{ "amenity": "school", "operator": "教育局" }]
-      },
-  
-      "timeline": {
-        "type": "array",
-        "description": "核心！时间轴——每个快照代表一个时间段。实体的『当前类型』= 当前生效快照的 type（顶层不再冗余存储）。应用层需保证：按 start_date 升序、各段不重叠、至多一段缺省 end_date（表示至今）。改名/改类型通过新增快照表达，快照 status 保持 active。",
-        "minItems": 1,
-        "items": {
-          "type": "object",
-          "required": ["start_date", "name", "type"],
-          "additionalProperties": false,
-          "properties": {
-            "start_date": { "$ref": "#/definitions/ohm_date" },
-            "end_date": {
-              "allOf": [{ "$ref": "#/definitions/ohm_date" }],
-              "description": "结束时间，不填 = 至今（仅允许最后一个快照缺省，且 status 不得为 demolished）"
-            },
-            "name": {
-              "allOf": [{ "$ref": "#/definitions/non_empty_string" }],
-              "description": "该时期名称"
-            },
-            "type": {
-              "allOf": [{ "$ref": "#/definitions/non_empty_string" }],
-              "description": "该时期的实体类型，复用 OSM 值（school/building/street/park...）"
-            },
-            "status": {
-              "type": "string",
-              "description": "该时段的状态。注意：『改名』是事件不是状态，改名后的新快照 status 仍为 active。",
-              "enum": ["active", "demolished", "under_construction", "proposed"]
-            },
-            "description": {
-              "type": "string",
-              "description": "该时期的叙事描述（人话，不是百科词条）"
-            },
-            "confidence": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 1,
-              "description": "该快照的置信度"
-            },
-            "sources": {
-              "type": "array",
-              "items": { "$ref": "#/definitions/non_empty_string" },
-              "minItems": 1,
-              "description": "来源（URL / 文献 / 口述）"
-            },
-            "evidence": {
-              "type": "array",
-              "description": "证据链（v0.1 先存 URL，v1 再加结构化）",
-              "items": {
-                "type": "object",
-                "required": ["type"],
-                "additionalProperties": false,
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "enum": ["photo", "satellite", "map", "document", "oral", "ai_generated"]
-                  },
-                  "url": { "type": "string", "format": "uri", "minLength": 1 },
-                  "year": { "type": "integer", "minimum": -9999, "maximum": 9999 }
-                },
-                "anyOf": [
-                  { "required": ["url"] },
-                  { "required": ["year"] }
-                ]
-              }
-            }
-          },
-  
+    "non_empty_string": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "properties": {
+    "ste_id": {
+      "type": "string",
+      "description": "全局唯一 ID，UUID v4（小写）",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "ste_version": {
+      "type": "string",
+      "description": "Schema 版本号。必填——用于未来版本迁移，写入方必须显式声明。",
+      "pattern": "^\\d+\\.\\d+(\\.\\d+)?$",
+      "examples": [
+        "0.1"
+      ]
+    },
+    "name": {
+      "type": "object",
+      "description": "当前名称。⚠️ 这是 timeline 中『当前生效快照』的反规范化缓存（用于搜索/展示），source of truth 是 timeline。冲突时以 timeline 为准，应由 timeline 派生生成，不建议手写。",
+      "required": [
+        "primary"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
           "allOf": [
             {
-              "if": {
-                "properties": { "status": { "const": "demolished" } },
-                "required": ["status"]
-              },
-              "then": { "required": ["end_date"] }
-            },
-            {
-              "if": {
-                "properties": {
-                  "evidence": {
-                    "contains": {
-                      "type": "object",
-                      "properties": { "type": { "const": "ai_generated" } },
-                      "required": ["type"]
-                    }
-                  }
-                },
-                "required": ["evidence"]
-              },
-              "then": { "required": ["confidence", "sources"] }
+              "$ref": "#/definitions/non_empty_string"
             }
-          ]
+          ],
+          "description": "现在叫什么"
+        },
+        "zh": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/non_empty_string"
+            }
+          ],
+          "description": "中文名（如有）"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/non_empty_string"
+          },
+          "uniqueItems": true,
+          "description": "曾用名/别称（搜索用）"
         }
+      }
+    },
+    "coordinates": {
+      "type": "object",
+      "description": "WGS84 坐标",
+      "required": [
+        "lat",
+        "lon"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "lat": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "lon": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        }
+      }
+    },
+    "tags": {
+      "type": "object",
+      "description": "自由 OSM 兼容 tags（key/value 均为字符串）",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "propertyNames": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "examples": [
+        {
+          "amenity": "school",
+          "operator": "教育局"
+        }
+      ]
+    },
+    "timeline": {
+      "type": "array",
+      "description": "核心！时间轴——每个快照代表一个时间段。实体的『当前类型』= 当前生效快照的 type（顶层不再冗余存储）。应用层需保证：按 start_date 升序、各段不重叠、至多一段缺省 end_date（表示至今）。改名/改类型通过新增快照表达，快照 status 保持 active。",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "start_date",
+          "name",
+          "type"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "start_date": {
+            "$ref": "#/definitions/ohm_date"
+          },
+          "end_date": {
+            "allOf": [
+              {
+                "$ref": "#/definitions/ohm_date"
+              }
+            ],
+            "description": "结束时间，不填 = 至今（仅允许最后一个快照缺省，且 status 不得为 demolished）"
+          },
+          "name": {
+            "allOf": [
+              {
+                "$ref": "#/definitions/non_empty_string"
+              }
+            ],
+            "description": "该时期名称"
+          },
+          "type": {
+            "allOf": [
+              {
+                "$ref": "#/definitions/non_empty_string"
+              }
+            ],
+            "description": "该时期的实体类型，复用 OSM 值（school/building/street/park...）"
+          },
+          "status": {
+            "type": "string",
+            "description": "该时段的状态。注意：『改名』是事件不是状态，改名后的新快照 status 仍为 active。",
+            "enum": [
+              "active",
+              "demolished",
+              "under_construction",
+              "proposed"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "该时期的叙事描述（人话，不是百科词条）"
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "该快照的置信度"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/non_empty_string"
+            },
+            "minItems": 1,
+            "description": "来源（URL / 文献 / 口述）"
+          },
+          "evidence": {
+            "type": "array",
+            "description": "证据链（v0.1 先存 URL，v1 再加结构化）",
+            "items": {
+              "type": "object",
+              "required": [
+                "type"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "photo",
+                    "satellite",
+                    "map",
+                    "document",
+                    "oral",
+                    "ai_generated"
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri",
+                  "minLength": 1
+                },
+                "year": {
+                  "type": "integer",
+                  "minimum": -9999,
+                  "maximum": 9999
+                }
+              },
+              "anyOf": [
+                {
+                  "required": [
+                    "url"
+                  ],
+                  "properties": {
+                    "url": true
+                  },
+                  "type": "object"
+                },
+                {
+                  "required": [
+                    "year"
+                  ],
+                  "properties": {
+                    "year": true
+                  },
+                  "type": "object"
+                }
+              ]
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "demolished"
+                }
+              },
+              "required": [
+                "status"
+              ],
+              "type": "object"
+            },
+            "then": {
+              "required": [
+                "end_date"
+              ],
+              "properties": {
+                "end_date": true
+              },
+              "type": "object"
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "evidence": {
+                  "contains": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "const": "ai_generated"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ]
+                  },
+                  "type": "array"
+                }
+              },
+              "required": [
+                "evidence"
+              ],
+              "type": "object"
+            },
+            "then": {
+              "required": [
+                "confidence",
+                "sources"
+              ],
+              "properties": {
+                "confidence": true,
+                "sources": true
+              },
+              "type": "object"
+            }
+          }
+        ]
       }
     }
   }
-  
+}

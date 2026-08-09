@@ -1,0 +1,21 @@
+{
+  "ste_id": "a3f8c2d1-4b6e-4c8a-9f2d-7e1b3a5c9d04",
+  "ste_version": "0.1",
+  "name": {
+    "primary": "X"
+  },
+  "coordinates": {
+    "lat": 1,
+    "lon": 2
+  },
+  "timeline": [
+    {
+      "start_date": "1950",
+      "name": "X",
+      "type": "school",
+      "sources": [
+        "s"
+      ]
+    }
+  ]
+}

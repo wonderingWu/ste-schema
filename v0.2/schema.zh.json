@@ -1,0 +1,1001 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://wonderingWu.github.io/ste-schema/v0.2/schema.zh.json",
+    "title": "STE Schema v0.2 (SpatioTemporal Entity)",
+    "description": "一个地点的时空快照。兼容 OSM/OHM tag 命名，时间是一等公民。v0.2 新增 external_ids、快照级坐标、contributed_by 溯源、多视角 narratives[]、支持外部 URL / 平台资产 ID / 线下实物的证据链，以及按伦理章程 R1 强制必填的来源。导出边界：本 schema 只描述可公开导出的数据（章程 C2）。平台私有数据（身份托管记录、已撤回内容正文）必须存放在平台侧，不得出现在 STE 文档中。草稿：处于 30 天无来源宽限期（章程 R1）的文档属于平台侧记录，不是合法 STE 文档；本 schema 只校验正式数据集条目。JSON Schema 无法表达的规则见仓库 README『应用层校验清单』。通过 schema 校验 ≠ 数据干净。",
+    "type": "object",
+    "required": [
+        "ste_id",
+        "ste_version",
+        "name",
+        "coordinates",
+        "timeline"
+    ],
+    "additionalProperties": false,
+    "definitions": {
+        "ohm_date": {
+            "type": "string",
+            "description": "OHM 风格日期：YYYY / YYYY-MM / YYYY-MM-DD。公元前年份采用 ISO 8601 天文纪年：0000 = 公元前1年，-0001 = 公元前2年，-0220 = 公元前221年（与 EDTF/OHM 生态一致；注意与口语化\"公元前\"计数存在 1 的偏移）。月份限 01-12，日期限 01-31；历法合法性（如 02-30）需应用层校验。",
+            "pattern": "^-?\\d{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12]\\d|3[01]))?)?$"
+        },
+        "non_empty_string": {
+            "type": "string",
+            "minLength": 1
+        },
+        "actor_id": {
+            "type": "string",
+            "description": "带命名空间的参与者标识——消除用户 ID 与保留字（如 ai/system）之间的歧义。命名空间：user:<id> = 注册用户；anon:<token> = 平台签发的不可关联匿名令牌（用于托管匿名作者，令牌不得与用户的其他贡献关联）；agent:<model-id> = AI 智能体；system:<process> = 自动化流水线；community = 集体署名。",
+            "pattern": "^(user:[A-Za-z0-9._-]+|anon:[A-Za-z0-9._-]+|agent:[A-Za-z0-9._-]+|system:[A-Za-z0-9._-]+|community)$"
+        },
+        "confidence_value": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "自报置信度，取值 [0,1]。应用必须如实呈现为\"自报置信度\"，不得包装为\"平台认证可信度\"（伦理章程 R3）。"
+        },
+        "language_tag": {
+            "type": "string",
+            "description": "BCP 47 语言标签：language[-Script][-Region]，例如 zh、en-US、zh-Hans-CN、zh-Hant。",
+            "pattern": "^[a-zA-Z]{2,3}(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|\\d{3}))?$"
+        },
+        "wgs84_point": {
+            "type": "object",
+            "description": "WGS84 点坐标。注意：lon -180 与 +180 表示同一经线，应用在比较前应做归一化。",
+            "required": [
+                "lat",
+                "lon"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "lat": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                },
+                "lon": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                }
+            }
+        },
+        "external_id_ref": {
+            "type": "object",
+            "description": "外部标识符引用，附带可选的核验状态与维护备注。",
+            "required": [
+                "id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "外部标识符值。各 key 的格式约束在该定义被引用处叠加。",
+                    "minLength": 1
+                },
+                "verified": {
+                    "type": "boolean",
+                    "description": "该映射是否已经人工核验？AI 生成的链接默认 false。",
+                    "default": false
+                },
+                "verified_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "最近一次核验的 ISO 8601 时间戳。仅当 verified=true 时允许出现（下方强制）。"
+                },
+                "note": {
+                    "type": "string",
+                    "description": "关于该映射的自由备注（如 OSM 变更、范围差异）"
+                }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "required": [
+                            "verified_at"
+                        ],
+                        "properties": {
+                            "verified_at": true
+                        },
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "verified"
+                        ],
+                        "properties": {
+                            "verified": {
+                                "const": true
+                            }
+                        },
+                        "type": "object"
+                    }
+                }
+            ]
+        },
+        "contribution_meta": {
+            "type": "object",
+            "description": "溯源元数据——谁创建/确认/修改了快照或证据条目，以及如何完成。created_by 与 created_via 必填：溯源不得完全留空（伦理章程贡献透明要求）。",
+            "required": [
+                "created_by",
+                "created_via"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "created_by": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/actor_id"
+                        }
+                    ],
+                    "description": "创建该条目的带命名空间参与者"
+                },
+                "created_via": {
+                    "type": "string",
+                    "description": "创建方式？",
+                    "enum": [
+                        "manual",
+                        "ai_extraction",
+                        "community_consensus",
+                        "import"
+                    ]
+                },
+                "ai_model": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "生成该内容的模型。created_via=ai_extraction 时必填；其他情况禁止出现（下方强制）。"
+                },
+                "ai_prompt_version": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "使用的 AI 抽取提示词/配置版本。仅当 created_via=ai_extraction 时有意义（下方强制）。"
+                },
+                "confirmed_by": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/actor_id"
+                    },
+                    "uniqueItems": true,
+                    "description": "确认过该条目的参与者列表"
+                },
+                "last_modified_by": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/actor_id"
+                        }
+                    ],
+                    "description": "最后修改该条目的参与者"
+                },
+                "last_modified_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "最后修改的 ISO 8601 时间戳"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "创建的 ISO 8601 时间戳"
+                }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "created_via": {
+                                "const": "ai_extraction"
+                            }
+                        },
+                        "required": [
+                            "created_via"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "ai_model"
+                        ],
+                        "properties": {
+                            "ai_model": true
+                        },
+                        "type": "object"
+                    },
+                    "else": {
+                        "not": {
+                            "anyOf": [
+                                {
+                                    "required": [
+                                        "ai_model"
+                                    ],
+                                    "properties": {
+                                        "ai_model": true
+                                    },
+                                    "type": "object"
+                                },
+                                {
+                                    "required": [
+                                        "ai_prompt_version"
+                                    ],
+                                    "properties": {
+                                        "ai_prompt_version": true
+                                    },
+                                    "type": "object"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "narrative_entry": {
+            "type": "object",
+            "description": "对实体或时间段的一种叙事性解读。叙事与事实主张明确分离——承载视角、作者署名与认识论来源三个维度。多个叙事可以并存。三个相交轴（对应伦理章程 R2）：source_of_knowledge（认识来源）、author_identity（作者身份）、style（文体）。撤回（R6）：retracted=true 时 text 必须为空且 retracted_at 必填——可导出数据中只保留墓碑骨架。托管（C2 导出边界）：身份托管记录只存平台侧；author_identity=escrowed_anonymous 时，author 必须是不可关联的 anon: 令牌。本 schema 刻意不设 escrow_note 字段。",
+            "required": [
+                "author",
+                "source_of_knowledge",
+                "author_identity",
+                "style",
+                "text"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "author": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/actor_id"
+                        }
+                    ],
+                    "description": "撰写该叙事的作者。author_identity=escrowed_anonymous 时必须为 anon:<token>；其他情况不得为 anon:（下方强制）。"
+                },
+                "source_of_knowledge": {
+                    "type": "string",
+                    "description": "作者如何得知？对应伦理章程 R2『视角』。",
+                    "enum": [
+                        "firsthand",
+                        "secondhand",
+                        "research",
+                        "ai_generated"
+                    ]
+                },
+                "author_identity": {
+                    "type": "string",
+                    "description": "作者对外如何表明身份？对应伦理章程 R2 三档体系。",
+                    "enum": [
+                        "real_name",
+                        "persistent_pseudonym",
+                        "escrowed_anonymous"
+                    ]
+                },
+                "style": {
+                    "type": "string",
+                    "description": "文本文体。与 source_of_knowledge 相互独立。",
+                    "enum": [
+                        "neutral",
+                        "personal_recollection",
+                        "community_consensus",
+                        "academic",
+                        "journalistic",
+                        "oral_history",
+                        "other"
+                    ]
+                },
+                "text": {
+                    "type": "string",
+                    "description": "叙事正文。仅当 retracted=true 时可为空（下方强制）。应用必须将 AI 生成的叙事与人类叙事在视觉上区分开（伦理章程 R3）。"
+                },
+                "language": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/language_tag"
+                        }
+                    ],
+                    "default": "en"
+                },
+                "confidence": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/confidence_value"
+                        }
+                    ],
+                    "description": "source_of_knowledge=ai_generated 时必填（伦理章程 R3，下方强制）。"
+                },
+                "ai_model": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "生成该叙事的模型。source_of_knowledge=ai_generated 时必填（下方强制）。"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "endorsed_by": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/actor_id"
+                    },
+                    "uniqueItems": true,
+                    "description": "认可该叙事的参与者列表"
+                },
+                "retracted": {
+                    "type": "boolean",
+                    "description": "作者已撤回（伦理章程 R6）。为 true 时：text 必须为空、retracted_at 必填。墓碑记录保留以维护溯源完整性。",
+                    "default": false
+                },
+                "retracted_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "撤回的 ISO 8601 时间戳。仅当 retracted=true 时允许出现（下方强制）。"
+                }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "retracted": {
+                                "const": true
+                            }
+                        },
+                        "required": [
+                            "retracted"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "retracted_at"
+                        ],
+                        "properties": {
+                            "text": {
+                                "maxLength": 0,
+                                "type": "string"
+                            },
+                            "retracted_at": true
+                        },
+                        "type": "object"
+                    },
+                    "else": {
+                        "not": {
+                            "required": [
+                                "retracted_at"
+                            ],
+                            "properties": {
+                                "retracted_at": true
+                            },
+                            "type": "object"
+                        },
+                        "properties": {
+                            "text": {
+                                "minLength": 1,
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "source_of_knowledge": {
+                                "const": "ai_generated"
+                            }
+                        },
+                        "required": [
+                            "source_of_knowledge"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "confidence",
+                            "ai_model"
+                        ],
+                        "properties": {
+                            "confidence": true,
+                            "ai_model": true
+                        },
+                        "type": "object"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "author_identity": {
+                                "const": "escrowed_anonymous"
+                            }
+                        },
+                        "required": [
+                            "author_identity"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "properties": {
+                            "author": {
+                                "pattern": "^anon:",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "else": {
+                        "properties": {
+                            "author": {
+                                "not": {
+                                    "pattern": "^anon:",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                }
+            ]
+        },
+        "evidence_item": {
+            "type": "object",
+            "description": "快照证据链中的一条。必须有所指向：外部 URL、平台资产，或明确标记的线下实物（offline=true + 描述其内容与存放位置的 title）。type 只表示媒介；AI 生成是正交的 ai_generated 标志（R3）。撤回（R6）：retracted=true 时 url/ste_asset_id 必须缺席（指针即内容本身），retracted_at 必填；type/date 作为墓碑骨架保留。",
+            "required": [
+                "type"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "证据的媒介。AI 生成不是媒介——使用 ai_generated 标志。",
+                    "enum": [
+                        "photo",
+                        "satellite",
+                        "map",
+                        "document",
+                        "oral",
+                        "audio",
+                        "video"
+                    ]
+                },
+                "ai_generated": {
+                    "type": "boolean",
+                    "description": "该证据是否由 AI 生成/复原（如 AI 补全的历史地图）？为 true 时 confidence 与 ai_model 必填（伦理章程 R3，下方强制）。",
+                    "default": false
+                },
+                "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "minLength": 1,
+                    "description": "指向证据的外部 URL"
+                },
+                "ste_asset_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "平台内部资产 ID，用于用户上传的证据"
+                },
+                "offline": {
+                    "type": "boolean",
+                    "description": "明确标记未数字化的实物条目（家庭照片、纸质档案）。为 true 时 title 必填，使条目至少可描述、可定位，供未来核验（R1）。",
+                    "default": false
+                },
+                "date": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/ohm_date"
+                        }
+                    ],
+                    "description": "证据本身的日期（拍摄、发布）。取代 v0.2 草案的整数 year——与 timeline 采用同一 ohm_date 约定，支持月/日精度与天文纪年公元前编号。"
+                },
+                "title": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/non_empty_string"
+                        }
+                    ],
+                    "description": "简短人类可读标签。offline=true 时必填。"
+                },
+                "confidence": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/confidence_value"
+                        }
+                    ],
+                    "description": "本条证据（而非快照）的置信度。ai_generated=true 时必填。"
+                },
+                "ai_model": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "生成该证据的模型。ai_generated=true 时必填。"
+                },
+                "contributed_by": {
+                    "$ref": "#/definitions/contribution_meta"
+                },
+                "retracted": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "retracted_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "retracted": {
+                                "const": true
+                            }
+                        },
+                        "required": [
+                            "retracted"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "retracted_at"
+                        ],
+                        "not": {
+                            "anyOf": [
+                                {
+                                    "required": [
+                                        "url"
+                                    ],
+                                    "properties": {
+                                        "url": true
+                                    },
+                                    "type": "object"
+                                },
+                                {
+                                    "required": [
+                                        "ste_asset_id"
+                                    ],
+                                    "properties": {
+                                        "ste_asset_id": true
+                                    },
+                                    "type": "object"
+                                }
+                            ]
+                        },
+                        "properties": {
+                            "retracted_at": true
+                        },
+                        "type": "object"
+                    },
+                    "else": {
+                        "not": {
+                            "required": [
+                                "retracted_at"
+                            ],
+                            "properties": {
+                                "retracted_at": true
+                            },
+                            "type": "object"
+                        },
+                        "anyOf": [
+                            {
+                                "required": [
+                                    "url"
+                                ],
+                                "properties": {
+                                    "url": true
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "required": [
+                                    "ste_asset_id"
+                                ],
+                                "properties": {
+                                    "ste_asset_id": true
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "required": [
+                                    "offline",
+                                    "title"
+                                ],
+                                "properties": {
+                                    "offline": {
+                                        "const": true
+                                    },
+                                    "title": true
+                                },
+                                "type": "object"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "ai_generated": {
+                                "const": true
+                            }
+                        },
+                        "required": [
+                            "ai_generated"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "confidence",
+                            "ai_model"
+                        ],
+                        "properties": {
+                            "confidence": true,
+                            "ai_model": true
+                        },
+                        "type": "object"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "offline": {
+                                "const": true
+                            }
+                        },
+                        "required": [
+                            "offline"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "title"
+                        ],
+                        "properties": {
+                            "title": true
+                        },
+                        "type": "object"
+                    }
+                }
+            ]
+        }
+    },
+    "properties": {
+        "ste_id": {
+            "type": "string",
+            "description": "全局唯一 ID，UUID v4（小写）",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "ste_version": {
+            "type": "string",
+            "description": "Schema 版本。本发布版只校验恰好为 v0.2 的文档——通过 const 锁定版本，声明其他版本的文档无法静默通过 v0.2 校验。开发分支的 schema 可放宽为 pattern。",
+            "const": "0.2"
+        },
+        "name": {
+            "type": "object",
+            "description": "当前名称。⚠️ 由 timeline 派生的反规范化缓存（供搜索/展示）；冲突时以 timeline 为准。派生规则：取最后一个快照（按 start_date）的名称，与状态无关——已拆除的实体保留其最终名称。aliases 应聚合此前所有快照的名称。应由程序派生，不应手写。",
+            "required": [
+                "primary"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "primary": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/non_empty_string"
+                        }
+                    ],
+                    "description": "取自最后一个 timeline 快照的名称"
+                },
+                "localized": {
+                    "type": "object",
+                    "description": "按 BCP 47 语言标签键控的本地化名称，例如 {\"zh-Hans\": \"北京大学\", \"en\": \"Peking University\"}。取代 v0.2 草案仅限中文的特例字段；可在不修改 schema 的前提下扩展到任意语言。",
+                    "propertyNames": {
+                        "pattern": "^[a-zA-Z]{2,3}(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|\\d{3}))?$",
+                        "type": "string"
+                    },
+                    "additionalProperties": {
+                        "$ref": "#/definitions/non_empty_string"
+                    }
+                },
+                "aliases": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/non_empty_string"
+                    },
+                    "uniqueItems": true,
+                    "description": "曾用名/别名（搜索缓存；由更早的 timeline 快照派生）"
+                }
+            }
+        },
+        "coordinates": {
+            "$ref": "#/definitions/wgs84_point",
+            "description": "实体默认 WGS84 代表点。⚠️ v0.2 几何仅为代表点——街道/公园/区域取质心或入口点，不是边界；多边形/线几何计划在未来版本提供。搬迁场景可按快照覆盖；快照自带坐标时，该时段以快照为准。"
+        },
+        "external_ids": {
+            "type": "object",
+            "description": "外部知识库交叉引用。每个条目是携带核验状态的 external_id_ref 对象。各 key 的 id 格式在下方强制。⚠️ baidu_baike：内容许可与 ODbL/CC 不兼容——仅作参考链接，内容不得抽取进 STE 数据（R1/R8）。",
+            "additionalProperties": false,
+            "properties": {
+                "wikidata": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/external_id_ref"
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "pattern": "^Q[1-9]\\d*$"
+                                }
+                            }
+                        }
+                    ],
+                    "description": "Wikidata Q 号，如 Q16"
+                },
+                "osm": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/external_id_ref"
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "pattern": "^(node|way|relation)/[1-9]\\d*$"
+                                }
+                            }
+                        }
+                    ],
+                    "description": "OSM 元素且显式声明类型，如 way/123456——裸数字在 node/way/relation 之间产生歧义"
+                },
+                "ohm": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/external_id_ref"
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "pattern": "^(node|way|relation)/[1-9]\\d*$"
+                                }
+                            }
+                        }
+                    ],
+                    "description": "OpenHistoricalMap 元素，格式同 osm"
+                },
+                "baidu_baike": {
+                    "$ref": "#/definitions/external_id_ref",
+                    "description": "百度百科词条 ID 或 URL slug。仅作参考；许可警告见上。"
+                },
+                "wikipedia": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/external_id_ref"
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "pattern": "^[a-z]{2,12}wiki:.+$"
+                                }
+                            }
+                        }
+                    ],
+                    "description": "Wikidata sitelink 约定：<lang>wiki:<标题>，如 zhwiki:北京大学、enwiki:Peking_University。同一实体的多语言版本应通过 wikidata 关联；wikipedia 只承载一个主条目。"
+                }
+            }
+        },
+        "tags": {
+            "type": "object",
+            "description": "自由 OSM 兼容标签。社区自造键须使用 ste: 前缀以避免与 OSM 惯例冲突（应用层检查）。按 OSM 实践，值不得为空。",
+            "additionalProperties": {
+                "type": "string",
+                "minLength": 1
+            },
+            "propertyNames": {
+                "minLength": 1,
+                "type": "string"
+            },
+            "examples": [
+                {
+                    "amenity": "school",
+                    "operator": "教育局",
+                    "ste:disappearance": "停办"
+                }
+            ]
+        },
+        "narratives": {
+            "type": "array",
+            "description": "多视角叙事。明确不是事实主张。应用必须展示 source_of_knowledge + style 标签，且不得把 AI 生成的叙事呈现为客观事实（R3）。已撤回的叙事渲染为墓碑（R6）。",
+            "items": {
+                "$ref": "#/definitions/narrative_entry"
+            }
+        },
+        "timeline": {
+            "type": "array",
+            "description": "核心！每个快照是一个时间段。当前 type = 最后一个快照的 type。end_date 约定：在声明的粒度上为闭区间（end_date 为 1937 表示持续到 1937 年底；下一快照可从 1938 开始；end 与 start 相等视为重叠）。应用须保证：按 start_date 升序、互不重叠、至多一个快照缺 end_date。改名是事件而非状态——改名后的快照 status 保持 active。一切领土/行政归属主张必须锚定时间段与来源（R7）。",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "required": [
+                    "start_date",
+                    "name",
+                    "type",
+                    "sources"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                    "start_date": {
+                        "$ref": "#/definitions/ohm_date"
+                    },
+                    "end_date": {
+                        "allOf": [
+                            {
+                                "$ref": "#/definitions/ohm_date"
+                            }
+                        ],
+                        "description": "闭区间结束日期；缺省 = 至今（仅最后一个快照可缺省，应用层检查）。status=demolished 时必填（下方强制）。"
+                    },
+                    "name": {
+                        "$ref": "#/definitions/non_empty_string"
+                    },
+                    "type": {
+                        "allOf": [
+                            {
+                                "$ref": "#/definitions/non_empty_string"
+                            }
+                        ],
+                        "description": "该时段的实体类型，复用 OSM 值（school/building/street/park...）"
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "该时段的物理状态（非数据审核状态——草稿存于平台侧，见顶层描述）。relocated 表示物理迁移；此时快照坐标必填。",
+                        "enum": [
+                            "active",
+                            "demolished",
+                            "under_construction",
+                            "proposed",
+                            "relocated"
+                        ]
+                    },
+                    "coordinates": {
+                        "allOf": [
+                            {
+                                "$ref": "#/definitions/wgs84_point"
+                            }
+                        ],
+                        "description": "迁移时段的快照级坐标覆盖；缺省 = 继承顶层。status=relocated 时必填（下方强制）。"
+                    },
+                    "description": {
+                        "allOf": [
+                            {
+                                "$ref": "#/definitions/non_empty_string"
+                            }
+                        ],
+                        "description": "最简短的中立事实摘要——只写事实；解读归 narratives[]。好例：\"该校因战争从北京迁至西安。\" 坏例：\"该校英勇西迁。\"文体固定为中立；溯源由正交的 description_provenance 字段承担。"
+                    },
+                    "description_provenance": {
+                        "type": "string",
+                        "description": "description 的溯源（与固定为 neutral 的文体正交）。取代 v0.2 草案的 description_style——其枚举把文体（neutral）与溯源混为一谈。description 出现时必填（下方强制）；ai_generated 额外要求快照级 confidence。",
+                        "enum": [
+                            "manual",
+                            "ai_generated",
+                            "community_consensus",
+                            "imported"
+                        ]
+                    },
+                    "confidence": {
+                        "allOf": [
+                            {
+                                "$ref": "#/definitions/confidence_value"
+                            }
+                        ],
+                        "description": "该快照整体的自报置信度。逐条证据的置信度在各自 evidence 条目内。"
+                    },
+                    "sources": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/non_empty_string"
+                        },
+                        "minItems": 1,
+                        "description": "来源（URL / 引文 / 口述史标识符）。按 R1 必填——无来源即无正式数据集条目；无来源数据留在平台侧作草稿（30 天宽限）。结构化 source 对象计划在 v0.3。"
+                    },
+                    "contributed_by": {
+                        "$ref": "#/definitions/contribution_meta"
+                    },
+                    "evidence": {
+                        "type": "array",
+                        "description": "该快照的证据链。结构化交叉验证在 v1 提供。",
+                        "items": {
+                            "$ref": "#/definitions/evidence_item"
+                        }
+                    }
+                },
+                "allOf": [
+                    {
+                        "if": {
+                            "properties": {
+                                "status": {
+                                    "const": "demolished"
+                                }
+                            },
+                            "required": [
+                                "status"
+                            ],
+                            "type": "object"
+                        },
+                        "then": {
+                            "required": [
+                                "end_date"
+                            ],
+                            "properties": {
+                                "end_date": true
+                            },
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "status": {
+                                    "const": "relocated"
+                                }
+                            },
+                            "required": [
+                                "status"
+                            ],
+                            "type": "object"
+                        },
+                        "then": {
+                            "required": [
+                                "coordinates"
+                            ],
+                            "properties": {
+                                "coordinates": true
+                            },
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "if": {
+                            "required": [
+                                "description"
+                            ],
+                            "properties": {
+                                "description": true
+                            },
+                            "type": "object"
+                        },
+                        "then": {
+                            "required": [
+                                "description_provenance"
+                            ],
+                            "properties": {
+                                "description_provenance": true
+                            },
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "description_provenance": {
+                                    "const": "ai_generated"
+                                }
+                            },
+                            "required": [
+                                "description_provenance"
+                            ],
+                            "type": "object"
+                        },
+                        "then": {
+                            "required": [
+                                "confidence"
+                            ],
+                            "properties": {
+                                "confidence": true
+                            },
+                            "type": "object"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

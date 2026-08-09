@@ -1,0 +1,32 @@
+{
+  "ste_id": "a3f8c2d1-4b6e-4c8a-9f2d-7e1b3a5c9d04",
+  "ste_version": "0.2",
+  "name": {
+    "primary": "X"
+  },
+  "coordinates": {
+    "lat": 1,
+    "lon": 2
+  },
+  "timeline": [
+    {
+      "start_date": "1950",
+      "name": "X",
+      "type": "school",
+      "sources": [
+        "s"
+      ]
+    }
+  ],
+  "narratives": [
+    {
+      "author": "anon:c7e29f4b1a",
+      "source_of_knowledge": "firsthand",
+      "author_identity": "escrowed_anonymous",
+      "style": "personal_recollection",
+      "text": "",
+      "retracted": true,
+      "retracted_at": "2026-06-20T10:15:00Z"
+    }
+  ]
+}

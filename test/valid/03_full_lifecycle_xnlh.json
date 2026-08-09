@@ -1,0 +1,252 @@
+{
+  "ste_id": "a3f8c2d1-4b6e-4c8a-9f2d-7e1b3a5c9d04",
+  "ste_version": "0.2",
+  "name": {
+    "primary": "云南师范大学",
+    "localized": {
+      "zh-Hans": "云南师范大学",
+      "en": "Yunnan Normal University"
+    },
+    "aliases": [
+      "国立长沙临时大学",
+      "国立西南联合大学",
+      "西南联大",
+      "国立昆明师范学院",
+      "昆明师范学院"
+    ]
+  },
+  "coordinates": {
+    "lat": 25.0582,
+    "lon": 102.7021
+  },
+  "external_ids": {
+    "wikidata": {
+      "id": "Q2120272",
+      "verified": false,
+      "note": "已核实为云南师范大学（Yunnan Normal University）Wikidata 条目，2026-08-09；置 verified=true 前请人工确认"
+    },
+    "osm": {
+      "id": "way/123456789",
+      "verified": false,
+      "note": "指向一二一校区西南联大旧址范围，待核实"
+    },
+    "wikipedia": {
+      "id": "zhwiki:国立西南联合大学",
+      "verified": true,
+      "verified_at": "2026-07-15T09:30:00Z"
+    }
+  },
+  "tags": {
+    "amenity": "university",
+    "operator": "云南省人民政府",
+    "heritage": "yes",
+    "ste:lineage": "国立西南联合大学师范学院"
+  },
+  "narratives": [
+    {
+      "author": "user:prof_li_hist",
+      "source_of_knowledge": "research",
+      "author_identity": "real_name",
+      "style": "academic",
+      "text": "西南联大在滇八年，于战火之中保存并延续了中国高等教育的命脉。三校合一而学统各异，其\"刚毅坚卓\"的校训与教授治校的传统，对战后中国学术格局产生了深远影响。本叙述基于校史档案与既有研究文献。",
+      "language": "zh-Hans",
+      "created_at": "2026-06-01T14:20:00Z",
+      "endorsed_by": [
+        "user:archivist_wang",
+        "user:zhang_1946"
+      ]
+    },
+    {
+      "author": "anon:c7e29f4b1a",
+      "source_of_knowledge": "secondhand",
+      "author_identity": "escrowed_anonymous",
+      "style": "personal_recollection",
+      "text": "祖父是当年湘黔滇旅行团的学生，徒步三千余里到昆明。他很少提那段路，只说过一次：夜里宿在苗寨，闻队伍是读书人，寨里人把仅有的米酒端了出来。",
+      "language": "zh-Hans",
+      "created_at": "2026-06-18T21:05:00Z"
+    },
+    {
+      "author": "agent:gpt-4o",
+      "source_of_knowledge": "ai_generated",
+      "author_identity": "persistent_pseudonym",
+      "style": "neutral",
+      "text": "根据时间线数据自动生成的摘要：该实体起源于 1937 年长沙临时大学，1938 年西迁昆明并更名为国立西南联合大学，1946 年三校北返后其师范学院留昆办学，历经两次更名后延续为今日的云南师范大学。",
+      "language": "zh-Hans",
+      "confidence": 0.72,
+      "ai_model": "gpt-4o-2024-11",
+      "created_at": "2026-07-01T03:00:00Z"
+    },
+    {
+      "author": "anon:9b2d5e8c3f",
+      "source_of_knowledge": "firsthand",
+      "author_identity": "escrowed_anonymous",
+      "style": "personal_recollection",
+      "text": "",
+      "language": "zh-Hans",
+      "created_at": "2026-05-10T08:00:00Z",
+      "retracted": true,
+      "retracted_at": "2026-06-20T10:15:00Z"
+    }
+  ],
+  "timeline": [
+    {
+      "start_date": "1937-11",
+      "end_date": "1938-04",
+      "name": "国立长沙临时大学",
+      "type": "university",
+      "status": "relocated",
+      "coordinates": {
+        "lat": 28.1938,
+        "lon": 112.9902
+      },
+      "description": "北京大学、清华大学、南开大学因战争南迁长沙，合组国立长沙临时大学，1937 年 11 月 1 日开学。1938 年 2 月起分三路西迁昆明。",
+      "description_provenance": "ai_generated",
+      "confidence": 0.85,
+      "sources": [
+        "https://zh.wikipedia.org/wiki/国立长沙临时大学",
+        "《国立西南联合大学校史》，北京大学出版社，1996"
+      ],
+      "contributed_by": {
+        "created_by": "agent:gpt-4o",
+        "created_via": "ai_extraction",
+        "ai_model": "gpt-4o-2024-11",
+        "ai_prompt_version": "extract-v0.2.3",
+        "confirmed_by": [
+          "user:prof_li_hist"
+        ],
+        "created_at": "2026-05-02T11:00:00Z"
+      },
+      "evidence": [
+        {
+          "type": "document",
+          "url": "https://example-archive.org/changsha-linshi-1937",
+          "date": "1937-11",
+          "title": "长沙临时大学开学布告（档案扫描）"
+        },
+        {
+          "type": "photo",
+          "date": "1938",
+          "title": "湘黔滇旅行团途中合影（应贡献者要求撤回）",
+          "retracted": true,
+          "retracted_at": "2026-06-20T10:15:00Z"
+        }
+      ]
+    },
+    {
+      "start_date": "1938-05",
+      "end_date": "1946-07",
+      "name": "国立西南联合大学",
+      "type": "university",
+      "status": "active",
+      "description": "1938 年 4 月西迁昆明完成，5 月 4 日更名为国立西南联合大学并开课。1946 年 7 月 31 日联大结束，三校北返。",
+      "description_provenance": "manual",
+      "confidence": 0.95,
+      "sources": [
+        "https://zh.wikipedia.org/wiki/国立西南联合大学",
+        "《国立西南联合大学校史》，北京大学出版社，1996",
+        "oral:oh-2025-0042"
+      ],
+      "contributed_by": {
+        "created_by": "user:archivist_wang",
+        "created_via": "manual",
+        "confirmed_by": [
+          "user:prof_li_hist",
+          "user:zhang_1946"
+        ],
+        "created_at": "2026-05-02T11:30:00Z",
+        "last_modified_by": "user:prof_li_hist",
+        "last_modified_at": "2026-06-05T16:00:00Z"
+      },
+      "evidence": [
+        {
+          "type": "photo",
+          "url": "https://example-archive.org/lianda-gate-1939.jpg",
+          "date": "1939",
+          "title": "西南联大校门历史照片"
+        },
+        {
+          "type": "document",
+          "ste_asset_id": "asset-8f3a2c91",
+          "date": "1941-10",
+          "title": "联大教务处布告（用户上传扫描件）",
+          "contributed_by": {
+            "created_by": "user:zhang_1946",
+            "created_via": "manual",
+            "created_at": "2026-05-20T09:00:00Z"
+          }
+        },
+        {
+          "type": "map",
+          "ai_generated": true,
+          "url": "https://example-platform.org/ai-maps/lianda-campus-1940",
+          "date": "1940",
+          "title": "AI 复原的 1940 年校园布局图（基于文字记载推断，非史料）",
+          "confidence": 0.55,
+          "ai_model": "map-reconstruct-v2",
+          "contributed_by": {
+            "created_by": "agent:map-reconstruct-v2",
+            "created_via": "ai_extraction",
+            "ai_model": "map-reconstruct-v2",
+            "created_at": "2026-06-10T02:00:00Z"
+          }
+        },
+        {
+          "type": "photo",
+          "offline": true,
+          "date": "1939",
+          "title": "贡献者家藏的祖父联大时期照片一张，未数字化，存于昆明家中"
+        }
+      ]
+    },
+    {
+      "start_date": "1946-08",
+      "end_date": "1950-09",
+      "name": "国立昆明师范学院",
+      "type": "university",
+      "status": "active",
+      "description": "联大北返后，其师范学院留昆独立设置为国立昆明师范学院，沿用原校址。",
+      "description_provenance": "manual",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/云南师范大学"
+      ],
+      "contributed_by": {
+        "created_by": "user:archivist_wang",
+        "created_via": "manual",
+        "created_at": "2026-05-03T10:00:00Z"
+      }
+    },
+    {
+      "start_date": "1950-10",
+      "end_date": "1984-03",
+      "name": "昆明师范学院",
+      "type": "university",
+      "status": "active",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/云南师范大学",
+        "《云南师范大学校史》校史编写组"
+      ],
+      "contributed_by": {
+        "created_by": "user:archivist_wang",
+        "created_via": "manual",
+        "created_at": "2026-05-03T10:00:00Z"
+      }
+    },
+    {
+      "start_date": "1984-04",
+      "name": "云南师范大学",
+      "type": "university",
+      "status": "active",
+      "description": "1984 年 4 月更名为云南师范大学，沿用现址办学至今。",
+      "description_provenance": "manual",
+      "sources": [
+        "https://zh.wikipedia.org/wiki/云南师范大学",
+        "《云南师范大学校史》校史编写组"
+      ],
+      "contributed_by": {
+        "created_by": "user:archivist_wang",
+        "created_via": "manual",
+        "created_at": "2026-05-03T10:00:00Z"
+      }
+    }
+  ]
+}

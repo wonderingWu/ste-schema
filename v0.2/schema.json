@@ -1,0 +1,1001 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://wonderingWu.github.io/ste-schema/v0.2/schema.json",
+    "title": "STE Schema v0.2 (SpatioTemporal Entity)",
+    "description": "A spatiotemporal snapshot of a place. Compatible with OSM/OHM tag naming; time is a first-class citizen. v0.2 adds external_ids, snapshot-level coordinates, contributed_by provenance, multi-perspective narratives[], evidence with external URLs / platform asset IDs / offline items, and mandatory sources per Ethics Charter R1. EXPORT BOUNDARY: this schema describes ONLY publicly exportable data (Charter C2). Platform-private data (identity escrow records, retracted content bodies) MUST live in platform-side storage and MUST NOT appear in STE documents. DRAFTS: documents in the 30-day no-source grace period (Charter R1) are platform-side records, NOT valid STE documents; this schema validates formal dataset entries only. Rules that JSON Schema cannot express are listed in the repo README under 'Application-level validation'. Passing schema validation does NOT guarantee clean data.",
+    "type": "object",
+    "required": [
+        "ste_id",
+        "ste_version",
+        "name",
+        "coordinates",
+        "timeline"
+    ],
+    "additionalProperties": false,
+    "definitions": {
+        "ohm_date": {
+            "type": "string",
+            "description": "OHM-style date: YYYY / YYYY-MM / YYYY-MM-DD. BCE years use ISO 8601 astronomical year numbering: 0000 = 1 BCE, -0001 = 2 BCE, -0220 = 221 BCE (consistent with EDTF/OHM ecosystems; note the off-by-one vs colloquial 'BCE' counting). Month limited to 01-12, day to 01-31; calendar validity (e.g. 02-30) must be checked at the application level.",
+            "pattern": "^-?\\d{4}(-(0[1-9]|1[0-2])(-(0[1-9]|[12]\\d|3[01]))?)?$"
+        },
+        "non_empty_string": {
+            "type": "string",
+            "minLength": 1
+        },
+        "actor_id": {
+            "type": "string",
+            "description": "Namespaced actor identifier — eliminates ambiguity between user IDs and reserved words like 'ai'/'system'. Namespaces: user:<id> = registered user; anon:<token> = platform-issued opaque token for escrowed-anonymous authors (the token MUST NOT be linkable to the user's other contributions); agent:<model-id> = AI agent; system:<process> = automated pipeline; community = collective attribution.",
+            "pattern": "^(user:[A-Za-z0-9._-]+|anon:[A-Za-z0-9._-]+|agent:[A-Za-z0-9._-]+|system:[A-Za-z0-9._-]+|community)$"
+        },
+        "confidence_value": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Self-reported confidence in [0,1]. Applications MUST present this as 'self-reported confidence', NOT 'platform-certified credibility' (Ethics Charter R3)."
+        },
+        "language_tag": {
+            "type": "string",
+            "description": "BCP 47 language tag: language[-Script][-Region], e.g. 'zh', 'en-US', 'zh-Hans-CN', 'zh-Hant'.",
+            "pattern": "^[a-zA-Z]{2,3}(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|\\d{3}))?$"
+        },
+        "wgs84_point": {
+            "type": "object",
+            "description": "WGS84 point coordinates. NOTE: lon -180 and +180 denote the same meridian; applications should normalize before comparison.",
+            "required": [
+                "lat",
+                "lon"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "lat": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                },
+                "lon": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                }
+            }
+        },
+        "external_id_ref": {
+            "type": "object",
+            "description": "A reference to an external identifier, with optional verification status and notes for maintenance.",
+            "required": [
+                "id"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "External identifier value. Per-key format constraints are applied where this definition is referenced.",
+                    "minLength": 1
+                },
+                "verified": {
+                    "type": "boolean",
+                    "description": "Has this mapping been verified by a human contributor? Default false for AI-generated links.",
+                    "default": false
+                },
+                "verified_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "ISO 8601 timestamp of the last verification. Only allowed when verified=true (enforced below)."
+                },
+                "note": {
+                    "type": "string",
+                    "description": "Free-form note about this mapping (e.g. changes in OSM, scope differences)"
+                }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "required": [
+                            "verified_at"
+                        ],
+                        "properties": {
+                            "verified_at": true
+                        },
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "verified"
+                        ],
+                        "properties": {
+                            "verified": {
+                                "const": true
+                            }
+                        },
+                        "type": "object"
+                    }
+                }
+            ]
+        },
+        "contribution_meta": {
+            "type": "object",
+            "description": "Provenance metadata — who created/confirmed/modified a snapshot or evidence item, and how. created_by and created_via are mandatory: provenance may not be left entirely blank (Ethics Charter contribution transparency).",
+            "required": [
+                "created_by",
+                "created_via"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "created_by": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/actor_id"
+                        }
+                    ],
+                    "description": "Namespaced actor who created this item"
+                },
+                "created_via": {
+                    "type": "string",
+                    "description": "How was this created?",
+                    "enum": [
+                        "manual",
+                        "ai_extraction",
+                        "community_consensus",
+                        "import"
+                    ]
+                },
+                "ai_model": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Which model generated it. Required when created_via=ai_extraction; forbidden otherwise (enforced below)."
+                },
+                "ai_prompt_version": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Version of the AI extraction prompt/configuration used. Only meaningful when created_via=ai_extraction (enforced below)."
+                },
+                "confirmed_by": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/actor_id"
+                    },
+                    "uniqueItems": true,
+                    "description": "List of actors who confirmed this item"
+                },
+                "last_modified_by": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/actor_id"
+                        }
+                    ],
+                    "description": "Actor who last modified this item"
+                },
+                "last_modified_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "ISO 8601 timestamp of the last modification"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "ISO 8601 timestamp of creation"
+                }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "created_via": {
+                                "const": "ai_extraction"
+                            }
+                        },
+                        "required": [
+                            "created_via"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "ai_model"
+                        ],
+                        "properties": {
+                            "ai_model": true
+                        },
+                        "type": "object"
+                    },
+                    "else": {
+                        "not": {
+                            "anyOf": [
+                                {
+                                    "required": [
+                                        "ai_model"
+                                    ],
+                                    "properties": {
+                                        "ai_model": true
+                                    },
+                                    "type": "object"
+                                },
+                                {
+                                    "required": [
+                                        "ai_prompt_version"
+                                    ],
+                                    "properties": {
+                                        "ai_prompt_version": true
+                                    },
+                                    "type": "object"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "narrative_entry": {
+            "type": "object",
+            "description": "A narrative interpretation of an entity or time period. Narratives are explicitly separate from factual claims — they carry perspective, author attribution, and epistemic source dimensions. Multiple narratives can coexist. Three intersecting axes per Ethics Charter R2: source_of_knowledge, author_identity, style. RETRACTION (R6): when retracted=true, text MUST be empty and retracted_at is required — only the tombstone skeleton remains in exportable data. ESCROW (C2 export boundary): identity-escrow records live platform-side only; when author_identity=escrowed_anonymous, author MUST be an anon: token unlinkable to the user's other contributions. There is deliberately NO escrow_note field in this schema.",
+            "required": [
+                "author",
+                "source_of_knowledge",
+                "author_identity",
+                "style",
+                "text"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "author": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/actor_id"
+                        }
+                    ],
+                    "description": "Who wrote this narrative. Must be anon:<token> when author_identity=escrowed_anonymous; must NOT be anon: otherwise (enforced below)."
+                },
+                "source_of_knowledge": {
+                    "type": "string",
+                    "description": "How does the author know this? Maps to Ethics Charter R2 '视角'.",
+                    "enum": [
+                        "firsthand",
+                        "secondhand",
+                        "research",
+                        "ai_generated"
+                    ]
+                },
+                "author_identity": {
+                    "type": "string",
+                    "description": "How is the author identified publicly? Maps to Ethics Charter R2 three-tier system.",
+                    "enum": [
+                        "real_name",
+                        "persistent_pseudonym",
+                        "escrowed_anonymous"
+                    ]
+                },
+                "style": {
+                    "type": "string",
+                    "description": "Textual genre. Independent of source_of_knowledge.",
+                    "enum": [
+                        "neutral",
+                        "personal_recollection",
+                        "community_consensus",
+                        "academic",
+                        "journalistic",
+                        "oral_history",
+                        "other"
+                    ]
+                },
+                "text": {
+                    "type": "string",
+                    "description": "The narrative text. May only be empty when retracted=true (enforced below). Applications must visually distinguish AI-generated narratives from human ones (Ethics Charter R3)."
+                },
+                "language": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/language_tag"
+                        }
+                    ],
+                    "default": "en"
+                },
+                "confidence": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/confidence_value"
+                        }
+                    ],
+                    "description": "Required when source_of_knowledge=ai_generated (Ethics Charter R3, enforced below)."
+                },
+                "ai_model": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Which model generated this narrative. Required when source_of_knowledge=ai_generated (enforced below)."
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "endorsed_by": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/actor_id"
+                    },
+                    "uniqueItems": true,
+                    "description": "List of actors who endorse this narrative"
+                },
+                "retracted": {
+                    "type": "boolean",
+                    "description": "Retracted by author (Ethics Charter R6). When true: text must be empty, retracted_at required. The tombstone record remains for provenance integrity.",
+                    "default": false
+                },
+                "retracted_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "description": "ISO 8601 timestamp of retraction. Only allowed when retracted=true (enforced below)."
+                }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "retracted": {
+                                "const": true
+                            }
+                        },
+                        "required": [
+                            "retracted"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "retracted_at"
+                        ],
+                        "properties": {
+                            "text": {
+                                "maxLength": 0,
+                                "type": "string"
+                            },
+                            "retracted_at": true
+                        },
+                        "type": "object"
+                    },
+                    "else": {
+                        "not": {
+                            "required": [
+                                "retracted_at"
+                            ],
+                            "properties": {
+                                "retracted_at": true
+                            },
+                            "type": "object"
+                        },
+                        "properties": {
+                            "text": {
+                                "minLength": 1,
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "source_of_knowledge": {
+                                "const": "ai_generated"
+                            }
+                        },
+                        "required": [
+                            "source_of_knowledge"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "confidence",
+                            "ai_model"
+                        ],
+                        "properties": {
+                            "confidence": true,
+                            "ai_model": true
+                        },
+                        "type": "object"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "author_identity": {
+                                "const": "escrowed_anonymous"
+                            }
+                        },
+                        "required": [
+                            "author_identity"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "properties": {
+                            "author": {
+                                "pattern": "^anon:",
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "else": {
+                        "properties": {
+                            "author": {
+                                "not": {
+                                    "pattern": "^anon:",
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                }
+            ]
+        },
+        "evidence_item": {
+            "type": "object",
+            "description": "One item in a snapshot's evidence chain. Must point at something: an external URL, a platform asset, or an explicitly-marked offline physical item (offline=true + title describing what and where it is). type is the MEDIUM only; AI generation is the orthogonal ai_generated flag (R3). RETRACTION (R6): when retracted=true, url/ste_asset_id MUST be absent (the pointer IS the content), retracted_at required; type/date remain as tombstone skeleton.",
+            "required": [
+                "type"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Medium of the evidence. AI generation is NOT a medium — use the ai_generated flag.",
+                    "enum": [
+                        "photo",
+                        "satellite",
+                        "map",
+                        "document",
+                        "oral",
+                        "audio",
+                        "video"
+                    ]
+                },
+                "ai_generated": {
+                    "type": "boolean",
+                    "description": "Was this evidence generated/reconstructed by AI (e.g. AI-completed historical map)? When true, confidence and ai_model are required (Ethics Charter R3, enforced below).",
+                    "default": false
+                },
+                "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "minLength": 1,
+                    "description": "External URL to the evidence"
+                },
+                "ste_asset_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Platform-internal asset ID for user-uploaded evidence"
+                },
+                "offline": {
+                    "type": "boolean",
+                    "description": "Explicitly marks a non-digitized physical item (family photo, paper archive). When true, title is required so the item is at least describable and locatable for future verification (R1).",
+                    "default": false
+                },
+                "date": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/ohm_date"
+                        }
+                    ],
+                    "description": "Date of the evidence itself (photo taken, document published). Replaces v0.2-draft integer 'year' — same ohm_date convention as timeline, supports month/day precision and astronomical BCE numbering."
+                },
+                "title": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/non_empty_string"
+                        }
+                    ],
+                    "description": "Short human-readable label. Required when offline=true."
+                },
+                "confidence": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/confidence_value"
+                        }
+                    ],
+                    "description": "Confidence for THIS evidence item (not the snapshot). Required when ai_generated=true."
+                },
+                "ai_model": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Which model generated this evidence. Required when ai_generated=true."
+                },
+                "contributed_by": {
+                    "$ref": "#/definitions/contribution_meta"
+                },
+                "retracted": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "retracted_at": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            },
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "retracted": {
+                                "const": true
+                            }
+                        },
+                        "required": [
+                            "retracted"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "retracted_at"
+                        ],
+                        "not": {
+                            "anyOf": [
+                                {
+                                    "required": [
+                                        "url"
+                                    ],
+                                    "properties": {
+                                        "url": true
+                                    },
+                                    "type": "object"
+                                },
+                                {
+                                    "required": [
+                                        "ste_asset_id"
+                                    ],
+                                    "properties": {
+                                        "ste_asset_id": true
+                                    },
+                                    "type": "object"
+                                }
+                            ]
+                        },
+                        "properties": {
+                            "retracted_at": true
+                        },
+                        "type": "object"
+                    },
+                    "else": {
+                        "not": {
+                            "required": [
+                                "retracted_at"
+                            ],
+                            "properties": {
+                                "retracted_at": true
+                            },
+                            "type": "object"
+                        },
+                        "anyOf": [
+                            {
+                                "required": [
+                                    "url"
+                                ],
+                                "properties": {
+                                    "url": true
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "required": [
+                                    "ste_asset_id"
+                                ],
+                                "properties": {
+                                    "ste_asset_id": true
+                                },
+                                "type": "object"
+                            },
+                            {
+                                "required": [
+                                    "offline",
+                                    "title"
+                                ],
+                                "properties": {
+                                    "offline": {
+                                        "const": true
+                                    },
+                                    "title": true
+                                },
+                                "type": "object"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "ai_generated": {
+                                "const": true
+                            }
+                        },
+                        "required": [
+                            "ai_generated"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "confidence",
+                            "ai_model"
+                        ],
+                        "properties": {
+                            "confidence": true,
+                            "ai_model": true
+                        },
+                        "type": "object"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "offline": {
+                                "const": true
+                            }
+                        },
+                        "required": [
+                            "offline"
+                        ],
+                        "type": "object"
+                    },
+                    "then": {
+                        "required": [
+                            "title"
+                        ],
+                        "properties": {
+                            "title": true
+                        },
+                        "type": "object"
+                    }
+                }
+            ]
+        }
+    },
+    "properties": {
+        "ste_id": {
+            "type": "string",
+            "description": "Globally unique ID, UUID v4 (lowercase)",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "ste_version": {
+            "type": "string",
+            "description": "Schema version. This published schema validates exactly v0.2 documents — version-locked via const so that a document claiming another version cannot silently pass v0.2 validation. The dev-branch schema may relax this to a pattern.",
+            "const": "0.2"
+        },
+        "name": {
+            "type": "object",
+            "description": "Current name. ⚠️ Denormalized cache derived from the timeline (for search/display); on conflict, the timeline wins. Derivation rule: taken from the LAST snapshot (by start_date), regardless of status — so a demolished entity keeps its final name. aliases should aggregate the names of all earlier snapshots. Should be derived, not hand-written.",
+            "required": [
+                "primary"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "primary": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/non_empty_string"
+                        }
+                    ],
+                    "description": "Name from the last timeline snapshot"
+                },
+                "localized": {
+                    "type": "object",
+                    "description": "Localized names keyed by BCP 47 language tag, e.g. {\"zh-Hans\": \"北京大学\", \"en\": \"Peking University\"}. Replaces the v0.2-draft zh-only special case; extensible to any language without schema changes.",
+                    "propertyNames": {
+                        "pattern": "^[a-zA-Z]{2,3}(-[a-zA-Z]{4})?(-([a-zA-Z]{2}|\\d{3}))?$",
+                        "type": "string"
+                    },
+                    "additionalProperties": {
+                        "$ref": "#/definitions/non_empty_string"
+                    }
+                },
+                "aliases": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/non_empty_string"
+                    },
+                    "uniqueItems": true,
+                    "description": "Former/alternative names (search cache; derived from earlier timeline snapshots)"
+                }
+            }
+        },
+        "coordinates": {
+            "$ref": "#/definitions/wgs84_point",
+            "description": "Default WGS84 representative point of the entity. ⚠️ v0.2 geometry is a representative point ONLY — for streets/parks/areas this is a centroid or entrance point, NOT a boundary; polygon/line geometry is planned for a future version. Can be overridden per-snapshot for relocation scenarios; when a snapshot has its own coordinates, those take precedence for that period."
+        },
+        "external_ids": {
+            "type": "object",
+            "description": "Cross-references to external knowledge bases. Each entry is an external_id_ref object carrying verification status. Per-key id formats are enforced below. ⚠️ baidu_baike: content licensing is incompatible with ODbL/CC — link for reference only; content MUST NOT be extracted into STE data (R1/R8).",
+            "additionalProperties": false,
+            "properties": {
+                "wikidata": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/external_id_ref"
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "pattern": "^Q[1-9]\\d*$"
+                                }
+                            }
+                        }
+                    ],
+                    "description": "Wikidata Q-number, e.g. 'Q16'"
+                },
+                "osm": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/external_id_ref"
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "pattern": "^(node|way|relation)/[1-9]\\d*$"
+                                }
+                            }
+                        }
+                    ],
+                    "description": "OSM element with explicit type, e.g. 'way/123456' — bare numeric ids are ambiguous across node/way/relation"
+                },
+                "ohm": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/external_id_ref"
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "pattern": "^(node|way|relation)/[1-9]\\d*$"
+                                }
+                            }
+                        }
+                    ],
+                    "description": "OpenHistoricalMap element, same format as osm"
+                },
+                "baidu_baike": {
+                    "$ref": "#/definitions/external_id_ref",
+                    "description": "Baidu Baike lemma id or URL slug. Reference-only; see licensing warning above."
+                },
+                "wikipedia": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/external_id_ref"
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "pattern": "^[a-z]{2,12}wiki:.+$"
+                                }
+                            }
+                        }
+                    ],
+                    "description": "Wikidata sitelink convention: '<lang>wiki:<title>', e.g. 'zhwiki:北京大学', 'enwiki:Peking_University'. Multiple language editions of the same entity should link via wikidata instead; wikipedia carries one primary article."
+                }
+            }
+        },
+        "tags": {
+            "type": "object",
+            "description": "Free-form OSM-compatible tags. Community-invented keys use the ste: prefix to avoid collision with OSM conventions (application-level check). Values must be non-empty per OSM practice.",
+            "additionalProperties": {
+                "type": "string",
+                "minLength": 1
+            },
+            "propertyNames": {
+                "minLength": 1,
+                "type": "string"
+            },
+            "examples": [
+                {
+                    "amenity": "school",
+                    "operator": "Board of Education",
+                    "ste:disappearance": "停办"
+                }
+            ]
+        },
+        "narratives": {
+            "type": "array",
+            "description": "Multi-perspective narratives. Explicitly NOT factual claims. Applications MUST display source_of_knowledge + style tags and MUST NOT present an AI-generated narrative as objective fact (R3). Retracted narratives render as tombstones (R6).",
+            "items": {
+                "$ref": "#/definitions/narrative_entry"
+            }
+        },
+        "timeline": {
+            "type": "array",
+            "description": "The core! Each snapshot is a time period. Current type = type of the LAST snapshot. end_date convention: INCLUSIVE at the stated granularity (end_date '1937' = existed through end of 1937; a next snapshot may start '1938'; equal end/start dates count as overlap). Application must ensure: sorted by start_date ascending, non-overlapping, at most one snapshot without end_date. Renames are events, not statuses — post-rename snapshots keep status 'active'. Every territorial/administrative claim MUST be anchored to a time period and source (R7).",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "required": [
+                    "start_date",
+                    "name",
+                    "type",
+                    "sources"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                    "start_date": {
+                        "$ref": "#/definitions/ohm_date"
+                    },
+                    "end_date": {
+                        "allOf": [
+                            {
+                                "$ref": "#/definitions/ohm_date"
+                            }
+                        ],
+                        "description": "Inclusive end date; omit = until now (only the last snapshot may omit it, application-level check). Required when status=demolished (enforced below)."
+                    },
+                    "name": {
+                        "$ref": "#/definitions/non_empty_string"
+                    },
+                    "type": {
+                        "allOf": [
+                            {
+                                "$ref": "#/definitions/non_empty_string"
+                            }
+                        ],
+                        "description": "Entity type during this period, reusing OSM values (school/building/street/park...)"
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "Physical status during this period (NOT data review status — drafts live platform-side, see top-level description). 'relocated' marks physical movement; snapshot coordinates then required.",
+                        "enum": [
+                            "active",
+                            "demolished",
+                            "under_construction",
+                            "proposed",
+                            "relocated"
+                        ]
+                    },
+                    "coordinates": {
+                        "allOf": [
+                            {
+                                "$ref": "#/definitions/wgs84_point"
+                            }
+                        ],
+                        "description": "Snapshot-level override for relocation periods; absent = inherit top-level. Required when status=relocated (enforced below)."
+                    },
+                    "description": {
+                        "allOf": [
+                            {
+                                "$ref": "#/definitions/non_empty_string"
+                            }
+                        ],
+                        "description": "Shortest NEUTRAL factual summary — facts only; interpretation goes to narratives[]. Good: 'The school moved from Beijing to Xi'an due to the war.' Bad: 'The school heroically evacuated westward.' Style is always neutral by definition; provenance is the orthogonal description_provenance field."
+                    },
+                    "description_provenance": {
+                        "type": "string",
+                        "description": "Provenance of the description (orthogonal to style, which is fixed as neutral). Replaces v0.2-draft description_style, whose enum mixed genre ('neutral') with provenance. Required whenever description is present (enforced below); ai_generated additionally requires snapshot confidence.",
+                        "enum": [
+                            "manual",
+                            "ai_generated",
+                            "community_consensus",
+                            "imported"
+                        ]
+                    },
+                    "confidence": {
+                        "allOf": [
+                            {
+                                "$ref": "#/definitions/confidence_value"
+                            }
+                        ],
+                        "description": "Self-reported confidence for this snapshot as a whole. Per-evidence confidence lives inside each evidence item."
+                    },
+                    "sources": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/non_empty_string"
+                        },
+                        "minItems": 1,
+                        "description": "Sources (URL / citation / oral-history identifier). REQUIRED per R1 — no source, no formal dataset entry; unsourced data stays platform-side as draft (30-day grace). Structured source objects planned for v0.3."
+                    },
+                    "contributed_by": {
+                        "$ref": "#/definitions/contribution_meta"
+                    },
+                    "evidence": {
+                        "type": "array",
+                        "description": "Evidence chain for this snapshot. Structured cross-validation comes in v1.",
+                        "items": {
+                            "$ref": "#/definitions/evidence_item"
+                        }
+                    }
+                },
+                "allOf": [
+                    {
+                        "if": {
+                            "properties": {
+                                "status": {
+                                    "const": "demolished"
+                                }
+                            },
+                            "required": [
+                                "status"
+                            ],
+                            "type": "object"
+                        },
+                        "then": {
+                            "required": [
+                                "end_date"
+                            ],
+                            "properties": {
+                                "end_date": true
+                            },
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "status": {
+                                    "const": "relocated"
+                                }
+                            },
+                            "required": [
+                                "status"
+                            ],
+                            "type": "object"
+                        },
+                        "then": {
+                            "required": [
+                                "coordinates"
+                            ],
+                            "properties": {
+                                "coordinates": true
+                            },
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "if": {
+                            "required": [
+                                "description"
+                            ],
+                            "properties": {
+                                "description": true
+                            },
+                            "type": "object"
+                        },
+                        "then": {
+                            "required": [
+                                "description_provenance"
+                            ],
+                            "properties": {
+                                "description_provenance": true
+                            },
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "description_provenance": {
+                                    "const": "ai_generated"
+                                }
+                            },
+                            "required": [
+                                "description_provenance"
+                            ],
+                            "type": "object"
+                        },
+                        "then": {
+                            "required": [
+                                "confidence"
+                            ],
+                            "properties": {
+                                "confidence": true
+                            },
+                            "type": "object"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

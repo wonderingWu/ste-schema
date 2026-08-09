@@ -6,12 +6,14 @@ on:
     paths:
       - 'v*/schema*.json'
       - 'examples/**'
+      - 'test/**'
       - 'scripts/**'
       - '.github/workflows/validate.yml'
   pull_request:
     paths:
       - 'v*/schema*.json'
       - 'examples/**'
+      - 'test/**'
       - 'scripts/**'
       - '.github/workflows/validate.yml'
 
@@ -30,16 +32,18 @@ jobs:
       - name: Install ajv-cli + ajv-formats
         run: npm install -g ajv-cli@5 ajv-formats@2
 
-      # ---------- Step 1: schema 本身必须能编译 ----------
-      - name: Compile schemas (en + zh)
+      # ---------- Step 1: schema 本体必须能编译（strict 模式） ----------
+      - name: Compile schemas (all versions, en + zh, strict)
         run: |
-          ajv compile --spec=draft7 -c ajv-formats --strict=false \
-            -s v0.1/schema.json
-          ajv compile --spec=draft7 -c ajv-formats --strict=false \
-            -s v0.1/schema.zh.json
+          for v in v0.1 v0.2; do
+            ajv compile --spec=draft7 -c ajv-formats --strict=true \
+              -s "$v/schema.json"
+            ajv compile --spec=draft7 -c ajv-formats --strict=true \
+              -s "$v/schema.zh.json"
+          done
 
-      # ---------- Step 2: valid 样例必须全部通过 ----------
-      - name: Validate examples/valid (must all PASS)
+      # ---------- Step 2: valid 样例必须全部通过（按版本对应目录） ----------
+      - name: Validate v0.1 valid examples (must all PASS)
         run: |
           shopt -s nullglob
           files=(examples/valid/*.json)
@@ -47,13 +51,26 @@ jobs:
             echo "::warning::No valid examples found — add at least one!"
             exit 0
           fi
-          ajv validate --spec=draft7 -c ajv-formats --strict=false \
+          ajv validate --spec=draft7 -c ajv-formats --strict=true \
             --all-errors --verbose \
             -s v0.1/schema.json \
             -d "examples/valid/*.json"
 
+      - name: Validate v0.2 valid examples (must all PASS)
+        run: |
+          shopt -s nullglob
+          files=(test/valid/*.json)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "::warning::No v0.2 valid examples found — add at least one!"
+            exit 0
+          fi
+          ajv validate --spec=draft7 -c ajv-formats --strict=true \
+            --all-errors --verbose \
+            -s v0.2/schema.json \
+            -d "test/valid/*.json"
+
       # ---------- Step 3: invalid 样例必须全部失败（负向测试） ----------
-      - name: Validate examples/invalid (must all FAIL)
+      - name: Validate v0.1 invalid examples (must all FAIL)
         run: |
           shopt -s nullglob
           files=(examples/invalid/*.json)
@@ -63,7 +80,7 @@ jobs:
           fi
           failed=0
           for f in "${files[@]}"; do
-            if ajv validate --spec=draft7 -c ajv-formats --strict=false \
+            if ajv validate --spec=draft7 -c ajv-formats --strict=true \
                  -s v0.1/schema.json -d "$f" > /dev/null 2>&1; then
               echo "::error file=$f::Expected validation to FAIL but it PASSED"
               failed=1
@@ -73,6 +90,28 @@ jobs:
           done
           exit $failed
 
-      # ---------- Step 4: 中英文版结构一致性 ----------
-      - name: Check en/zh schema parity
-        run: node scripts/check-parity.mjs v0.1/schema.json v0.1/schema.zh.json
+      - name: Validate v0.2 invalid examples (must all FAIL)
+        run: |
+          shopt -s nullglob
+          files=(test/invalid/*.json)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "::warning::No v0.2 invalid examples found — negative tests recommended."
+            exit 0
+          fi
+          failed=0
+          for f in "${files[@]}"; do
+            if ajv validate --spec=draft7 -c ajv-formats --strict=true \
+                 -s v0.2/schema.json -d "$f" > /dev/null 2>&1; then
+              echo "::error file=$f::Expected validation to FAIL but it PASSED"
+              failed=1
+            else
+              echo "OK (correctly rejected): $f"
+            fi
+          done
+          exit $failed
+
+      # ---------- Step 4: 中英文版结构一致性（各版本） ----------
+      - name: Check en/zh schema parity (all versions)
+        run: |
+          node scripts/check-parity.mjs v0.1/schema.json v0.1/schema.zh.json
+          node scripts/check-parity.mjs v0.2/schema.json v0.2/schema.zh.json
