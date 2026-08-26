@@ -1,0 +1,383 @@
+{
+  "dataset": "sjz-schools",
+  "schema": "https://wonderingWu.github.io/ste-schema/v0.2/schema.json",
+  "maturity": "demo（来源为占位演示，见 dataset/README.md 收录标准）",
+  "exported_at": "2026-08-26T02:22:04.388Z",
+  "count": 6,
+  "entities": [
+    {
+      "ste_id": "4a1e8b3c-6d2f-4a1b-8c3d-5e7f9a0b1c01",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "石家庄市第四中学",
+        "localized": {
+          "zh-Hans": "石家庄市第四中学"
+        },
+        "aliases": [
+          "石家庄四中",
+          "四中"
+        ]
+      },
+      "coordinates": {
+        "lat": 38.0363,
+        "lon": 114.5015
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:short": "石家庄四中",
+        "ste:demo": "yes"
+      },
+      "narratives": [],
+      "timeline": [
+        {
+          "start_date": "1956",
+          "name": "石家庄市第四中学",
+          "type": "school",
+          "status": "demolished",
+          "sources": [
+            "《石家庄市教育志》（演示数据）",
+            "oral:demo-0001"
+          ],
+          "contributed_by": {
+            "created_by": "system:seed",
+            "created_via": "import",
+            "created_at": "2026-01-15T08:00:00Z"
+          },
+          "end_date": "2008",
+          "description": "1956年开办，2008年拆除，原址位于长安区中山东路附近。（演示数据）",
+          "description_provenance": "manual",
+          "evidence": [
+            {
+              "type": "document",
+              "offline": true,
+              "date": "2008",
+              "title": "2008年学校拆除公告存档（未数字化，演示）"
+            }
+          ]
+        }
+      ],
+      "external_ids": {
+        "osm": {
+          "id": "way/1324599181",
+          "verified": true,
+          "verified_at": "2026-08-26T01:40:00Z"
+        }
+      }
+    },
+    {
+      "ste_id": "5b2f9c4d-7e3a-4b2c-9d4e-6f8a0b1c2d02",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "石家庄市第一中学",
+        "localized": {
+          "zh-Hans": "石家庄市第一中学"
+        },
+        "aliases": [
+          "石家庄市立中学",
+          "石家庄一中",
+          "一中"
+        ]
+      },
+      "coordinates": {
+        "lat": 38.0446,
+        "lon": 114.4974
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:short": "石家庄一中",
+        "ste:demo": "yes",
+        "ste:lineage": "石家庄市立中学 → 石家庄市第一中学"
+      },
+      "narratives": [
+        {
+          "author": "agent:ste-summary-demo",
+          "source_of_knowledge": "ai_generated",
+          "author_identity": "persistent_pseudonym",
+          "style": "neutral",
+          "text": "根据时间线数据自动生成的摘要：该校1947年以「石家庄市立中学」之名创办，1953年更名为石家庄市第一中学并沿用至今，是石家庄历史最久的中学之一。（演示数据）",
+          "language": "zh-Hans",
+          "confidence": 0.72,
+          "ai_model": "ste-summary-demo-v1",
+          "created_at": "2026-01-15T08:05:00Z"
+        }
+      ],
+      "timeline": [
+        {
+          "start_date": "1947",
+          "name": "石家庄市立中学",
+          "type": "school",
+          "status": "active",
+          "sources": [
+            "《石家庄市教育志》（演示数据）"
+          ],
+          "contributed_by": {
+            "created_by": "system:seed",
+            "created_via": "import",
+            "created_at": "2026-01-15T08:00:00Z"
+          },
+          "end_date": "1953-08",
+          "description": "1947年创办，初名石家庄市立中学。（演示数据）",
+          "description_provenance": "manual"
+        },
+        {
+          "start_date": "1953-09",
+          "name": "石家庄市第一中学",
+          "type": "school",
+          "status": "active",
+          "sources": [
+            "《石家庄市教育志》（演示数据）",
+            "oral:demo-0002"
+          ],
+          "contributed_by": {
+            "created_by": "system:seed",
+            "created_via": "import",
+            "created_at": "2026-01-15T08:00:00Z"
+          },
+          "description": "1953年更名为石家庄市第一中学，沿用至今。（演示数据）",
+          "description_provenance": "manual",
+          "evidence": [
+            {
+              "type": "document",
+              "offline": true,
+              "date": "1953",
+              "title": "1953年更名批复档案复印件（未数字化，演示）"
+            }
+          ]
+        }
+      ],
+      "external_ids": {
+        "osm": {
+          "id": "way/802067367",
+          "verified": true,
+          "verified_at": "2026-08-26T01:40:00Z"
+        }
+      }
+    },
+    {
+      "ste_id": "6c3a0d5e-8f4b-4c3d-8e5f-7a9b1c2d3e03",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "河北师范大学附属中学",
+        "localized": {
+          "zh-Hans": "河北师范大学附属中学"
+        },
+        "aliases": [
+          "河北石家庄师范学院附属中学",
+          "师大附中"
+        ]
+      },
+      "coordinates": {
+        "lat": 38.0436,
+        "lon": 114.5243
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:short": "师大附中",
+        "ste:demo": "yes",
+        "ste:lineage": "河北石家庄师范学院附属中学 → 河北师范大学附属中学"
+      },
+      "narratives": [],
+      "timeline": [
+        {
+          "start_date": "1955",
+          "name": "河北石家庄师范学院附属中学",
+          "type": "school",
+          "status": "active",
+          "sources": [
+            "《石家庄市教育志》（演示数据）"
+          ],
+          "contributed_by": {
+            "created_by": "system:seed",
+            "created_via": "import",
+            "created_at": "2026-01-15T08:00:00Z"
+          },
+          "end_date": "1960-08",
+          "description": "1955年创办，隶属石家庄师范学院。（演示数据）",
+          "description_provenance": "manual"
+        },
+        {
+          "start_date": "1960-09",
+          "name": "河北师范大学附属中学",
+          "type": "school",
+          "status": "active",
+          "sources": [
+            "《石家庄市教育志》（演示数据）",
+            "oral:demo-0003"
+          ],
+          "contributed_by": {
+            "created_by": "system:seed",
+            "created_via": "import",
+            "created_at": "2026-01-15T08:00:00Z"
+          },
+          "description": "1960年随校更名，沿用至今。（演示数据）",
+          "description_provenance": "manual"
+        }
+      ],
+      "external_ids": {
+        "osm": {
+          "id": "way/1152385558",
+          "verified": true,
+          "verified_at": "2026-08-26T01:40:00Z"
+        }
+      }
+    },
+    {
+      "ste_id": "7d4b1e6f-9a5c-4d4e-9f6a-8b0c2d3e4f04",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "石家庄市育才小学",
+        "localized": {
+          "zh-Hans": "石家庄市育才小学"
+        },
+        "aliases": [
+          "育才小学"
+        ]
+      },
+      "coordinates": {
+        "lat": 38.0468,
+        "lon": 114.5227
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:short": "育才小学",
+        "ste:demo": "yes",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "地址核实：长安区育才街5号；坐标为育才街门牌内插，街区级，待精确定位"
+      },
+      "narratives": [],
+      "timeline": [
+        {
+          "start_date": "1963",
+          "name": "石家庄市育才小学",
+          "type": "school",
+          "status": "active",
+          "sources": [
+            "《石家庄市教育志》（演示数据）",
+            "oral:demo-0004"
+          ],
+          "contributed_by": {
+            "created_by": "system:seed",
+            "created_via": "import",
+            "created_at": "2026-01-15T08:00:00Z"
+          },
+          "description": "1963年开办，位于长安区育才街。（演示数据）",
+          "description_provenance": "manual"
+        }
+      ]
+    },
+    {
+      "ste_id": "8e5c2f7a-0b6d-4e5f-8a7b-9c1d3e4f5a05",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "石家庄市第二中学",
+        "localized": {
+          "zh-Hans": "石家庄市第二中学"
+        },
+        "aliases": [
+          "石家庄联合中学",
+          "石家庄二中",
+          "二中"
+        ]
+      },
+      "coordinates": {
+        "lat": 38.052,
+        "lon": 114.4727
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:short": "石家庄二中",
+        "ste:demo": "yes",
+        "ste:lineage": "石家庄联合中学 → 石家庄市第二中学"
+      },
+      "narratives": [],
+      "timeline": [
+        {
+          "start_date": "1948",
+          "name": "石家庄联合中学",
+          "type": "school",
+          "status": "active",
+          "sources": [
+            "《石家庄市教育志》（演示数据）"
+          ],
+          "contributed_by": {
+            "created_by": "system:seed",
+            "created_via": "import",
+            "created_at": "2026-01-15T08:00:00Z"
+          },
+          "end_date": "1949-08",
+          "description": "1948年创办，初名石家庄联合中学。（演示数据）",
+          "description_provenance": "manual"
+        },
+        {
+          "start_date": "1949-09",
+          "name": "石家庄市第二中学",
+          "type": "school",
+          "status": "active",
+          "sources": [
+            "《石家庄市教育志》（演示数据）",
+            "oral:demo-0005"
+          ],
+          "contributed_by": {
+            "created_by": "system:seed",
+            "created_via": "import",
+            "created_at": "2026-01-15T08:00:00Z"
+          },
+          "description": "1949年更名为石家庄市第二中学，沿用至今。（演示数据）",
+          "description_provenance": "manual"
+        }
+      ],
+      "external_ids": {
+        "osm": {
+          "id": "way/692411366",
+          "verified": true,
+          "verified_at": "2026-08-26T01:40:00Z"
+        }
+      }
+    },
+    {
+      "ste_id": "9f6d3a8b-1c7e-4f6a-9b8c-0d2e4f5a6b06",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "范西路小学",
+        "localized": {
+          "zh-Hans": "范西路小学"
+        },
+        "aliases": [
+          "范西路小学"
+        ]
+      },
+      "coordinates": {
+        "lat": 38.0388,
+        "lon": 114.518
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:short": "范西路小学",
+        "ste:demo": "yes",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "地址核实：长安区范西路78号；坐标为范西路东段街区级锚定，待精确定位"
+      },
+      "narratives": [],
+      "timeline": [
+        {
+          "start_date": "1958",
+          "name": "范西路小学",
+          "type": "school",
+          "status": "demolished",
+          "sources": [
+            "《石家庄市教育志》（演示数据）",
+            "oral:demo-0006"
+          ],
+          "contributed_by": {
+            "created_by": "system:seed",
+            "created_via": "import",
+            "created_at": "2026-01-15T08:00:00Z"
+          },
+          "end_date": "2004",
+          "description": "1958年开办，2004年撤并。（演示数据）",
+          "description_provenance": "manual"
+        }
+      ]
+    }
+  ]
+}

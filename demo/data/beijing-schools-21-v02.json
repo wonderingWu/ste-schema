@@ -1,0 +1,1331 @@
+{
+  "dataset": "beijing-schools",
+  "schema": "https://wonderingWu.github.io/ste-schema/v0.2/schema.json",
+  "maturity": "迁移存档（机械迁移，坐标与沿革未逐校核实，坐标多为城区级近似）",
+  "provenance": "上游 wonderingWu/ste-schema demo/data/schools.json v0.1 存档，经 dataset/migrate-77.js 迁移（2026-08-26）",
+  "exported_at": "2026-08-26T04:10:27.773Z",
+  "count": 21,
+  "entities": [
+    {
+      "ste_id": "a27b98c1-d48b-470c-8098-2b9c10610cde",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "北京八中",
+        "aliases": [
+          "老八中"
+        ],
+        "localized": {
+          "zh-Hans": "北京八中"
+        }
+      },
+      "coordinates": {
+        "lat": 39.9322341,
+        "lon": 116.4109734
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "停办",
+        "city": "北京",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1950",
+          "end_date": "1999",
+          "name": "北京八中",
+          "type": "school",
+          "status": "active",
+          "description": "新中国首批重点中学之一，因东城区教育布局调整与校舍老化停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2000",
+          "end_date": "2000",
+          "name": "北京八中",
+          "type": "school",
+          "status": "demolished",
+          "description": "停办：新中国首批重点中学之一，因东城区教育布局调整与校舍老化停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "015b40ef-963d-4f84-83a9-009807e5b671",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "北京九中",
+        "aliases": [
+          "老九中"
+        ],
+        "localized": {
+          "zh-Hans": "北京九中"
+        }
+      },
+      "coordinates": {
+        "lat": 39.912,
+        "lon": 116.366
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "停办",
+        "city": "北京",
+        "note": "坐标修正：已回退西城区区中心，需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1950",
+          "end_date": "1989",
+          "name": "北京九中",
+          "type": "school",
+          "status": "active",
+          "description": "曾为北京市重点中学，因城区更新与校舍危旧停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "1990",
+          "end_date": "1990",
+          "name": "北京九中",
+          "type": "school",
+          "status": "demolished",
+          "description": "停办：曾为北京市重点中学，因城区更新与校舍危旧停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "b5f2fd56-02c3-4e6a-81da-860ca47da312",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "北京十一中",
+        "aliases": [
+          "老十一中"
+        ],
+        "localized": {
+          "zh-Hans": "北京十一中"
+        }
+      },
+      "coordinates": {
+        "lat": 39.928,
+        "lon": 116.416
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "停办",
+        "city": "北京",
+        "note": "坐标回退到东城区区中心（地理编码未命中），需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1950",
+          "end_date": "1989",
+          "name": "北京十一中",
+          "type": "school",
+          "status": "active",
+          "description": "老牌重点校，因教育资源整合停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "1990",
+          "end_date": "1990",
+          "name": "北京十一中",
+          "type": "school",
+          "status": "demolished",
+          "description": "停办：老牌重点校，因教育资源整合停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "097662b6-9e0f-456e-862d-7276ac70f66f",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "北京十三中",
+        "aliases": [
+          "老十三中"
+        ],
+        "localized": {
+          "zh-Hans": "北京十三中"
+        }
+      },
+      "coordinates": {
+        "lat": 39.928,
+        "lon": 116.416
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "停办",
+        "city": "北京",
+        "note": "坐标回退到东城区区中心（地理编码未命中），需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1950",
+          "end_date": "1999",
+          "name": "北京十三中",
+          "type": "school",
+          "status": "active",
+          "description": "老城区改造导致校舍拆除，学校停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2000",
+          "end_date": "2000",
+          "name": "北京十三中",
+          "type": "school",
+          "status": "demolished",
+          "description": "停办：老城区改造导致校舍拆除，学校停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "00f2f413-0ad3-47bb-8f48-cae12d4ea4c0",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "北京十四中",
+        "aliases": [
+          "老十四中"
+        ],
+        "localized": {
+          "zh-Hans": "北京十四中"
+        }
+      },
+      "coordinates": {
+        "lat": 39.912,
+        "lon": 116.366
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "停办",
+        "city": "北京",
+        "note": "坐标回退到西城区区中心（地理编码未命中），需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1950",
+          "end_date": "1989",
+          "name": "北京十四中",
+          "type": "school",
+          "status": "active",
+          "description": "曾为重点校，因城市更新停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "1990",
+          "end_date": "1990",
+          "name": "北京十四中",
+          "type": "school",
+          "status": "demolished",
+          "description": "停办：曾为重点校，因城市更新停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "93fe43de-8df0-4189-896b-d9c1c0ddac60",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "北京十五中",
+        "aliases": [
+          "老十五中"
+        ],
+        "localized": {
+          "zh-Hans": "北京十五中"
+        }
+      },
+      "coordinates": {
+        "lat": 39.928,
+        "lon": 116.416
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "停办",
+        "city": "北京",
+        "note": "坐标回退到东城区区中心（地理编码未命中），需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1950",
+          "end_date": "1989",
+          "name": "北京十五中",
+          "type": "school",
+          "status": "active",
+          "description": "因老城区改造与校舍拆迁停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "1990",
+          "end_date": "1990",
+          "name": "北京十五中",
+          "type": "school",
+          "status": "demolished",
+          "description": "停办：因老城区改造与校舍拆迁停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "e26d8213-0722-45b0-8868-1b85c194a2f0",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "北京十六中",
+        "aliases": [
+          "老十六中"
+        ],
+        "localized": {
+          "zh-Hans": "北京十六中"
+        }
+      },
+      "coordinates": {
+        "lat": 39.912,
+        "lon": 116.366
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "停办",
+        "city": "北京",
+        "note": "坐标回退到西城区区中心（地理编码未命中），需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1950",
+          "end_date": "1989",
+          "name": "北京十六中",
+          "type": "school",
+          "status": "active",
+          "description": "因城市规划调整停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "1990",
+          "end_date": "1990",
+          "name": "北京十六中",
+          "type": "school",
+          "status": "demolished",
+          "description": "停办：因城市规划调整停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "77092edf-d123-46d9-8121-887301ad8c6e",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "北京十九中",
+        "aliases": [
+          "老校址"
+        ],
+        "localized": {
+          "zh-Hans": "北京十九中"
+        }
+      },
+      "coordinates": {
+        "lat": 39.959,
+        "lon": 116.298
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "搬迁（老址停办）",
+        "city": "北京",
+        "note": "坐标回退到海淀区区中心（地理编码未命中），需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1950",
+          "end_date": "1999",
+          "name": "北京十九中",
+          "type": "school",
+          "status": "active",
+          "description": "老校址停办后迁至阳春光华校区，与人大附中合作办学。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2000",
+          "end_date": "2000",
+          "name": "北京十九中",
+          "type": "school",
+          "status": "demolished",
+          "description": "搬迁：原校址关闭，老校址停办后迁至阳春光华校区，与人大附中合作办学。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "070c3771-1456-4247-84d9-7d8259c35c8d",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "北京九十九中",
+        "aliases": [
+          "老校址"
+        ],
+        "localized": {
+          "zh-Hans": "北京九十九中"
+        }
+      },
+      "coordinates": {
+        "lat": 39.959,
+        "lon": 116.298
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "停办→恢复",
+        "city": "北京",
+        "note": "坐标修正：已回退海淀区区中心，需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1980",
+          "end_date": "2009",
+          "name": "北京九十九中",
+          "type": "school",
+          "status": "active",
+          "description": "因生源减少停办多年，2026 年恢复招生。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2010",
+          "end_date": "2010",
+          "name": "北京九十九中",
+          "type": "school",
+          "status": "demolished",
+          "description": "停办期间：因生源减少停办多年，2026 年恢复招生。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2026",
+          "name": "北京九十九中",
+          "type": "school",
+          "status": "active",
+          "description": "恢复招生（2026 年）。因生源减少停办多年，2026 年恢复招生。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "7926f46e-28c4-444a-8292-917117570f49",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "史家小学分校",
+        "aliases": [
+          "老校址"
+        ],
+        "localized": {
+          "zh-Hans": "史家小学分校"
+        }
+      },
+      "coordinates": {
+        "lat": 39.9169964,
+        "lon": 116.4125409
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "停办",
+        "city": "北京",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1946",
+          "end_date": "2009",
+          "name": "史家小学分校",
+          "type": "school",
+          "status": "active",
+          "description": "因老城区更新，分校校舍拆除。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2010",
+          "end_date": "2010",
+          "name": "史家小学分校",
+          "type": "school",
+          "status": "demolished",
+          "description": "停办：因老城区更新，分校校舍拆除。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "4d7be311-92b1-40a0-8ba2-ba328f61adb1",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "府学胡同小学部分校区",
+        "localized": {
+          "zh-Hans": "府学胡同小学部分校区"
+        }
+      },
+      "coordinates": {
+        "lat": 39.9343093,
+        "lon": 116.4066834
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "停办（部分）",
+        "city": "北京",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1906",
+          "end_date": "1999",
+          "name": "府学胡同小学部分校区",
+          "type": "school",
+          "status": "active",
+          "description": "老城区改造导致部分校区停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2000",
+          "end_date": "2000",
+          "name": "府学胡同小学部分校区",
+          "type": "school",
+          "status": "demolished",
+          "description": "停办：老城区改造导致部分校区停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "4cc11512-07f4-4be7-8840-17551697c3a4",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "西城实验小学部分校区",
+        "localized": {
+          "zh-Hans": "西城实验小学部分校区"
+        }
+      },
+      "coordinates": {
+        "lat": 39.912,
+        "lon": 116.366
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "停办（部分）",
+        "city": "北京",
+        "note": "坐标回退到西城区区中心（地理编码未命中），需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1950",
+          "end_date": "1999",
+          "name": "西城实验小学部分校区",
+          "type": "school",
+          "status": "active",
+          "description": "因旧城改造停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2000",
+          "end_date": "2000",
+          "name": "西城实验小学部分校区",
+          "type": "school",
+          "status": "demolished",
+          "description": "停办：因旧城改造停办。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "e1b04b5b-106c-427c-8ec3-1d78ae42c8c1",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "海淀区振兴小学",
+        "aliases": [
+          "民办"
+        ],
+        "localized": {
+          "zh-Hans": "海淀区振兴小学"
+        }
+      },
+      "coordinates": {
+        "lat": 39.959,
+        "lon": 116.298
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "停办",
+        "city": "北京",
+        "note": "坐标回退到海淀区区中心（地理编码未命中），需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1990",
+          "end_date": "2023",
+          "name": "海淀区振兴小学",
+          "type": "school",
+          "status": "active",
+          "description": "办学许可被废止，学校停止办学。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2024",
+          "end_date": "2024",
+          "name": "海淀区振兴小学",
+          "type": "school",
+          "status": "demolished",
+          "description": "停办：办学许可被废止，学校停止办学。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "d6c6f487-91d1-4a4a-815b-0696cb40d3a1",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "稻香湖学校未来城校区",
+        "aliases": [
+          "昌平"
+        ],
+        "localized": {
+          "zh-Hans": "稻香湖学校未来城校区"
+        }
+      },
+      "coordinates": {
+        "lat": 39.928,
+        "lon": 116.416
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "停办",
+        "city": "北京",
+        "note": "坐标回退到东城区区中心（地理编码未命中），需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "2018",
+          "end_date": "2025",
+          "name": "稻香湖学校未来城校区",
+          "type": "school",
+          "status": "active",
+          "description": "占地 148 亩的高端民办学校，因未获资质与运营成本停办，学生迁往海淀主校区。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2026",
+          "end_date": "2026",
+          "name": "稻香湖学校未来城校区",
+          "type": "school",
+          "status": "demolished",
+          "description": "停办：占地 148 亩的高端民办学校，因未获资质与运营成本停办，学生迁往海淀主校区。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "4502b578-40cc-4dab-8b0d-0747278b903f",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "通州区第四中学",
+        "aliases": [
+          "首师大附中通州实验学校"
+        ],
+        "localized": {
+          "zh-Hans": "通州区第四中学"
+        }
+      },
+      "coordinates": {
+        "lat": 39.909,
+        "lon": 116.656
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "更名/升级",
+        "city": "北京",
+        "note": "坐标回退到通州区区中心（地理编码未命中），需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1950",
+          "end_date": "2025",
+          "name": "通州区第四中学",
+          "type": "school",
+          "status": "active",
+          "description": "恢复高中部并入首师大附中教育集团。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2026",
+          "name": "首师大附中通州实验学校",
+          "type": "school",
+          "status": "active",
+          "description": "更名/升级为「首师大附中通州实验学校」。恢复高中部并入首师大附中教育集团。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "040d6df5-a756-438d-8bb1-908b8bdfcaa8",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "龙旺庄小学",
+        "aliases": [
+          "龙旺庄学校"
+        ],
+        "localized": {
+          "zh-Hans": "龙旺庄小学"
+        }
+      },
+      "coordinates": {
+        "lat": 39.9283026,
+        "lon": 116.6827786
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "升级",
+        "city": "北京",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1990",
+          "end_date": "2025",
+          "name": "龙旺庄小学",
+          "type": "school",
+          "status": "active",
+          "description": "从小学升级为九年一贯制学校。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2026",
+          "name": "龙旺庄学校",
+          "type": "school",
+          "status": "active",
+          "description": "更名/升级为「龙旺庄学校」。从小学升级为九年一贯制学校。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "70458692-78c0-400a-82ec-64f1e7129d24",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "运河中学附属小学",
+        "aliases": [
+          "运河中学附属学校"
+        ],
+        "localized": {
+          "zh-Hans": "运河中学附属小学"
+        }
+      },
+      "coordinates": {
+        "lat": 39.8809529,
+        "lon": 116.6926086
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "升级",
+        "city": "北京",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1990",
+          "end_date": "2025",
+          "name": "运河中学附属小学",
+          "type": "school",
+          "status": "active",
+          "description": "从小学升级为九年一贯制学校。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2026",
+          "name": "运河中学附属学校",
+          "type": "school",
+          "status": "active",
+          "description": "更名/升级为「运河中学附属学校」。从小学升级为九年一贯制学校。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "9ac332f7-b79e-4c48-89c0-0a4a1a30f2e2",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "丰台五小望园校区",
+        "aliases": [
+          "培元小学"
+        ],
+        "localized": {
+          "zh-Hans": "丰台五小望园校区"
+        }
+      },
+      "coordinates": {
+        "lat": 39.858,
+        "lon": 116.286
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "更名/并入",
+        "city": "北京",
+        "note": "坐标修正：已回退丰台区区中心，需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1990",
+          "end_date": "2025",
+          "name": "丰台五小望园校区",
+          "type": "school",
+          "status": "active",
+          "description": "校区更名并加入十二中教育集团。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2026",
+          "name": "培元小学",
+          "type": "school",
+          "status": "active",
+          "description": "更名/升级为「培元小学」。校区更名并加入十二中教育集团。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "0d5d0270-e827-4b6f-8110-d0808c6cb946",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "丰台五小京铁校区",
+        "aliases": [
+          "培元小学北校区"
+        ],
+        "localized": {
+          "zh-Hans": "丰台五小京铁校区"
+        }
+      },
+      "coordinates": {
+        "lat": 39.8929983,
+        "lon": 116.2765149
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "更名/并入",
+        "city": "北京",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1990",
+          "end_date": "2025",
+          "name": "丰台五小京铁校区",
+          "type": "school",
+          "status": "active",
+          "description": "校区更名并加入十二中教育集团。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2026",
+          "name": "培元小学北校区",
+          "type": "school",
+          "status": "active",
+          "description": "更名/升级为「培元小学北校区」。校区更名并加入十二中教育集团。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "0195e79a-7d17-4c5e-89d8-ef4c50755609",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "兴华中学海户校区",
+        "aliases": [
+          "大兴"
+        ],
+        "localized": {
+          "zh-Hans": "兴华中学海户校区"
+        }
+      },
+      "coordinates": {
+        "lat": 39.8506537,
+        "lon": 116.3940324
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "搬迁/扩建",
+        "city": "北京",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "2000",
+          "end_date": "2025",
+          "name": "兴华中学海户校区",
+          "type": "school",
+          "status": "active",
+          "description": "新校区启用，形成“一校三址”。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2026",
+          "end_date": "2026",
+          "name": "兴华中学海户校区",
+          "type": "school",
+          "status": "demolished",
+          "description": "搬迁：原校址关闭，新校区启用，形成“一校三址”。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "1e736a2c-143c-4a43-83c2-010121e2b47f",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "北京朝阳职业学校",
+        "aliases": [
+          "由三校合并"
+        ],
+        "localized": {
+          "zh-Hans": "北京朝阳职业学校"
+        }
+      },
+      "coordinates": {
+        "lat": 39.921,
+        "lon": 116.443
+      },
+      "tags": {
+        "amenity": "school",
+        "ste:disappearance": "合并",
+        "city": "北京",
+        "note": "坐标回退到朝阳区区中心（地理编码未命中），需人工精化",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "v0.1 存档迁移，坐标多为城区级近似"
+      },
+      "timeline": [
+        {
+          "start_date": "1980",
+          "end_date": "2025",
+          "name": "北京朝阳职业学校",
+          "type": "school",
+          "status": "active",
+          "description": "劲松职业高中、求实职业学校、电气工程学校三校合并为大型职业学校。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        },
+        {
+          "start_date": "2026",
+          "name": "北京朝阳职业学校",
+          "type": "school",
+          "status": "active",
+          "description": "更名/升级为「北京朝阳职业学校」。劲松职业高中、求实职业学校、电气工程学校三校合并为大型职业学校。",
+          "confidence": 0.7,
+          "sources": [
+            "上游 wonderingWu/ste-schema demo/data/schools.json（v0.1 存档，2026-08-26 机械迁移，沿革与坐标待核实）"
+          ],
+          "description_provenance": "imported",
+          "contributed_by": {
+            "created_by": "system:migration",
+            "created_via": "import",
+            "created_at": "2026-08-26T04:00:00Z"
+          }
+        }
+      ]
+    }
+  ]
+}

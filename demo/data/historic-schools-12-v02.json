@@ -1,0 +1,2022 @@
+{
+  "dataset": "historic-schools",
+  "schema": "https://wonderingWu.github.io/ste-schema/v0.2/schema.json",
+  "maturity": "候选（真实史料骨架，来源为维基/公开二手资料与示例链接；合入精选集前须人工核实，见 reference/minimax-former-alma-maters/README.md）",
+  "provenance": "MiniMax former-alma-maters-demo data.js（2026-08-23/24），经 export-historic.js 逐份校验导出",
+  "exported_at": "2026-08-26T03:38:26.063Z",
+  "count": 12,
+  "entities": [
+    {
+      "ste_id": "f47c0001-4000-4000-8000-000000000001",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "原四存中学校址（现中南海内）",
+        "localized": {
+          "zh-Hans": "原四存中学校址（现中南海内）",
+          "en": "Former Site of Sicun Middle School (now within Zhongnanhai)"
+        },
+        "aliases": [
+          "私立四存中学",
+          "Sicun Middle School",
+          "北京八中（合并体）"
+        ]
+      },
+      "coordinates": {
+        "lat": 39.9135,
+        "lon": 116.3755
+      },
+      "external_ids": {
+        "wikipedia": {
+          "id": "zhwiki:四存中学",
+          "verified": true,
+          "verified_at": "2026-08-01T10:00:00Z"
+        }
+      },
+      "tags": {
+        "amenity": "school",
+        "historic": "yes",
+        "addr:city": "Beijing",
+        "addr:district": "Xicheng",
+        "ste:status_outcome": "absorbed_into_government",
+        "ste:coord_source": "OSM way/30833629 府右街（2026-08-26 核实）；校址在原府右街10号（现中南海内不开放），坐标为府右街沿街点位"
+      },
+      "narratives": [
+        {
+          "author": "user:historian_beijing",
+          "source_of_knowledge": "research",
+          "author_identity": "real_name",
+          "style": "academic",
+          "text": "四存中学于 1921 年由清末举人张荫梧创办于北平府右街 10 号，1936 年因全市国文竞赛夺魁获张学良赠银盾。1949 年 7 月，前校长张荫梧涉冀中武装暴动案，周恩来亲自批示将该校迁出，校址随后划入中南海范围，与北平市立第八中学合并办学。",
+          "language": "zh-Hans",
+          "created_at": "2026-08-01T10:00:00Z",
+          "endorsed_by": [
+            "user:archivist_bj"
+          ]
+        },
+        {
+          "author": "anon:a8c2e1f4d7",
+          "source_of_knowledge": "secondhand",
+          "author_identity": "escrowed_anonymous",
+          "style": "personal_recollection",
+          "text": "我父亲是 1947 届四存中学毕业生。他说那时的校园紧贴着中南海的西墙，课间能听到里面广播的声音。1949 年某天回学校拿东西，发现围墙外多了岗哨，从此再没进过那扇门。后来的同学去了合并后的八中。",
+          "language": "zh-Hans",
+          "created_at": "2026-08-05T20:30:00Z"
+        },
+        {
+          "author": "agent:claude-opus-4",
+          "source_of_knowledge": "ai_generated",
+          "author_identity": "persistent_pseudonym",
+          "style": "neutral",
+          "text": "该实体起始于 1921 年的私立四存中学，原址位于北平府右街 10 号；1949 年因校址划入中南海，学校与北平八中合并，原校址至今未作为公共空间开放。",
+          "language": "zh-Hans",
+          "confidence": 0.68,
+          "ai_model": "claude-opus-4-20250514",
+          "created_at": "2026-08-10T03:00:00Z"
+        },
+        {
+          "author": "anon:8f3d2c9e1b",
+          "source_of_knowledge": "firsthand",
+          "author_identity": "escrowed_anonymous",
+          "style": "personal_recollection",
+          "text": "",
+          "language": "zh-Hans",
+          "created_at": "2026-07-15T08:00:00Z",
+          "retracted": true,
+          "retracted_at": "2026-08-12T14:20:00Z"
+        }
+      ],
+      "timeline": [
+        {
+          "start_date": "1921-09",
+          "end_date": "1949-06",
+          "name": "私立四存中学",
+          "type": "school",
+          "status": "active",
+          "description": "私立四存中学在北平府右街 10 号办学，校长张荫梧。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/四存中学",
+            "《北京教育史话》, 1995"
+          ],
+          "contributed_by": {
+            "created_by": "user:historian_beijing",
+            "created_via": "manual",
+            "created_at": "2026-08-01T10:00:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%23f6c343'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%23f6c343'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E5%9B%9B%E5%AD%98%E4%B8%AD%E5%AD%A6%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1936%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1936",
+              "title": "四存中学 1936 年全市国文竞赛优胜合影"
+            },
+            {
+              "type": "document",
+              "url": "https://example-archive.org/sicun-charter-1921.pdf",
+              "date": "1921",
+              "title": "四存中学创办章程"
+            }
+          ]
+        },
+        {
+          "start_date": "1949-07",
+          "end_date": "1949-07",
+          "name": "私立四存中学（迁出期）",
+          "type": "school",
+          "status": "relocated",
+          "coordinates": {
+            "lat": 39.9408,
+            "lon": 116.3894
+          },
+          "description": "校址被划入中南海，学校整体迁至北平八中校址合并办学。",
+          "description_provenance": "manual",
+          "confidence": 0.6,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/四存中学",
+            "oral:bj-edu-2025-007"
+          ],
+          "contributed_by": {
+            "created_by": "user:historian_beijing",
+            "created_via": "manual",
+            "confirmed_by": [
+              "user:archivist_bj"
+            ],
+            "created_at": "2026-08-02T11:00:00Z"
+          },
+          "evidence": [
+            {
+              "type": "document",
+              "ste_asset_id": "asset-sicun-merge-1949",
+              "date": "1949-07",
+              "title": "北平市教育局关于四存、八中合并的批复（扫描件）",
+              "contributed_by": {
+                "created_by": "user:archivist_bj",
+                "created_via": "manual",
+                "created_at": "2026-08-02T15:00:00Z"
+              }
+            }
+          ]
+        },
+        {
+          "start_date": "1949-08",
+          "end_date": "1950-11",
+          "name": "原四存中学（校舍拆除）",
+          "type": "school",
+          "status": "demolished",
+          "description": "校舍于 1949-1950 年间陆续拆除。",
+          "description_provenance": "manual",
+          "confidence": 0.75,
+          "sources": [
+            "《北京市西城区文物普查报告》, 2018"
+          ],
+          "contributed_by": {
+            "created_by": "user:historian_beijing",
+            "created_via": "manual",
+            "created_at": "2026-08-03T09:00:00Z"
+          },
+          "evidence": [
+            {
+              "type": "document",
+              "ste_asset_id": "asset-sicun-demolition-1950",
+              "date": "1950-06",
+              "title": "原四存中学旧址移交中南海管理局的档案（扫描件）"
+            }
+          ]
+        },
+        {
+          "start_date": "1950-12",
+          "name": "原四存中学校址（中南海内）",
+          "type": "site",
+          "status": "active",
+          "description": "原四存中学校址作为中南海一部分至今存在，但不对公众开放。",
+          "description_provenance": "manual",
+          "confidence": 0.85,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/中南海",
+            "《北京市西城区文物普查报告》, 2018"
+          ],
+          "contributed_by": {
+            "created_by": "user:historian_beijing",
+            "created_via": "manual",
+            "created_at": "2026-08-03T09:30:00Z"
+          },
+          "evidence": [
+            {
+              "type": "satellite",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%235a7a8a'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%235a7a8a'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E4%B8%AD%E5%8D%97%E6%B5%B7%E5%8D%AB%E6%98%9F%E5%9B%BE%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E2024%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "2024-06",
+              "title": "原校址区域 2024 年卫星影像"
+            },
+            {
+              "type": "photo",
+              "offline": true,
+              "date": "1949",
+              "title": "贡献者家藏的 1949 年校园告别合影，存于北京家中，未数字化"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ste_id": "f47c0002-4000-4000-8000-000000000002",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "云南师范大学",
+        "localized": {
+          "zh-Hans": "云南师范大学",
+          "en": "Yunnan Normal University"
+        },
+        "aliases": [
+          "国立长沙临时大学",
+          "国立西南联合大学",
+          "西南联大",
+          "国立昆明师范学院",
+          "昆明师范学院"
+        ]
+      },
+      "coordinates": {
+        "lat": 25.0589,
+        "lon": 102.695
+      },
+      "external_ids": {
+        "wikipedia": {
+          "id": "zhwiki:云南师范大学",
+          "verified": true,
+          "verified_at": "2026-07-15T09:30:00Z"
+        },
+        "osm": {
+          "id": "way/398461849",
+          "verified": true,
+          "verified_at": "2026-08-26T03:30:00Z",
+          "note": "云南师范大学(一二一西南联大校区)——即西南联大原址"
+        }
+      },
+      "tags": {
+        "amenity": "university",
+        "heritage": "yes",
+        "addr:city": "Kunming",
+        "addr:district": "Wuhua",
+        "ste:lineage": "国立西南联合大学师范学院",
+        "ste:coord_source": "OSM way/398461849 云南师范大学一二一西南联大校区（2026-08-26 核实）；长沙临大坐标为韭菜园圣经学校旧址街区级"
+      },
+      "narratives": [
+        {
+          "author": "user:prof_li_hist",
+          "source_of_knowledge": "research",
+          "author_identity": "real_name",
+          "style": "academic",
+          "text": "西南联大在滇八年，于战火中保存并延续了中国高等教育的命脉。三校合一而学统各异，其『刚毅坚卓』的校训与教授治校传统，对战后中国学术格局影响深远。本叙述基于校史档案与既有研究文献。",
+          "language": "zh-Hans",
+          "created_at": "2026-06-01T14:20:00Z",
+          "endorsed_by": [
+            "user:archivist_wang",
+            "user:zhang_1946"
+          ]
+        },
+        {
+          "author": "anon:c7e29f4b1a",
+          "source_of_knowledge": "secondhand",
+          "author_identity": "escrowed_anonymous",
+          "style": "personal_recollection",
+          "text": "祖父是当年湘黔滇旅行团的学生，徒步三千余里到昆明。他很少提那段路，只说过一次：夜里宿在苗寨，闻队伍是读书人，寨里人把仅有的米酒端了出来。",
+          "language": "zh-Hans",
+          "created_at": "2026-06-18T21:05:00Z"
+        },
+        {
+          "author": "agent:claude-opus-4",
+          "source_of_knowledge": "ai_generated",
+          "author_identity": "persistent_pseudonym",
+          "style": "neutral",
+          "text": "根据 timeline 数据自动生成的摘要：该实体起源于 1937 年长沙临时大学，1938 年西迁昆明并更名为国立西南联合大学，1946 年三校北返后其师范学院留昆独立办学，历经两次更名延续为今日的云南师范大学。",
+          "language": "zh-Hans",
+          "confidence": 0.72,
+          "ai_model": "claude-opus-4-20250514",
+          "created_at": "2026-07-01T03:00:00Z"
+        },
+        {
+          "author": "anon:9b2d5e8c3f",
+          "source_of_knowledge": "firsthand",
+          "author_identity": "escrowed_anonymous",
+          "style": "personal_recollection",
+          "text": "",
+          "language": "zh-Hans",
+          "created_at": "2026-05-10T08:00:00Z",
+          "retracted": true,
+          "retracted_at": "2026-06-20T10:15:00Z"
+        }
+      ],
+      "timeline": [
+        {
+          "start_date": "1937-11",
+          "end_date": "1938-04",
+          "name": "国立长沙临时大学",
+          "type": "university",
+          "status": "relocated",
+          "coordinates": {
+            "lat": 28.1938,
+            "lon": 112.9902
+          },
+          "description": "北大、清华、南开因抗战南迁长沙合组国立长沙临时大学，1937 年 11 月 1 日开学。1938 年 2 月起分三路西迁昆明。",
+          "description_provenance": "ai_generated",
+          "confidence": 0.85,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/国立长沙临时大学",
+            "《国立西南联合大学校史》, 北京大学出版社, 1996"
+          ],
+          "contributed_by": {
+            "created_by": "agent:claude-opus-4",
+            "created_via": "ai_extraction",
+            "ai_model": "claude-opus-4-20250514",
+            "ai_prompt_version": "extract-v0.2.3",
+            "confirmed_by": [
+              "user:prof_li_hist"
+            ],
+            "created_at": "2026-05-02T11:00:00Z"
+          },
+          "evidence": [
+            {
+              "type": "document",
+              "url": "https://example-archive.org/changsha-linshi-1937",
+              "date": "1937-11",
+              "title": "长沙临时大学开学布告（档案扫描）"
+            },
+            {
+              "type": "photo",
+              "date": "1938",
+              "title": "湘黔滇旅行团途中合影（应贡献者要求撤回）",
+              "retracted": true,
+              "retracted_at": "2026-06-20T10:15:00Z"
+            }
+          ]
+        },
+        {
+          "start_date": "1938-05",
+          "end_date": "1946-07",
+          "name": "国立西南联合大学",
+          "type": "university",
+          "status": "active",
+          "description": "1938 年 4 月西迁昆明完成，5 月 4 日更名为国立西南联合大学并开课。1946 年 7 月 31 日联大结束，三校北返。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/国立西南联合大学",
+            "《国立西南联合大学校史》, 北京大学出版社, 1996",
+            "oral:oh-2025-0042"
+          ],
+          "contributed_by": {
+            "created_by": "user:archivist_wang",
+            "created_via": "manual",
+            "confirmed_by": [
+              "user:prof_li_hist",
+              "user:zhang_1946"
+            ],
+            "created_at": "2026-05-02T11:30:00Z",
+            "last_modified_by": "user:prof_li_hist",
+            "last_modified_at": "2026-06-05T16:00:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%235e8a3c'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%235e8a3c'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E8%A5%BF%E5%8D%97%E8%81%94%E5%A4%A7%E6%A0%A1%E9%97%A8%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1939%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1939",
+              "title": "西南联大校门历史照片"
+            },
+            {
+              "type": "map",
+              "ai_generated": true,
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%238a5c3a'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%238a5c3a'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3EAI%20%E5%A4%8D%E5%8E%9F%201940%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1940%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'190'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'11'%20fill%3D'rgba(255%2C255%2C255%2C0.85)'%3E%5BAI%5D%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1940",
+              "title": "AI 复原的 1940 年校园布局图（基于文字记载推断，非史料）",
+              "confidence": 0.55,
+              "ai_model": "map-reconstruct-v2",
+              "contributed_by": {
+                "created_by": "agent:map-reconstruct-v2",
+                "created_via": "ai_extraction",
+                "ai_model": "map-reconstruct-v2",
+                "created_at": "2026-06-10T02:00:00Z"
+              }
+            },
+            {
+              "type": "photo",
+              "offline": true,
+              "date": "1939",
+              "title": "贡献者家藏的祖父联大时期照片一张，未数字化，存于昆明家中"
+            }
+          ]
+        },
+        {
+          "start_date": "1946-08",
+          "end_date": "1950-09",
+          "name": "国立昆明师范学院",
+          "type": "university",
+          "status": "active",
+          "description": "联大北返后，其师范学院留昆独立设置为国立昆明师范学院，沿用原校址。",
+          "description_provenance": "manual",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/云南师范大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:archivist_wang",
+            "created_via": "manual",
+            "created_at": "2026-05-03T10:00:00Z"
+          }
+        },
+        {
+          "start_date": "1950-10",
+          "end_date": "1984-03",
+          "name": "昆明师范学院",
+          "type": "university",
+          "status": "active",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/云南师范大学",
+            "《云南师范大学校史》校史编写组"
+          ],
+          "contributed_by": {
+            "created_by": "user:archivist_wang",
+            "created_via": "manual",
+            "created_at": "2026-05-03T10:30:00Z"
+          }
+        },
+        {
+          "start_date": "1984-04",
+          "name": "云南师范大学",
+          "type": "university",
+          "status": "active",
+          "description": "1984 年更名为云南师范大学，延续至今。",
+          "description_provenance": "manual",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/云南师范大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:archivist_wang",
+            "created_via": "manual",
+            "created_at": "2026-05-03T11:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "f47c0003-4000-4000-8000-000000000003",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "北京市第一六一中学",
+        "localized": {
+          "zh-Hans": "北京市第一六一中学",
+          "en": "Beijing No. 161 Middle School"
+        },
+        "aliases": [
+          "京师公立第一女子中学",
+          "北平市立第一女子中学",
+          "北京女一中",
+          "北京市第一女子中学"
+        ]
+      },
+      "coordinates": {
+        "lat": 39.8804,
+        "lon": 116.3608
+      },
+      "external_ids": {
+        "wikipedia": {
+          "id": "zhwiki:北京市第一六一中学",
+          "verified": true,
+          "verified_at": "2026-08-05T08:00:00Z"
+        },
+        "osm": {
+          "id": "relation/16706675",
+          "verified": true,
+          "verified_at": "2026-08-26T03:30:00Z",
+          "note": "北京市第一六一中学(新校区)，南横西街94号"
+        }
+      },
+      "tags": {
+        "amenity": "school",
+        "addr:city": "Beijing",
+        "addr:district": "Xicheng",
+        "ste:founded_by": "蔡元培",
+        "ste:numbering": "renumbered",
+        "ste:lineage": "京师公立第一女子中学 → 北平女一中 → 北京女一中 → 一六一中学（2000/2004 并入三十中、长安中学）",
+        "ste:coord_source": "OSM relation/16706675 一六一中学新校区（2026-08-26 核实）；鲍家街/北长街历史点位为街区级",
+        "ste:revision": "2026-08-26 数据虾史实订正：删除原误植的'北京六中→长安中学(1967)→西迁陕西'版本，改为可考的直系沿革"
+      },
+      "narratives": [
+        {
+          "author": "agent:kimi-data-shrimp",
+          "source_of_knowledge": "ai_generated",
+          "author_identity": "persistent_pseudonym",
+          "style": "neutral",
+          "text": "一六一中学的直系前身是 1913 年京师学务局创办的京师公立第一女子中学，初址宣武门内鲍家街/西交民巷一带，1926 年由李大钊协助争取迁北长街 44 号（今北长街 113 号，一二·九运动策源地之一）。1949 年私立四存中学女部并入，1972 年定今名。2000 年北京市第三十中学、2004 年北京长安中学（1999 年由北京六中与二十八中合并而成）先后并入。2018-2019 年整体迁入南横西街 94 号新校区。（本叙事为 2026-08-26 史实订正版，替代此前误植的'北京六中抗战西迁'说法：长安中学存在于 1999-2004 年，与文革更名无关；市立中学抗战西迁一说未查到可靠来源。）",
+          "language": "zh-Hans",
+          "confidence": 0.9,
+          "ai_model": "kimi-2026-08-26",
+          "created_at": "2026-08-26T03:30:00Z"
+        }
+      ],
+      "timeline": [
+        {
+          "start_date": "1913",
+          "end_date": "1927",
+          "name": "京师公立第一女子中学",
+          "type": "school",
+          "status": "active",
+          "coordinates": {
+            "lat": 39.9073,
+            "lon": 116.3565
+          },
+          "description": "1913 年京师学务局创办，初址宣武门内鲍家街/西交民巷一带（坐标街区级待考）；1926 年迁北长街 44 号（今 113 号，原故宫花神殿）。",
+          "description_provenance": "manual",
+          "confidence": 0.9,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京市第一六一中学",
+            "https://xinwen.bjd.com.cn/content/s685fc420d5de817b102c2d02.html"
+          ],
+          "contributed_by": {
+            "created_by": "agent:kimi-data-shrimp",
+            "created_via": "ai_extraction",
+            "ai_model": "kimi-2026-08-26",
+            "created_at": "2026-08-26T03:30:00Z"
+          }
+        },
+        {
+          "start_date": "1928",
+          "end_date": "1930",
+          "name": "北平特别市市立第一女子中学",
+          "type": "school",
+          "status": "active",
+          "coordinates": {
+            "lat": 39.916,
+            "lon": 116.3855
+          },
+          "description": "1928 年更名。（北长街校址，坐标街区级）",
+          "description_provenance": "manual",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京市第一六一中学"
+          ],
+          "contributed_by": {
+            "created_by": "agent:kimi-data-shrimp",
+            "created_via": "ai_extraction",
+            "ai_model": "kimi-2026-08-26",
+            "created_at": "2026-08-26T03:30:00Z"
+          }
+        },
+        {
+          "start_date": "1931",
+          "end_date": "1948",
+          "name": "北平市立第一女子中学",
+          "type": "school",
+          "status": "active",
+          "coordinates": {
+            "lat": 39.916,
+            "lon": 116.3855
+          },
+          "description": "1931 年更名。1935 年一二·九运动策源地之一，北平学联机关设于校内。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京市第一六一中学",
+            "https://xinwen.bjd.com.cn/content/s685fc420d5de817b102c2d02.html"
+          ],
+          "contributed_by": {
+            "created_by": "agent:kimi-data-shrimp",
+            "created_via": "ai_extraction",
+            "ai_model": "kimi-2026-08-26",
+            "created_at": "2026-08-26T03:30:00Z"
+          }
+        },
+        {
+          "start_date": "1949",
+          "end_date": "1971",
+          "name": "北京市第一女子中学",
+          "type": "school",
+          "status": "active",
+          "coordinates": {
+            "lat": 39.916,
+            "lon": 116.3855
+          },
+          "description": "1949 年私立四存中学女部并入；建国后最早确定的市属重点中学之一。",
+          "description_provenance": "manual",
+          "confidence": 0.9,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京市第一六一中学",
+            "https://gaokao.chsi.com.cn/zx/sch/zxgkinfo.action?id=178347574"
+          ],
+          "contributed_by": {
+            "created_by": "agent:kimi-data-shrimp",
+            "created_via": "ai_extraction",
+            "ai_model": "kimi-2026-08-26",
+            "created_at": "2026-08-26T03:30:00Z"
+          }
+        },
+        {
+          "start_date": "1972",
+          "end_date": "2017",
+          "name": "北京市第一六一中学",
+          "type": "school",
+          "status": "active",
+          "coordinates": {
+            "lat": 39.916,
+            "lon": 116.3855
+          },
+          "description": "1972 年定今名，陈云题写校名。2000 年北京市第三十中学、2004 年北京长安中学（1999 年由北京六中与二十八中合并）先后并入，形成一校三址格局。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京市第一六一中学",
+            "https://gaokao.chsi.com.cn/zx/sch/zxgkinfo.action?id=178347574"
+          ],
+          "contributed_by": {
+            "created_by": "agent:kimi-data-shrimp",
+            "created_via": "ai_extraction",
+            "ai_model": "kimi-2026-08-26",
+            "created_at": "2026-08-26T03:30:00Z"
+          }
+        },
+        {
+          "start_date": "2018",
+          "name": "北京市第一六一中学（南横西街新校区）",
+          "type": "school",
+          "status": "active",
+          "description": "2018 年启动整体搬迁至南横西街 94 号（原北京市卫生职业学校），2019 年春季新校区启用；2024 年和平门校区改扩建完成。（基础坐标=新校区，OSM 核实）",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京市第一六一中学",
+            "http://www.bj161zhx.cn/page.aspx?id=148"
+          ],
+          "contributed_by": {
+            "created_by": "agent:kimi-data-shrimp",
+            "created_via": "ai_extraction",
+            "ai_model": "kimi-2026-08-26",
+            "created_at": "2026-08-26T03:30:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "f47c0004-4000-4000-8000-000000000004",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "北京师范大学附属中学",
+        "localized": {
+          "zh-Hans": "北京师范大学附属中学",
+          "en": "The High School Affiliated to Beijing Normal University"
+        },
+        "aliases": [
+          "五城学堂",
+          "五城中学堂",
+          "北京高师附中",
+          "国立北师附中",
+          "国立西北联大附中",
+          "北平师大附中"
+        ]
+      },
+      "coordinates": {
+        "lat": 39.8963,
+        "lon": 116.3794
+      },
+      "external_ids": {
+        "wikidata": {
+          "id": "Q1092291",
+          "verified": true,
+          "verified_at": "2026-08-08T12:00:00Z"
+        },
+        "wikipedia": {
+          "id": "zhwiki:北京师范大学附属中学",
+          "verified": true,
+          "verified_at": "2026-08-08T12:00:00Z"
+        },
+        "osm": {
+          "id": "way/655287747",
+          "verified": true,
+          "verified_at": "2026-08-26T03:30:00Z",
+          "note": "南新华街校址"
+        }
+      },
+      "tags": {
+        "amenity": "school",
+        "addr:city": "Beijing",
+        "addr:district": "Xicheng",
+        "ste:renames": "7",
+        "ste:alumni": "钱学森 1923-1929",
+        "ste:coord_source": "OSM way/655287747 北师大附中（南新华街，2026-08-26 核实）；西迁段坐标为西安/城固城区示意"
+      },
+      "narratives": [
+        {
+          "author": "user:bnu_archives",
+          "source_of_knowledge": "research",
+          "author_identity": "real_name",
+          "style": "academic",
+          "text": "五城学堂创办于 1901 年，是中国最早的近代中学之一；1902 年改称五城中学堂，『中学』概念在近代中国由此进入制度化阶段。1937 年随北平高校西迁，附中部分师生组建国立西北联合大学附中，1946 年回迁。钱学森 1923-1929 年在此就读。",
+          "language": "zh-Hans",
+          "created_at": "2026-08-08T12:00:00Z",
+          "endorsed_by": [
+            "user:prof_li_hist"
+          ]
+        }
+      ],
+      "timeline": [
+        {
+          "start_date": "1901",
+          "end_date": "1901",
+          "name": "五城学堂",
+          "type": "school",
+          "status": "active",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京师范大学附属中学"
+          ],
+          "contributed_by": {
+            "created_by": "user:bnu_archives",
+            "created_via": "manual",
+            "created_at": "2026-08-08T12:00:00Z"
+          }
+        },
+        {
+          "start_date": "1902",
+          "end_date": "1911",
+          "name": "五城中学堂",
+          "type": "school",
+          "status": "active",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京师范大学附属中学"
+          ],
+          "contributed_by": {
+            "created_by": "user:bnu_archives",
+            "created_via": "manual",
+            "created_at": "2026-08-08T12:01:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%23a08560'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%23a08560'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E4%BA%94%E5%9F%8E%E4%B8%AD%E5%AD%A6%E5%A0%82%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1908%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1908",
+              "title": "1908 年五城中学堂"
+            }
+          ]
+        },
+        {
+          "start_date": "1912",
+          "end_date": "1922",
+          "name": "北京高等师范学校附属中学",
+          "type": "school",
+          "status": "active",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京师范大学附属中学"
+          ],
+          "contributed_by": {
+            "created_by": "user:bnu_archives",
+            "created_via": "manual",
+            "created_at": "2026-08-08T12:02:00Z"
+          }
+        },
+        {
+          "start_date": "1923",
+          "end_date": "1936",
+          "name": "国立北平师范大学附属中学",
+          "type": "school",
+          "status": "active",
+          "description": "钱学森 1923-1929 年在此就读。",
+          "description_provenance": "manual",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京师范大学附属中学"
+          ],
+          "contributed_by": {
+            "created_by": "user:bnu_archives",
+            "created_via": "manual",
+            "created_at": "2026-08-08T12:03:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%23605040'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%23605040'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E5%8C%97%E5%B8%88%E9%99%84%E4%B8%AD%E5%AD%A6%E7%94%9F%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1925%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1925",
+              "title": "1925 年北师附中学生合影"
+            }
+          ]
+        },
+        {
+          "start_date": "1937",
+          "end_date": "1937",
+          "name": "西安临时大学附属中学高中部",
+          "type": "school",
+          "status": "relocated",
+          "coordinates": {
+            "lat": 34.3416,
+            "lon": 108.9398
+          },
+          "description": "1937 年部分师生随北平师大西迁西安，组建西安临时大学附中高中部（方永蒸代理主任）。（坐标为西安城区示意，精确校址待考；北平南新华街校舍同期维持办学，本行聚焦西迁支脉）",
+          "description_provenance": "manual",
+          "confidence": 0.7,
+          "sources": [
+            "https://m.krzzjn.com/show-944-146377.html",
+            "http://www.hfgcxx.com/upload/files/新版数阅资源盘/文化、科学、教育、体育/教育大辞典（下）.pdf"
+          ],
+          "contributed_by": {
+            "created_by": "agent:kimi-data-shrimp",
+            "created_via": "ai_extraction",
+            "ai_model": "kimi-2026-08-26",
+            "created_at": "2026-08-26T03:30:00Z"
+          }
+        },
+        {
+          "start_date": "1938",
+          "end_date": "1945",
+          "name": "国立西北联大师范学院附属中学（西北师院附中）",
+          "type": "school",
+          "status": "relocated",
+          "coordinates": {
+            "lat": 33.1529,
+            "lon": 107.3338
+          },
+          "description": "1938 年 3 月随迁陕西城固，改西北联大附中；1939 年随西北师范学院改西北师院附中，1943 年随迁兰州十里店；留西北部分后发展为西北师范大学附属中学。北京本部 1946 年复校。（坐标为城固县城示意）",
+          "description_provenance": "manual",
+          "confidence": 0.7,
+          "sources": [
+            "http://www.hfgcxx.com/upload/files/新版数阅资源盘/文化、科学、教育、体育/教育大辞典（下）.pdf",
+            "http://www.nwnusch.cn/uploadfile/2025/0903/20250903113623452.pdf"
+          ],
+          "contributed_by": {
+            "created_by": "agent:kimi-data-shrimp",
+            "created_via": "ai_extraction",
+            "ai_model": "kimi-2026-08-26",
+            "created_at": "2026-08-26T03:30:00Z"
+          }
+        },
+        {
+          "start_date": "1946",
+          "end_date": "1948",
+          "name": "北平师范大学附属中学",
+          "type": "school",
+          "status": "active",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京师范大学附属中学"
+          ],
+          "contributed_by": {
+            "created_by": "user:bnu_archives",
+            "created_via": "manual",
+            "created_at": "2026-08-08T12:05:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%23406050'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%23406050'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E5%8C%97%E5%B9%B3%E5%B8%88%E5%A4%A7%E9%99%84%E4%B8%AD%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1947%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1947",
+              "title": "1947 年北平师大附中"
+            }
+          ]
+        },
+        {
+          "start_date": "1949",
+          "name": "北京师范大学附属中学",
+          "type": "school",
+          "status": "active",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京师范大学附属中学"
+          ],
+          "contributed_by": {
+            "created_by": "user:bnu_archives",
+            "created_via": "manual",
+            "created_at": "2026-08-08T12:06:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%233a3a4a'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%233a3a4a'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E5%8C%97%E5%B8%88%E5%A4%A7%E9%99%84%E4%B8%AD%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E2015%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "2015",
+              "title": "2015 年校园"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ste_id": "f47c0005-4000-4000-8000-000000000005",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "原圣约翰大学校址（华东政法大学长宁校区）",
+        "localized": {
+          "zh-Hans": "原圣约翰大学校址（华东政法大学长宁校区）",
+          "en": "Former St. John's University Campus (now ECUPL Changning)"
+        },
+        "aliases": [
+          "圣约翰书院",
+          "圣约翰大学",
+          "Saint John's University",
+          "华东政法学院（沿用校舍）"
+        ]
+      },
+      "coordinates": {
+        "lat": 31.2278,
+        "lon": 121.4125
+      },
+      "external_ids": {
+        "wikipedia": {
+          "id": "zhwiki:圣约翰大学",
+          "verified": true,
+          "verified_at": "2026-08-09T10:00:00Z"
+        },
+        "osm": {
+          "id": "way/477227512",
+          "verified": true,
+          "verified_at": "2026-08-26T03:30:00Z",
+          "note": "华东政法大学（万航渡路 1575 号，圣约翰大学原址）"
+        }
+      },
+      "tags": {
+        "amenity": "university",
+        "heritage": "yes",
+        "addr:city": "Shanghai",
+        "addr:district": "Changning",
+        "ste:heritage_building": "怀施堂 / 格致楼",
+        "ste:coord_source": "OSM way/477227512 华东政法大学长宁校区（2026-08-26 核实，原标偏东南约 1.2km）"
+      },
+      "narratives": [
+        {
+          "author": "user:shanghai_modern_history",
+          "source_of_knowledge": "research",
+          "author_identity": "real_name",
+          "style": "academic",
+          "text": "St. John's University (圣约翰大学) was founded in 1879 in Shanghai by the American Episcopal Church. It was the most prestigious English-medium university in East Asia before 1952. Following the nationwide 院系调整 of 1952, its departments were merged into Fudan University, East China Normal University, and other institutions. The campus was reassigned to the newly-created East China Institute of Political Science and Law, which preserves several of the original Gothic-style buildings including 怀施堂 and 格致楼.",
+          "language": "en",
+          "created_at": "2026-08-09T10:00:00Z"
+        },
+        {
+          "author": "user:shanghai_modern_history",
+          "source_of_knowledge": "research",
+          "author_identity": "real_name",
+          "style": "academic",
+          "text": "圣约翰大学由美国圣公会 1879 年在上海创办，1952 年全国院系调整时，文理科并入复旦大学、华东师范大学等校，校舍划归新成立的华东政法学院。原校园内的怀施堂、格致楼等历史建筑至今保存。",
+          "language": "zh-Hans",
+          "created_at": "2026-08-09T10:05:00Z"
+        },
+        {
+          "author": "anon:e5d7c2b9a3",
+          "source_of_knowledge": "secondhand",
+          "author_identity": "escrowed_anonymous",
+          "style": "personal_recollection",
+          "text": "外婆五十年代在圣约翰旧址上的华东政法学院念书。她说校园里的怀施堂当时被改作大礼堂，老建筑的彩色玻璃窗还在，冬天坐在里面比新楼暖和得多。",
+          "language": "zh-Hans",
+          "created_at": "2026-08-12T15:00:00Z"
+        }
+      ],
+      "timeline": [
+        {
+          "start_date": "1879",
+          "end_date": "1904",
+          "name": "圣约翰书院",
+          "type": "university",
+          "status": "active",
+          "description": "美国圣公会创办，初名圣约翰书院。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/圣约翰大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:shanghai_modern_history",
+            "created_via": "manual",
+            "created_at": "2026-08-09T10:00:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%238a7050'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%238a7050'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E5%9C%A3%E7%BA%A6%E7%BF%B0%E4%B9%A6%E9%99%A2%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1895%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1895",
+              "title": "1895 年圣约翰书院"
+            }
+          ]
+        },
+        {
+          "start_date": "1905",
+          "end_date": "1951",
+          "name": "圣约翰大学",
+          "type": "university",
+          "status": "active",
+          "description": "1905 年升格为大学，1949 年前为东亚最知名的英语大学之一。",
+          "description_provenance": "manual",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/圣约翰大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:shanghai_modern_history",
+            "created_via": "manual",
+            "created_at": "2026-08-09T10:01:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%236a5040'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%236a5040'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E6%80%80%E6%96%BD%E5%A0%82%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1920%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1920",
+              "title": "怀施堂历史照片"
+            }
+          ]
+        },
+        {
+          "start_date": "1952",
+          "end_date": "1957",
+          "name": "华东政法学院",
+          "type": "university",
+          "status": "active",
+          "description": "1952 年院系调整，圣约翰校舍划归新成立的华东政法学院；圣约翰校名消失。",
+          "description_provenance": "manual",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/圣约翰大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:shanghai_modern_history",
+            "created_via": "manual",
+            "created_at": "2026-08-09T10:02:00Z"
+          }
+        },
+        {
+          "start_date": "1958",
+          "end_date": "2006",
+          "name": "（校舍曾兼用）",
+          "type": "site",
+          "status": "active",
+          "description": "1960 年代后曾兼作他用，部分院系并入上海社会科学院等机构。",
+          "description_provenance": "manual",
+          "confidence": 0.7,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/华东政法大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:shanghai_modern_history",
+            "created_via": "manual",
+            "created_at": "2026-08-09T10:03:00Z"
+          }
+        },
+        {
+          "start_date": "2007",
+          "name": "华东政法大学长宁校区",
+          "type": "university",
+          "status": "active",
+          "description": "华东政法学院 2007 年更名为华东政法大学，长宁校区为原圣约翰校园所在。",
+          "description_provenance": "manual",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/华东政法大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:shanghai_modern_history",
+            "created_via": "manual",
+            "created_at": "2026-08-09T10:04:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%234a5a6a'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%234a5a6a'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E5%8D%8E%E4%B8%9C%E6%94%BF%E6%B3%95%E5%A4%A7%E5%AD%A6%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E2020%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "2020",
+              "title": "2020 年长宁校区"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ste_id": "f47c0006-4000-4000-8000-000000000006",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "原铁路职工子弟第一小学校址（现东交民巷小学）",
+        "localized": {
+          "zh-Hans": "原铁路职工子弟第一小学校址（现东交民巷小学）",
+          "en": "Former Site of Railway Workers' Primary School No. 1"
+        },
+        "aliases": [
+          "铁路职工子弟第一小学",
+          "铁一小",
+          "东交民巷小学（合并后）"
+        ]
+      },
+      "coordinates": {
+        "lat": 39.902,
+        "lon": 116.4065
+      },
+      "external_ids": {
+        "wikipedia": {
+          "id": "zhwiki:东交民巷小学",
+          "verified": false,
+          "note": "Wikipedia 条目存在但未独立核实"
+        },
+        "osm": {
+          "id": "way/962574354",
+          "verified": false,
+          "note": "东交民巷小学西校区点位（2026-08-26 Overpass 命中）；铁一小原址是否即此待考"
+        }
+      },
+      "tags": {
+        "amenity": "school",
+        "addr:city": "Beijing",
+        "addr:district": "Dongcheng",
+        "ste:era": "prc",
+        "ste:system_change": "industry_school_to_public",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "OSM way/962574354 东交民巷小学西校区（2026-08-26）；铁一小原址精确点位待考"
+      },
+      "narratives": [
+        {
+          "author": "user:dongjiao_archives",
+          "source_of_knowledge": "research",
+          "author_identity": "real_name",
+          "style": "neutral",
+          "text": "原铁路职工子弟第一小学创办于 1950 年代，隶属铁道部，2005 年根据国务院关于分离企业办社会职能的政策，整体移交东交民巷小学成为其分校。这是中国铁路系统 2000 年代后企业剥离办社会职能的典型缩影。",
+          "language": "zh-Hans",
+          "created_at": "2026-08-10T14:00:00Z"
+        }
+      ],
+      "timeline": [
+        {
+          "start_date": "1952",
+          "end_date": "2004",
+          "name": "铁路职工子弟第一小学",
+          "type": "school",
+          "status": "active",
+          "description": "隶属铁道部的子弟学校，招收铁路系统职工子女。",
+          "description_provenance": "manual",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/东交民巷小学"
+          ],
+          "contributed_by": {
+            "created_by": "user:dongjiao_archives",
+            "created_via": "manual",
+            "created_at": "2026-08-10T14:00:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%23807060'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%23807060'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E9%93%81%E4%B8%80%E5%B0%8F%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1970%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1970",
+              "title": "1970 年代铁一小学校园"
+            }
+          ]
+        },
+        {
+          "start_date": "2005",
+          "name": "东交民巷小学（原铁一小学校址）",
+          "type": "school",
+          "status": "active",
+          "description": "2005 年整体移交东交民巷小学成为其分校，校名『铁一小』消失。",
+          "description_provenance": "manual",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/东交民巷小学"
+          ],
+          "contributed_by": {
+            "created_by": "user:dongjiao_archives",
+            "created_via": "manual",
+            "created_at": "2026-08-10T14:01:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "f47c0007-4000-4000-8000-000000000007",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "上海圣约翰大学旧医学院（今复旦医学院）",
+        "localized": {
+          "zh-Hans": "上海圣约翰大学医学院旧址（今复旦大学上海医学院）",
+          "en": "Former St. John's Medical School (now Fudan Shanghai Medical College)"
+        },
+        "aliases": [
+          "圣约翰大学医学院",
+          "上海医学院（合并体）",
+          "上海医科大学（前身）"
+        ]
+      },
+      "coordinates": {
+        "lat": 31.1979,
+        "lon": 121.4452
+      },
+      "external_ids": {
+        "wikipedia": {
+          "id": "zhwiki:上海医科大学",
+          "verified": true,
+          "verified_at": "2026-08-15T10:00:00Z"
+        },
+        "osm": {
+          "id": "way/294618101",
+          "verified": false,
+          "note": "复旦大学枫林校区=今复旦上海医学院（2026-08-26 Overpass 命中）；圣约翰医学院原址精确点位待考"
+        }
+      },
+      "tags": {
+        "amenity": "university",
+        "addr:city": "Shanghai",
+        "addr:district": "Xuhui",
+        "ste:lineage": "圣约翰大学医学院 + 震旦大学医学院 + 同德医学院",
+        "ste:coord_confidence": "low",
+        "ste:coord_source": "OSM way/294618101 复旦大学枫林校区（2026-08-26）；坐标表今址，圣约翰医学院原址待考"
+      },
+      "narratives": [
+        {
+          "author": "user:med_history",
+          "source_of_knowledge": "research",
+          "author_identity": "real_name",
+          "style": "academic",
+          "text": "1952 年院系调整中，圣约翰大学医学院、震旦大学医学院、同德医学院合并成立上海第二医学院，1985 年更名为上海医科大学，2000 年与复旦大学合并为复旦大学上海医学院。圣约翰医学院原址现由复旦医学院使用，部分历史建筑如格致楼保存至今。",
+          "language": "zh-Hans",
+          "created_at": "2026-08-15T10:00:00Z"
+        }
+      ],
+      "timeline": [
+        {
+          "start_date": "1896",
+          "end_date": "1951",
+          "name": "圣约翰大学医学院",
+          "type": "university",
+          "status": "active",
+          "description": "圣约翰大学医学部。",
+          "description_provenance": "manual",
+          "confidence": 0.9,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/上海医科大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:med_history",
+            "created_via": "manual",
+            "created_at": "2026-08-15T10:00:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%237a5a4a'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%237a5a4a'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E5%9C%A3%E7%BA%A6%E7%BF%B0%E5%8C%BB%E5%AD%A6%E9%99%A2%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1935%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1935",
+              "title": "1935 年圣约翰医学院"
+            }
+          ]
+        },
+        {
+          "start_date": "1952",
+          "end_date": "1984",
+          "name": "上海第二医学院",
+          "type": "university",
+          "status": "active",
+          "description": "1952 年由圣约翰、震旦、同德三校医学院合并成立。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/上海医科大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:med_history",
+            "created_via": "manual",
+            "created_at": "2026-08-15T10:01:00Z"
+          }
+        },
+        {
+          "start_date": "1985",
+          "end_date": "1999",
+          "name": "上海医科大学",
+          "type": "university",
+          "status": "active",
+          "description": "1985 年更名为上海医科大学。",
+          "description_provenance": "manual",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/上海医科大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:med_history",
+            "created_via": "manual",
+            "created_at": "2026-08-15T10:02:00Z"
+          }
+        },
+        {
+          "start_date": "2000",
+          "name": "复旦大学上海医学院",
+          "type": "university",
+          "status": "active",
+          "description": "2000 年与复旦大学合并。",
+          "description_provenance": "manual",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/上海医科大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:med_history",
+            "created_via": "manual",
+            "created_at": "2026-08-15T10:03:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "f47c0008-4000-4000-8000-000000000008",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "南京大学（原金陵大学校址）",
+        "localized": {
+          "zh-Hans": "南京大学鼓楼校区（原金陵大学校址）",
+          "en": "Nanjing University Gulou Campus (former University of Nanking)"
+        },
+        "aliases": [
+          "金陵大学",
+          "University of Nanking",
+          "金陵大学堂",
+          "汇文书院"
+        ]
+      },
+      "coordinates": {
+        "lat": 32.0566,
+        "lon": 118.7741
+      },
+      "external_ids": {
+        "wikipedia": {
+          "id": "zhwiki:南京大学鼓楼校区",
+          "verified": true,
+          "verified_at": "2026-08-16T08:00:00Z"
+        },
+        "osm": {
+          "id": "way/88779953",
+          "verified": true,
+          "verified_at": "2026-08-26T03:30:00Z"
+        }
+      },
+      "tags": {
+        "amenity": "university",
+        "heritage": "yes",
+        "addr:city": "Nanjing",
+        "addr:district": "Gulou",
+        "ste:lineage": "汇文书院 → 金陵大学 → 南京大学",
+        "ste:coord_source": "OSM way/88779953 南京大学鼓楼校区（2026-08-26 核实，原标偏北约 2.5km）"
+      },
+      "narratives": [
+        {
+          "author": "user:nanjing_uni_history",
+          "source_of_knowledge": "research",
+          "author_identity": "real_name",
+          "style": "academic",
+          "text": "金陵大学前身为 1888 年美国教会创办的汇文书院，1910 年合并为金陵大学，是民国时期著名的教会大学之一。1952 年院系调整中，金陵大学文、理学院并入南京大学，原校址（鼓楼校区）由南京大学使用至今。校园内的北大楼（塔楼）等历史建筑保存完好。",
+          "language": "zh-Hans",
+          "created_at": "2026-08-16T08:00:00Z",
+          "endorsed_by": [
+            "user:nju_archivist"
+          ]
+        }
+      ],
+      "timeline": [
+        {
+          "start_date": "1888",
+          "end_date": "1909",
+          "name": "汇文书院",
+          "type": "university",
+          "status": "active",
+          "description": "美国教会创办，1888 年成立。",
+          "description_provenance": "manual",
+          "confidence": 0.9,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/南京大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:nanjing_uni_history",
+            "created_via": "manual",
+            "created_at": "2026-08-16T08:00:00Z"
+          }
+        },
+        {
+          "start_date": "1910",
+          "end_date": "1951",
+          "name": "金陵大学",
+          "type": "university",
+          "status": "active",
+          "description": "1910 年由几所教会书院合并。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/南京大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:nanjing_uni_history",
+            "created_via": "manual",
+            "created_at": "2026-08-16T08:01:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%235a4a30'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%235a4a30'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E9%87%91%E9%99%B5%E5%A4%A7%E5%AD%A6%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1925%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1925",
+              "title": "1925 年金陵大学"
+            }
+          ]
+        },
+        {
+          "start_date": "1952",
+          "name": "南京大学（鼓楼校区）",
+          "type": "university",
+          "status": "active",
+          "description": "1952 年院系调整中金陵大学文理学院并入南京大学，原校址由南京大学使用。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/南京大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:nanjing_uni_history",
+            "created_via": "manual",
+            "created_at": "2026-08-16T08:02:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%234a3a2a'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%234a3a2a'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E5%8D%97%E5%A4%A7%E5%8C%97%E5%A4%A7%E6%A5%BC%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E2018%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "2018",
+              "title": "南京大学鼓楼校区北大楼"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "ste_id": "f47c0009-4000-4000-8000-000000000009",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "中山大学（康乐园）",
+        "localized": {
+          "zh-Hans": "中山大学康乐园（原国立中山大学校址）",
+          "en": "Sun Yat-sen University, Ka Yin Lok (Kangleyuan)"
+        },
+        "aliases": [
+          "国立广东大学",
+          "国立中山大学",
+          "岭南大学（部分并入）"
+        ]
+      },
+      "coordinates": {
+        "lat": 23.0996,
+        "lon": 113.2924
+      },
+      "external_ids": {
+        "wikipedia": {
+          "id": "zhwiki:中山大学康乐园",
+          "verified": true,
+          "verified_at": "2026-08-17T10:00:00Z"
+        },
+        "osm": {
+          "id": "way/300917756",
+          "verified": true,
+          "verified_at": "2026-08-26T03:30:00Z",
+          "note": "中山大学广州校区南校园（康乐园）"
+        }
+      },
+      "tags": {
+        "amenity": "university",
+        "heritage": "yes",
+        "addr:city": "Guangzhou",
+        "addr:district": "Haizhu",
+        "ste:founded_by": "孙中山",
+        "ste:coord_source": "OSM way/300917756 中山大学南校园康乐园（2026-08-26 核实）"
+      },
+      "narratives": [
+        {
+          "author": "user:gzsun_yat_sen_history",
+          "source_of_knowledge": "research",
+          "author_identity": "real_name",
+          "style": "academic",
+          "text": "1924 年孙中山将广东几所高等师范学校合并成立国立广东大学，1926 年改名为国立中山大学。1952 年院系调整中，岭南大学等校部分院系并入。今日中山大学康乐园校区主要使用原国立中山大学校址，部分建筑来自原岭南大学。",
+          "language": "zh-Hans",
+          "created_at": "2026-08-17T10:00:00Z"
+        }
+      ],
+      "timeline": [
+        {
+          "start_date": "1904",
+          "end_date": "1923",
+          "name": "广东高等师范学校",
+          "type": "university",
+          "status": "active",
+          "description": "前身之一。",
+          "description_provenance": "manual",
+          "confidence": 0.85,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/中山大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:gzsun_yat_sen_history",
+            "created_via": "manual",
+            "created_at": "2026-08-17T10:00:00Z"
+          }
+        },
+        {
+          "start_date": "1924",
+          "end_date": "1925",
+          "name": "国立广东大学",
+          "type": "university",
+          "status": "active",
+          "description": "1924 年孙中山创立于广州。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/中山大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:gzsun_yat_sen_history",
+            "created_via": "manual",
+            "created_at": "2026-08-17T10:01:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%238a3a30'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%238a3a30'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E5%9B%BD%E7%AB%8B%E5%B9%BF%E4%B8%9C%E5%A4%A7%E5%AD%A6%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1924%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1924",
+              "title": "1924 年国立广东大学开学典礼"
+            }
+          ]
+        },
+        {
+          "start_date": "1926",
+          "end_date": "1951",
+          "name": "国立中山大学",
+          "type": "university",
+          "status": "active",
+          "description": "1926 年改名国立中山大学。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/中山大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:gzsun_yat_sen_history",
+            "created_via": "manual",
+            "created_at": "2026-08-17T10:02:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%235a4a3a'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%235a4a3a'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E4%B8%AD%E5%B1%B1%E5%A4%A7%E5%AD%A6%E6%A0%A1%E9%97%A8%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1935%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1935",
+              "title": "1935 年中山大学校门"
+            }
+          ]
+        },
+        {
+          "start_date": "1952",
+          "name": "中山大学",
+          "type": "university",
+          "status": "active",
+          "description": "1952 年院系调整后定名中山大学至今。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/中山大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:gzsun_yat_sen_history",
+            "created_via": "manual",
+            "created_at": "2026-08-17T10:03:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "f47c000a-4000-4000-8000-000000000010",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "四川大学（华西校区）",
+        "localized": {
+          "zh-Hans": "四川大学华西校区（原华西协合大学校址）",
+          "en": "Sichuan University Huaxi Campus (former West China Union University)"
+        },
+        "aliases": [
+          "华西协合大学",
+          "West China Union University",
+          "华西大学"
+        ]
+      },
+      "coordinates": {
+        "lat": 30.6426,
+        "lon": 104.0674
+      },
+      "external_ids": {
+        "wikipedia": {
+          "id": "zhwiki:华西医科大学",
+          "verified": true,
+          "verified_at": "2026-08-18T08:00:00Z"
+        },
+        "osm": {
+          "id": "relation/9189906",
+          "verified": true,
+          "verified_at": "2026-08-26T03:30:00Z",
+          "note": "四川大学华西校区"
+        }
+      },
+      "tags": {
+        "amenity": "university",
+        "heritage": "yes",
+        "addr:city": "Chengdu",
+        "addr:district": "Wuhou",
+        "ste:heritage_building": "华西钟楼 / 懋德堂",
+        "ste:coord_source": "OSM relation/9189906 四川大学华西校区（2026-08-26 核实）"
+      },
+      "narratives": [
+        {
+          "author": "user:chengdu_history",
+          "source_of_knowledge": "research",
+          "author_identity": "real_name",
+          "style": "academic",
+          "text": "华西协合大学（West China Union University）由美国、英国、加拿大五所教会 1910 年在成都合办，是中国西部最早的现代大学之一。1951 年改为华西大学，1953 年院系调整中院系并入四川大学等校，2000 年华西医科大学并入四川大学，原校址作为四川大学华西校区使用至今。",
+          "language": "zh-Hans",
+          "created_at": "2026-08-18T08:00:00Z"
+        }
+      ],
+      "timeline": [
+        {
+          "start_date": "1910",
+          "end_date": "1950",
+          "name": "华西协合大学",
+          "type": "university",
+          "status": "active",
+          "description": "1910 年由美英加五教会合办。",
+          "description_provenance": "manual",
+          "confidence": 0.9,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/华西医科大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:chengdu_history",
+            "created_via": "manual",
+            "created_at": "2026-08-18T08:00:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%237a6a4a'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%237a6a4a'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E5%8D%8E%E8%A5%BF%E5%8D%8F%E5%90%88%E5%A4%A7%E5%AD%A6%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1925%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1925",
+              "title": "1925 年华西协合大学校园"
+            }
+          ]
+        },
+        {
+          "start_date": "1951",
+          "end_date": "1952",
+          "name": "华西大学",
+          "type": "university",
+          "status": "active",
+          "description": "1951 年新中国成立后改名。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/华西医科大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:chengdu_history",
+            "created_via": "manual",
+            "created_at": "2026-08-18T08:01:00Z"
+          }
+        },
+        {
+          "start_date": "1953",
+          "end_date": "1999",
+          "name": "华西医科大学",
+          "type": "university",
+          "status": "active",
+          "description": "1953 年院系调整后独立为华西医科大学。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/华西医科大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:chengdu_history",
+            "created_via": "manual",
+            "created_at": "2026-08-18T08:02:00Z"
+          }
+        },
+        {
+          "start_date": "2000",
+          "name": "四川大学华西校区",
+          "type": "university",
+          "status": "active",
+          "description": "2000 年华西医科大学并入四川大学，原校址作为华西校区。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/华西医科大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:chengdu_history",
+            "created_via": "manual",
+            "created_at": "2026-08-18T08:03:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "f47c000b-4000-4000-8000-000000000011",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "武汉大学",
+        "localized": {
+          "zh-Hans": "武汉大学（国立武汉大学旧址）",
+          "en": "Wuhan University (former National Wuhan University)"
+        },
+        "aliases": [
+          "国立武昌高等师范学校",
+          "国立武昌中山大学",
+          "国立武汉大学",
+          "武汉大学"
+        ]
+      },
+      "coordinates": {
+        "lat": 30.5374,
+        "lon": 114.3615
+      },
+      "external_ids": {
+        "wikipedia": {
+          "id": "zhwiki:武汉大学",
+          "verified": true,
+          "verified_at": "2026-08-19T08:00:00Z"
+        },
+        "osm": {
+          "id": "relation/10717504",
+          "verified": true,
+          "verified_at": "2026-08-26T03:30:00Z"
+        }
+      },
+      "tags": {
+        "amenity": "university",
+        "heritage": "yes",
+        "addr:city": "Wuhan",
+        "addr:district": "Wuchang",
+        "ste:campus_design": "李四光规划",
+        "ste:coord_source": "OSM relation/10717504 武汉大学（2026-08-26 核实）；西迁段坐标=乐山文庙（OSM way/1009039108）"
+      },
+      "narratives": [
+        {
+          "author": "user:whu_history",
+          "source_of_knowledge": "research",
+          "author_identity": "real_name",
+          "style": "academic",
+          "text": "武汉大学前身为 1893 年创办的自强学堂，历经国立武昌高等师范学校、国立武昌中山大学、国立武汉大学等阶段，1928 年定名国立武汉大学。李四光主持的新校舍规划设计使其成为中国近代最美校园之一，1937 年西迁四川乐山，1946 年回迁珞珈山。",
+          "language": "zh-Hans",
+          "created_at": "2026-08-19T08:00:00Z"
+        }
+      ],
+      "timeline": [
+        {
+          "start_date": "1893",
+          "end_date": "1912",
+          "name": "自强学堂",
+          "type": "university",
+          "status": "active",
+          "description": "1893 年张之洞创办。",
+          "description_provenance": "manual",
+          "confidence": 0.9,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/武汉大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:whu_history",
+            "created_via": "manual",
+            "created_at": "2026-08-19T08:00:00Z"
+          }
+        },
+        {
+          "start_date": "1913",
+          "end_date": "1922",
+          "name": "国立武昌高等师范学校",
+          "type": "university",
+          "status": "active",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/武汉大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:whu_history",
+            "created_via": "manual",
+            "created_at": "2026-08-19T08:01:00Z"
+          }
+        },
+        {
+          "start_date": "1923",
+          "end_date": "1927",
+          "name": "国立武昌师范大学 / 国立武昌中山大学",
+          "type": "university",
+          "status": "active",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/武汉大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:whu_history",
+            "created_via": "manual",
+            "created_at": "2026-08-19T08:02:00Z"
+          }
+        },
+        {
+          "start_date": "1928",
+          "end_date": "1937",
+          "name": "国立武汉大学",
+          "type": "university",
+          "status": "active",
+          "description": "1928 年定名，李四光规划新校舍于珞珈山。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/武汉大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:whu_history",
+            "created_via": "manual",
+            "created_at": "2026-08-19T08:03:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%235a5a4a'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%235a5a4a'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E6%AD%A6%E5%A4%A7%E8%80%81%E5%BB%BA%E7%AD%91%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1935%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1935",
+              "title": "1935 年武大老建筑"
+            }
+          ]
+        },
+        {
+          "start_date": "1938",
+          "end_date": "1945",
+          "name": "国立武汉大学（西迁乐山）",
+          "type": "university",
+          "status": "relocated",
+          "coordinates": {
+            "lat": 29.5614,
+            "lon": 103.7593
+          },
+          "description": "1938 年春西迁四川乐山，校本部设乐山文庙（OSM way/1009039108），1946 年回迁珞珈山。",
+          "description_provenance": "manual",
+          "confidence": 0.9,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/武汉大学",
+            "http://jds.cass.cn/webpic/web/jdsww/UploadFiles/zyqk/2010/12/201012071519524119.pdf"
+          ],
+          "contributed_by": {
+            "created_by": "agent:kimi-data-shrimp",
+            "created_via": "ai_extraction",
+            "ai_model": "kimi-2026-08-26",
+            "created_at": "2026-08-26T03:30:00Z"
+          }
+        },
+        {
+          "start_date": "1946",
+          "name": "武汉大学",
+          "type": "university",
+          "status": "active",
+          "description": "1946 年回迁珞珈山至今。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/武汉大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:whu_history",
+            "created_via": "manual",
+            "created_at": "2026-08-19T08:05:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "ste_id": "f47c000c-4000-4000-8000-000000000012",
+      "ste_version": "0.2",
+      "name": {
+        "primary": "北京大学（马神庙/红墙校址）",
+        "localized": {
+          "zh-Hans": "北京大学（马神庙/红墙校址）",
+          "en": "Peking University (Ma Shen Miao / Red Wall Campus)"
+        },
+        "aliases": [
+          "京师大学堂",
+          "国立北京大学",
+          "北京大学"
+        ]
+      },
+      "coordinates": {
+        "lat": 39.9918,
+        "lon": 116.3039
+      },
+      "external_ids": {
+        "wikipedia": {
+          "id": "zhwiki:北京大学",
+          "verified": true,
+          "verified_at": "2026-08-20T08:00:00Z"
+        },
+        "osm": {
+          "id": "way/1330709889",
+          "verified": true,
+          "verified_at": "2026-08-26T03:30:00Z",
+          "note": "燕园校址（1952 年至今）"
+        }
+      },
+      "tags": {
+        "amenity": "university",
+        "heritage": "yes",
+        "addr:city": "Beijing",
+        "addr:district": "Haidian",
+        "ste:founded_year": "1898",
+        "ste:relocated_during": "1937-1946",
+        "ste:coord_source": "OSM way/1330709889 北京大学燕园（2026-08-26 核实）；马神庙段=沙滩后街一带街区级；沙滩红楼段=北大红楼 OSM way/187204004"
+      },
+      "narratives": [
+        {
+          "author": "user:pku_history",
+          "source_of_knowledge": "research",
+          "author_identity": "real_name",
+          "style": "academic",
+          "text": "京师大学堂于 1898 年戊戌变法中创办，1912 年改称国立北京大学，是中国近代第一所国立综合性大学。1937 年抗战西迁，与清华、南开合组西南联大；1946 年北返。原校址经历马神庙、沙滩、红楼、燕园多次变迁。",
+          "language": "zh-Hans",
+          "created_at": "2026-08-20T08:00:00Z"
+        }
+      ],
+      "timeline": [
+        {
+          "start_date": "1898",
+          "end_date": "1911",
+          "name": "京师大学堂",
+          "type": "university",
+          "status": "active",
+          "description": "1898 年戊戌变法中创办于马神庙。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:pku_history",
+            "created_via": "manual",
+            "created_at": "2026-08-20T08:00:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%238a7050'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%238a7050'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E4%BA%AC%E5%B8%88%E5%A4%A7%E5%AD%A6%E5%A0%82%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1902%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1902",
+              "title": "1902 年京师大学堂"
+            }
+          ],
+          "coordinates": {
+            "lat": 39.924,
+            "lon": 116.3953
+          }
+        },
+        {
+          "start_date": "1912",
+          "end_date": "1936",
+          "name": "国立北京大学（沙滩/红楼时期）",
+          "type": "university",
+          "status": "active",
+          "description": "1912 年改名，迁至沙滩红楼。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:pku_history",
+            "created_via": "manual",
+            "created_at": "2026-08-20T08:01:00Z"
+          },
+          "evidence": [
+            {
+              "type": "photo",
+              "url": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20400%20240'%3E%0A%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%3ClinearGradient%20id%3D'g'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%237a4040'%20stop-opacity%3D'0.85'%2F%3E%0A%20%20%20%20%20%20%20%20%3Cstop%20offset%3D'100%25'%20stop-color%3D'%237a4040'%20stop-opacity%3D'0.55'%2F%3E%0A%20%20%20%20%20%20%3C%2FlinearGradient%3E%0A%20%20%20%20%20%20%3Cpattern%20id%3D'noise'%20width%3D'4'%20height%3D'4'%20patternUnits%3D'userSpaceOnUse'%3E%0A%20%20%20%20%20%20%20%20%3Crect%20width%3D'4'%20height%3D'4'%20fill%3D'rgba(0%2C0%2C0%2C0.05)'%2F%3E%0A%20%20%20%20%20%20%3C%2Fpattern%3E%0A%20%20%20%20%3C%2Fdefs%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23g)'%2F%3E%0A%20%20%20%20%3Crect%20width%3D'400'%20height%3D'240'%20fill%3D'url(%23noise)'%2F%3E%0A%20%20%20%20%3Crect%20x%3D'12'%20y%3D'12'%20width%3D'376'%20height%3D'216'%20fill%3D'none'%20stroke%3D'rgba(255%2C255%2C255%2C0.4)'%20stroke-width%3D'1'%2F%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'130'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'28'%20fill%3D'rgba(255%2C255%2C255%2C0.95)'%20font-weight%3D'500'%3E%E5%8C%97%E5%A4%A7%E7%BA%A2%E6%A5%BC%3C%2Ftext%3E%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'160'%20font-family%3D'Georgia%2C%20serif'%20font-size%3D'16'%20fill%3D'rgba(255%2C255%2C255%2C0.75)'%3E1920%3C%2Ftext%3E%0A%20%20%20%20%0A%20%20%20%20%3Ctext%20x%3D'30'%20y%3D'215'%20font-family%3D'ui-monospace%2Cmonospace'%20font-size%3D'9'%20fill%3D'rgba(255%2C255%2C255%2C0.6)'%3Eplaceholder%20%C2%B7%20replace%20with%20Wikimedia%20Commons%20URL%3C%2Ftext%3E%0A%20%20%3C%2Fsvg%3E",
+              "date": "1920",
+              "title": "1920 年北大红楼"
+            }
+          ],
+          "coordinates": {
+            "lat": 39.9233,
+            "lon": 116.3991
+          }
+        },
+        {
+          "start_date": "1937",
+          "end_date": "1945",
+          "name": "国立北京大学（西南联大）",
+          "type": "university",
+          "status": "relocated",
+          "coordinates": {
+            "lat": 25.0589,
+            "lon": 102.695
+          },
+          "description": "1937 年与清华、南开合组西南联大，迁昆明。",
+          "description_provenance": "manual",
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:pku_history",
+            "created_via": "manual",
+            "created_at": "2026-08-20T08:02:00Z"
+          }
+        },
+        {
+          "start_date": "1946",
+          "name": "北京大学",
+          "type": "university",
+          "status": "active",
+          "description": "1946 年回迁，1952 年院系调整后迁至现燕园校址。原马神庙/沙滩/红楼校址移交给其他单位使用。",
+          "description_provenance": "manual",
+          "confidence": 0.95,
+          "sources": [
+            "https://zh.wikipedia.org/wiki/北京大学"
+          ],
+          "contributed_by": {
+            "created_by": "user:pku_history",
+            "created_via": "manual",
+            "created_at": "2026-08-20T08:03:00Z"
+          }
+        }
+      ]
+    }
+  ]
+}
