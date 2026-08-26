@@ -248,6 +248,7 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
   <div class="legend">
     <i style="background:#e8743b"></i>大=当年记忆多&nbsp;
     <i style="background:#2e9e5b"></i>绿=亲历多&nbsp;
+    <i style="background:#8fa8bd"></i>蓝=还没人留记忆&nbsp;
     <i style="background:#b8b0a2"></i>灰点=已消失的学校，点开看它的故事
     <button class="legendbtn" onclick="Home.demo(true)">▶ 再看一遍</button>
   </div>
@@ -870,7 +871,8 @@ const Home={
     return {n:list.length,ratio:human.length?fh/human.length:null};
   },
   confColor(w){
-    if(!w.n||w.ratio==null)return '#b8b0a2';
+    if(!w.n)return '#8fa8bd'; /* 当年窗口 0 记忆：蓝灰——与"已消失"的幽灵灰区分开 */
+    if(w.ratio==null)return '#b8b0a2';
     return w.ratio>=0.7?'#2e9e5b':(w.ratio>=0.4?'#e8a03b':'#b8b0a2');
   },
   refresh(){
@@ -959,6 +961,7 @@ const Home={
     const q=$('searchInput').value.trim(),drop=$('searchDrop');
     if(!q){drop.classList.remove('show');return;}
     const hits=Store.db.entities.filter(e=>{
+      if(this.viewIds&&!this.viewIds[e.ste_id])return false; /* 搜索限定当前城市视图 */
       if(e.name.primary.includes(q))return true;
       if((e.name.aliases||[]).some(a=>a.includes(q)))return true;
       return e.timeline.some(s=>s.name.includes(q)); /* 所有时期的名字 */
@@ -969,20 +972,42 @@ const Home={
           return '<div class="sd-item" onclick="Detail.open(\''+e.ste_id+'\');$(\'searchDrop\').classList.remove(\'show\')">'
             +'<span class="nm">'+esc(e.name.primary)+'</span><span class="yr">'+firstY+'–'+(lastEnd||'今')+'</span></div>';
         }).join('')
-      :'<div class="sd-item" onclick="requestSchool(this.dataset.q)" data-q="'+esc(q)+'"><span style="color:var(--pri);font-size:12px">没有找到「'+esc(q)+'」？<b>留下校名</b>，母校开通后通知你</span></div>';
+      :'<div class="sd-item" style="display:block" onclick="event.stopPropagation()">'
+        +'<div style="font-size:12px">「'+esc(q)+'」还没开通（当前在'+esc(this.city)+'找的学校里都没有）</div>'
+        +'<input id="missCity" value="'+esc(this.city)+'" placeholder="在哪个城市？" style="width:100%;height:30px;margin-top:8px;padding:0 10px;border:1px solid var(--line);border-radius:8px;font-size:12px"/>'
+        +'<div style="display:flex;gap:8px;margin-top:8px">'
+        +'<button style="flex:1;padding:7px 0;border-radius:8px;border:1.5px solid var(--pri);color:var(--pri);background:var(--card);font-size:12px;font-weight:700" onclick="Home.missRequest()">📌 留下校名</button>'
+        +'<button style="flex:1;padding:7px 0;border-radius:8px;background:var(--pri);color:#fff;font-size:12px;font-weight:700" onclick="Home.missMemo()">✍️ 顺便留条记忆</button>'
+        +'</div>'
+        +'<div style="font-size:10px;color:var(--sub);margin-top:6px">学校开通后通知你；记忆会先存进你的个人中心，开通后自动挂靠</div></div>';
     drop.classList.add('show');
+  },
+  /* 搜索 miss：留名（带城市） */
+  missRequest(){
+    const q=$('searchInput').value.trim();if(!q)return;
+    const city=($('missCity')&&$('missCity').value.trim())||null;
+    requestSchool(q,city);
+    $('searchDrop').classList.remove('show');
+  },
+  /* 搜索 miss：留名 + 孤儿 memo（学校未开通，记忆先存个人中心，开通后挂靠） */
+  missMemo(){
+    const q=$('searchInput').value.trim();if(!q)return;
+    const city=($('missCity')&&$('missCity').value.trim())||null;
+    requestSchool(q,city);
+    $('searchDrop').classList.remove('show');
+    Upload.open(null,city?q+'（'+city+'）':q);
   }
 };
 </script>
 <script>
 /* ================= 分享 ================= */
-function requestSchool(name){
+function requestSchool(name,city){
   try{
     const a=JSON.parse(localStorage.getItem('ste_school_requests')||'[]');
-    a.push({name:name,at:new Date().toISOString()});
+    a.push({name:name,city:city||null,at:new Date().toISOString()});
     localStorage.setItem('ste_school_requests',JSON.stringify(a));
   }catch(e){}
-  toast('已记下，母校开通后第一时间告诉你');
+  toast('已记下'+(city?'（'+city+'）':'')+'，母校开通后第一时间告诉你');
 }
 const Share={
   /* 分享链接：带状态，接收方打开直达同校同年（冷启动也能恢复） */
@@ -1214,12 +1239,13 @@ const Detail={
 
 /* ================= 上传流程（产物 = ste-memo 文档） ================= */
 const Upload={
-  sid:null, draft:null, recog:null, recText:'', photoData:null,
-  open(sid){
+  sid:null, draft:null, recog:null, recText:'', photoData:null, orphanPlace:null,
+  open(sid,orphanPlace){
     if(sid&&Store.histIds[sid]){toast('演示数据包为只读，暂不能上传记忆');return;}
-    /* 默认落第一所可上传实体（跳过叠加包只读实体） */
-    if(!sid){const first=Store.db.entities.find(e=>!Store.histIds[e.ste_id]);sid=first?first.ste_id:Store.db.entities[0].ste_id;}
-    this.sid=sid;
+    this.orphanPlace=orphanPlace||null;
+    /* 默认落第一所可上传实体（跳过叠加包只读实体）；孤儿模式不选学校 */
+    if(!sid&&!orphanPlace){const first=Store.db.entities.find(e=>!Store.histIds[e.ste_id]);sid=first?first.ste_id:Store.db.entities[0].ste_id;}
+    this.sid=sid||null;
     this.draft=null;this.photoData=null;
     $('rawText').value='';$('confirmCard').classList.remove('show');$('aiSteps').classList.remove('show');
     $('photoInput').value='';$('pubErr').style.display='none';
@@ -1255,18 +1281,25 @@ const Upload={
     }
   },
   renderChips(){
-    $('schChips').innerHTML=Store.db.entities.filter(e=>!Store.histIds[e.ste_id]).map(e=>{
+    /* 孤儿模式：最前面一枚"待开通学校"chip（cur）；点真实学校 chip 即脱离孤儿模式 */
+    const orphanChip=this.orphanPlace
+      ?'<button class="chip cur" onclick="Upload.pickOrphan()">📝 '+esc(this.orphanPlace)+'（待开通）</button>':'';
+    $('schChips').innerHTML=orphanChip+Store.db.entities.filter(e=>!Store.histIds[e.ste_id]).map(e=>{
       const gone=snapEndY(curSnap(e))!=null;
-      return '<button class="chip'+(e.ste_id===this.sid?' cur':'')+(gone?' gone':'')+'" onclick="Upload.pick(\''+e.ste_id+'\')">'+esc(shortName(e))+(gone?'（已撤并）':'')+'</button>';
+      return '<button class="chip'+(e.ste_id===this.sid&&!this.orphanPlace?' cur':'')+(gone?' gone':'')+'" onclick="Upload.pick(\''+e.ste_id+'\')">'+esc(shortName(e))+(gone?'（已撤并）':'')+'</button>';
     }).join('')+'<button class="chip" onclick="Upload.requestNew()">＋ 找不到学校</button>';
   },
   requestNew(){
     let n=null;
-    try{n=prompt('写下你的校名，母校开通后第一个通知你');}catch(e){}
-    if(n&&n.trim())requestSchool(n.trim());
+    try{n=prompt('写下你的校名，母校开通后第一个通知你（格式：校名，城市）');}catch(e){}
+    if(n&&n.trim()){
+      const parts=n.trim().split(/[,，]/);
+      requestSchool(parts[0].trim(),parts[1]?parts[1].trim():null);
+    }
     else if(n===null)toast('也可以直接在首页搜校名，搜不到就能留名');
   },
-  pick(sid){this.sid=sid;this.renderChips();},
+  pick(sid){this.sid=sid;this.orphanPlace=null;this.renderChips();},
+  pickOrphan(){this.sid=null;this.renderChips();},
   startTalk(ev){
     ev.preventDefault();
     const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -1332,11 +1365,16 @@ const Upload={
     const tags=$('cfTags').value.split(/[,，]/).map(s=>s.trim()).filter(Boolean);
     const price=parseFloat($('cfPrice').value);
     const placeText=$('cfPlace').value.trim();
-    const e=Store.get(this.sid);
+    const e=this.sid?Store.get(this.sid):null;
+    if(!e&&!this.orphanPlace){toast('请选择学校');return;}
+    /* 孤儿 memo：学校未开通，place_text=校名（城市）· 用户补的地点 */
+    const orphanPlaceText=!e
+      ?this.orphanPlace+(placeText?' · '+placeText:'')
+      :(placeText||null);
     /* 构造 memo → 整份过 validateMEMO，通过才入库 */
-    const memo=buildMemo({ste_id:e.ste_id,text:raw,year:y,
+    const memo=buildMemo({ste_id:e?e.ste_id:null,text:raw,year:y,
       sok:$('cfSok').value,aid:$('cfAid').value,tags:tags,
-      price:isNaN(price)?null:price,place:placeText||null,photo:!!this.photoData,photoData:this.photoData});
+      price:isNaN(price)?null:price,place:orphanPlaceText,photo:!!this.photoData,photoData:this.photoData});
     const v=validateMEMO(memo);
     if(!v.ok){
       $('pubErr').style.display='';
@@ -1348,6 +1386,11 @@ const Upload={
     if(memo.author.startsWith('anon:')&&!Store.db.myTokens.includes(memo.author))Store.db.myTokens.push(memo.author);
     Store.save();
     $('pubErr').style.display='none';
+    if(!e){
+      toast('已发布 · 学校开通后自动挂靠到你的记忆');
+      Me.open();
+      return;
+    }
     const covered=snapAt(e,y)!=null;
     toast('已发布，谢谢你的记忆'+(covered?'':' · 提示：该校 '+y+' 年已不存在'));
     Detail.open(this.sid);
@@ -1374,6 +1417,7 @@ const Me={
             :'<div class="tx">'+esc(m.text)+'</div>';
           return '<div class="memcard" style="margin:0 0 8px">'+body
             +'<div class="ft"><span class="tag">'+esc(e?shortName(e):(m.place_text||'未关联'))+'</span>'
+            +(e?'':'<span class="badge axis">📝 待挂靠学校</span>')
             +'<span class="badge '+(m.source_of_knowledge==='firsthand'?'fh':'sh')+'">'+(SOK_LAB[m.source_of_knowledge]||'')+'</span>'
             +(m.author_identity==='escrowed_anonymous'?'<span class="badge axis">托管匿名</span>':'')
             +(m.retracted?'':'<button class="retractbtn" onclick="Me.retract(\''+m.memo_id+'\')">撤回</button>')
