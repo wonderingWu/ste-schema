@@ -80,6 +80,22 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
   box-shadow:0 4px 14px rgba(232,116,59,.4)}
 .bigadd:active{background:var(--pri-d)}
 
+/* ============ marker 浮层卡（点标记弹出不跳页） ============ */
+.stepop .leaflet-popup-content-wrapper{border-radius:14px;background:var(--card);box-shadow:0 8px 28px rgba(43,38,32,.25);padding:0}
+.stepop .leaflet-popup-content{margin:0;width:270px!important;line-height:1.5;font-size:13px;color:var(--ink)}
+.stepop .leaflet-popup-tip{background:var(--card)}
+.ppcard{padding:12px 12px 10px}
+.ppnm{font-size:15px;font-weight:800;color:var(--pri-d)}
+.ppmeta{font-size:11px;color:var(--sub);margin-top:2px}
+.ppphotos{display:flex;gap:6px;overflow-x:auto;margin-top:8px;-webkit-overflow-scrolling:touch}
+.ppphotos img{height:86px;border-radius:8px;flex:none;display:block}
+.ppphotos video{height:86px;border-radius:8px;flex:none;display:block;background:#000}
+.ppq{margin-top:8px;font-size:12px;color:var(--ink);border-left:3px solid var(--line);padding-left:8px}
+.ppq span{display:block;font-size:10px;color:var(--sub);margin-top:2px}
+.ppbtns{display:flex;gap:8px;margin-top:10px}
+.ppbtns button{flex:1;padding:7px 0;border-radius:9px;background:var(--pri);color:#fff;font-size:12px;font-weight:700}
+.ppbtns button.sub{background:var(--card);color:var(--pri);border:1.5px solid var(--pri)}
+
 /* ============ 通用页头 ============ */
 .phead{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:12px;
   background:rgba(247,244,238,.97);border-bottom:1px solid var(--line)}
@@ -253,6 +269,7 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
     <button class="back" onclick="Router.home()">←</button>
     <div class="ttl" id="schTtl">学校</div>
     <button class="iconbtn" onclick="Share.school()" title="分享这所学校">📤</button>
+    <button class="iconbtn" onclick="Share.card()" title="生成分享卡">🖼</button>
     <button class="iconbtn" onclick="toast('已关注（原型演示）')">⭐</button>
   </div>
   <div class="pbody">
@@ -680,8 +697,10 @@ function buildMemo(opts){
     m.claims=[claim];
   }
   if(opts.photo){
-    m.media=[{type:'photo',ste_asset_id:opts.assetId||('asset-'+uuid4().slice(0,8)),
-      date:String(opts.year),title:(tags[0]||'记忆')+'（用户上传，演示）'}];
+    const item={type:'photo',date:String(opts.year),title:(tags[0]||'记忆')+'（用户上传）'};
+    if(opts.photoData)item.url=opts.photoData; /* 真实照片（canvas 压缩后的 data URL） */
+    else{item.ste_asset_id=opts.assetId||('asset-'+uuid4().slice(0,8));item.title+='·演示占位';}
+    m.media=[item];
   }
   m.contributed_by={created_by:'agent:rule-demo',created_via:'ai_extraction',ai_model:'rule-engine-demo',
     confirmed_by:[author],created_at:now};
@@ -759,7 +778,7 @@ const Home={
     $('searchInput').addEventListener('input',()=>this.search());
     document.addEventListener('click',e=>{if(!e.target.closest('.searchbox'))$('searchDrop').classList.remove('show');});
     this.refresh();
-    if(!localStorage.getItem('ste_demo_seen_v1')){localStorage.setItem('ste_demo_seen_v1','1');setTimeout(()=>this.demo(false),600);}
+    if(!localStorage.getItem('ste_demo_seen_v1')&&!/[?&](school|year)=/.test(location.search)){localStorage.setItem('ste_demo_seen_v1','1');setTimeout(()=>this.demo(false),600);}
     /* 联调模式：?debug=historic 叠加历史名校 12 校（只读，内存合并，不写 localStorage、不动种子） */
     if(/[?&]debug=historic/.test(location.search))this.loadHistoric();
   },
@@ -872,11 +891,13 @@ const Home={
           {color:'#e8743b',weight:2,opacity:.6,dashArray:'4 6'}).addTo(this.map));
       }
       if(!snap){
-        /* 已撤并（Y > end_date 年）→ 灰色幽灵点 */
+        /* 已撤并（Y > end_date 年）→ 灰色幽灵点；点它弹浮层——它的故事就是"这里曾经是什么" */
         visible++;
         const ghost=L.circleMarker([e.coordinates.lat,e.coordinates.lon],
           {radius:4,color:'#c9c0b2',weight:1,fillColor:'#c9c0b2',fillOpacity:0.25}).addTo(this.map);
         ghost.bindTooltip(esc(shortName(e))+'（'+firstY+'–'+lastEnd+'）',{direction:'top'});
+        ghost.bindPopup('',{maxWidth:290,className:'stepop'});
+        ghost.on('popupopen',ev=>{ev.popup.setContent(this.popHtml(e));});
         this.markers[e.ste_id]=ghost;
         return;
       }
@@ -896,10 +917,43 @@ const Home={
       /* marker 随时间移动：快照带坐标（迁址期）就落在快照坐标上 */
       const pos=snap.coordinates||e.coordinates;
       const mk=L.marker([pos.lat,pos.lon],{icon}).addTo(this.map);
-      mk.on('click',()=>Detail.open(e.ste_id));
+      /* 浮层卡：点击不跳页，popupopen 时现算内容（memo 可能刚发布过） */
+      mk.bindPopup('',{maxWidth:290,className:'stepop'});
+      mk.on('popupopen',ev=>{ev.popup.setContent(this.popHtml(e));});
       this.markers[e.ste_id]=mk;
     });
     $('homeStat').textContent=(this.viewIds?'📍 '+this.city+'（演示包） · ':(this.historic?'🧪 联调 · 全国 · ':'📍 石家庄 · '))+y+'年在地图上的学校 '+visible+' 所 · 当年记忆 '+winTotal+' 条 · 全库 '+Store.db.memos.length+' 条';
+  },
+  /* marker 浮层卡内容：当年校名 + 年代 + 照片横滑（仅真实照片，宁缺毋滥）+ 最多 2 条记忆摘要 + 入口按钮 */
+  popHtml(e){
+    const y=this.year;
+    const snap=snapAt(e,y)||curSnap(e);
+    const firstY=snapStartY(e.timeline[0]),lastEnd=snapEndY(curSnap(e));
+    const memos=Store.memosOf(e.ste_id).filter(m=>!m.retracted);
+    /* 当年窗口 ±2 年优先，没有就用最新 */
+    const win=memos.filter(m=>{const my=memoYear(m);return my!=null&&Math.abs(my-y)<=2;});
+    const top=(win.length?win:memos).slice(0,2);
+    const quotes=top.map(m=>'<div class="ppq">“'+esc(m.text.length>60?m.text.slice(0,60)+'…':m.text)
+      +'”<span>—— '+esc(authorLabel(m.author))+(memoYear(m)?' · '+memoYear(m):'')+'</span></div>').join('');
+    /* 媒体条：真实照片横滑；视频静音循环自动播（容器预留） */
+    const imgs=[],vids=[];
+    memos.forEach(m=>(m.media||[]).forEach(x=>{
+      if(!x.url)return;
+      if(x.type==='photo'&&x.url.indexOf('data:image')===0)imgs.push(x.url);
+      if(x.type==='video')vids.push(x.url);
+    }));
+    const strip=(imgs.length||vids.length)
+      ?'<div class="ppphotos">'+vids.map(u=>'<video src="'+u+'" autoplay muted loop playsinline></video>').join('')
+        +imgs.map(u=>'<img src="'+u+'" alt=""/>').join('')+'</div>':'';
+    const ro=!!Store.histIds[e.ste_id];
+    return '<div class="ppcard">'
+      +'<div class="ppnm">'+esc(snap.name)+'</div>'
+      +'<div class="ppmeta">'+firstY+'–'+(lastEnd?lastEnd+' · 已撤并':'今')+(ro?' · 📦 演示数据包':'')+'</div>'
+      +strip
+      +(quotes||'<div class="ppq" style="color:var(--sub)">还没有记忆，第一条会很重要</div>')
+      +'<div class="ppbtns"><button onclick="Home.map.closePopup();Detail.open(\''+e.ste_id+'\')">看全部 ›</button>'
+      +(ro?'':'<button class="sub" onclick="Home.map.closePopup();Upload.open(\''+e.ste_id+'\')">＋ 写记忆</button>')
+      +'</div></div>';
   },
   search(){
     const q=$('searchInput').value.trim(),drop=$('searchDrop');
@@ -931,27 +985,75 @@ function requestSchool(name){
   toast('已记下，母校开通后第一时间告诉你');
 }
 const Share={
-  send(text){
-    if(navigator.share){navigator.share({title:'曾经的母校',text:text}).catch(()=>{});}
-    else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(()=>toast('已复制，去粘贴分享吧'),()=>toast(text));}
-    else toast(text);
+  /* 分享链接：带状态，接收方打开直达同校同年（冷启动也能恢复） */
+  link(params){return location.origin+location.pathname+'?'+params;},
+  send(text,url){
+    const full=url?text+' '+url:text;
+    if(navigator.share){navigator.share({title:'曾经的母校',text:text,url:url||undefined}).catch(()=>{});}
+    else if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(full).then(()=>toast('已复制（含链接），去粘贴分享吧'),()=>toast(full));}
+    else toast(full);
   },
   year(){
     const y=Home.year;
     const visible=Store.db.entities.filter(e=>(!Home.viewIds||Home.viewIds[e.ste_id])&&snapAt(e,y)).length;
-    this.send(y+'年的'+(Home.city||'石家庄')+'，'+visible+' 所母校在地图上，校名还是当年的样子 —— 你的母校还在这里吗？');
+    this.send(y+'年的'+(Home.city||'石家庄')+'，'+visible+' 所母校在地图上，校名还是当年的样子 —— 你的母校还在这里吗？',
+      this.link('year='+y));
   },
   school(){
     const e=Store.get(Detail.sid);if(!e)return;
     const firstY=snapStartY(e.timeline[0]),lastEnd=snapEndY(curSnap(e));
     const memos=Store.memosOf(e.ste_id).filter(m=>!m.retracted);
     const alumni=[...new Set(memos.map(m=>authorLabel(m.author)))].length;
-    this.send(e.name.primary+' '+firstY+'–'+(lastEnd||'今')+(lastEnd?' · 已撤并':'')+' · '+alumni+' 位校友留下 '+memos.length+' 条记忆 —— 你的母校还在这里吗？');
+    this.send(e.name.primary+' '+firstY+'–'+(lastEnd||'今')+(lastEnd?' · 已撤并':'')+' · '+alumni+' 位校友留下 '+memos.length+' 条记忆 —— 你的母校还在这里吗？',
+      this.link('school='+e.ste_id+'&year='+Home.year));
   },
   memo(m){
     if(!m)return;
     const y=memoYear(m);
-    this.send('「'+m.text.slice(0,50)+(m.text.length>50?'…':'')+'」—— 一位'+(m.source_of_knowledge==='firsthand'?'亲历':'转述')+'校友的'+(y||'')+'年记忆 · 你的母校还在这里吗？');
+    const url=m.ste_id?this.link('school='+m.ste_id+(y?'&year='+y:'')):null;
+    this.send('「'+m.text.slice(0,50)+(m.text.length>50?'…':'')+'」—— 一位'+(m.source_of_knowledge==='firsthand'?'亲历':'转述')+'校友的'+(y||'')+'年记忆 · 你的母校还在这里吗？',url);
+  },
+  /* 分享卡：canvas 海报 1080×1350，纯前端生成，可下载 */
+  card(){
+    const e=Store.get(Detail.sid);if(!e)return;
+    const firstY=snapStartY(e.timeline[0]),lastEnd=snapEndY(curSnap(e));
+    const memos=Store.memosOf(e.ste_id).filter(m=>!m.retracted);
+    const quote=memos.length?memos[0].text:'';
+    const cv=document.createElement('canvas');cv.width=1080;cv.height=1350;
+    const c=cv.getContext('2d');
+    c.fillStyle='#f7f4ee';c.fillRect(0,0,1080,1350);
+    /* 顶部印章条 */
+    c.fillStyle='#c95a24';c.fillRect(0,0,1080,120);
+    c.fillStyle='#f7f4ee';c.font='bold 44px serif';c.textAlign='center';
+    c.fillText('你的母校还在这里吗？',540,78);
+    /* 地图点 motif */
+    c.fillStyle='#e8743b';c.beginPath();c.arc(540,420,150,0,7);c.fill();
+    c.fillStyle='#f7f4ee';c.beginPath();c.arc(540,420,60,0,7);c.fill();
+    /* 校名与年代 */
+    c.fillStyle='#2b2620';c.font='bold 96px serif';
+    const nm=e.name.primary.length>10?e.name.primary.slice(0,10):e.name.primary;
+    c.fillText(nm,540,700);
+    c.font='44px serif';c.fillStyle='#8a8073';
+    c.fillText(firstY+' – '+(lastEnd?lastEnd+' · 已撤并':'今'),540,780);
+    /* 金句记忆 */
+    if(quote){
+      c.font='36px serif';c.fillStyle='#5c5344';
+      const q=quote.length>56?quote.slice(0,56)+'…':quote;
+      const mid=Math.ceil(q.length/2);
+      c.fillText('“'+q.slice(0,mid),540,920);
+      c.fillText(q.slice(mid)+'”',540,980);
+      c.font='28px serif';c.fillStyle='#8a8073';
+      c.fillText('—— 一位'+(memos[0].source_of_knowledge==='firsthand'?'亲历':'转述')+'校友的记忆',540,1050);
+    }
+    /* 底部链接 */
+    c.fillStyle='#c95a24';c.font='30px sans-serif';
+    c.fillText(this.link('school='+e.ste_id),540,1260);
+    c.strokeStyle='#e8e1d5';c.lineWidth=2;c.strokeRect(30,30,1020,1290);
+    const a=document.createElement('a');
+    a.href=cv.toDataURL('image/png');
+    a.download='母校分享卡-'+e.name.primary+'.png';
+    a.click();
+    toast('分享卡已生成下载，发给校友群吧');
   }
 };
 
@@ -1015,8 +1117,10 @@ const Detail={
     if(ev.retracted)return '<span class="evchip">🪦 证据已被撤回</span>';
     const ICON={photo:'📷',document:'📄',oral:'🎙',audio:'🎙',video:'🎬',map:'🗺',satellite:'🛰'};
     const yr=ev.date?+String(ev.date).slice(0,4):null;
-    const thumb=ev.type==='photo'?'<img src="'+memoryPhoto(ev.title||'照片',yr)+'" alt=""/>':'';
-    const ptr=ev.offline?'线下':(ev.ste_asset_id?'资产':'链接');
+    /* 真实照片（用户上传的 data URL）直接渲染；asset 占位才用 SVG 占位图 */
+    const imgSrc=ev.type==='photo'?(ev.url&&ev.url.indexOf('data:image')===0?ev.url:memoryPhoto(ev.title||'照片',yr)):null;
+    const thumb=imgSrc?'<img src="'+imgSrc+'" alt=""/>':'';
+    const ptr=ev.offline?'线下':(ev.ste_asset_id?'资产':(ev.url&&ev.url.indexOf('data:')===0?'照片':'链接'));
     return '<span class="evchip" title="'+esc(ptr)+'">'
       +thumb+(ICON[ev.type]||'📎')+' '+esc(ev.title||ev.url||ev.ste_asset_id||ev.type)+(ev.date?' · '+esc(ev.date):'')+'</span>';
   },
@@ -1130,7 +1234,23 @@ const Upload={
       $('talkBtn').addEventListener('touchend',()=>Upload.stopTalk());
       $('photoInput').addEventListener('change',e=>{
         const f=e.target.files[0];if(!f)return;
-        const rd=new FileReader();rd.onload=()=>{Upload.photoData=rd.result;toast('照片已附加，发布时将写入 memo.media');};rd.readAsDataURL(f);
+        if(!/^image\//.test(f.type)){toast('只支持图片文件');return;}
+        /* 压缩后存 data URL：localStorage 5MB 配额，最长边 1280 / JPEG 0.8 */
+        const rd=new FileReader();
+        rd.onload=()=>{
+          const img=new Image();
+          img.onload=()=>{
+            const k=Math.min(1,1280/Math.max(img.width,img.height));
+            const cv=document.createElement('canvas');
+            cv.width=Math.round(img.width*k);cv.height=Math.round(img.height*k);
+            cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+            Upload.photoData=cv.toDataURL('image/jpeg',0.8);
+            toast('照片已附加（已压缩），发布时随记忆一起保存');
+          };
+          img.onerror=()=>toast('图片读取失败，换一张试试');
+          img.src=rd.result;
+        };
+        rd.readAsDataURL(f);
       });
     }
   },
@@ -1216,7 +1336,7 @@ const Upload={
     /* 构造 memo → 整份过 validateMEMO，通过才入库 */
     const memo=buildMemo({ste_id:e.ste_id,text:raw,year:y,
       sok:$('cfSok').value,aid:$('cfAid').value,tags:tags,
-      price:isNaN(price)?null:price,place:placeText||null,photo:!!this.photoData});
+      price:isNaN(price)?null:price,place:placeText||null,photo:!!this.photoData,photoData:this.photoData});
     const v=validateMEMO(memo);
     if(!v.ok){
       $('pubErr').style.display='';
@@ -1294,6 +1414,36 @@ const Me={
 /* ================= 启动 ================= */
 Store.load();
 Home.init();
+/* 分享链接状态恢复：?school=<ste_id>&year=1986 —— 接收方打开直达同校同年 */
+(function(){
+  try{
+    const q=new URLSearchParams(location.search);
+    const y=+q.get('year'),sid=q.get('school');
+    if(y&&y>=1879&&y<=2026)Home.setYear(y);
+    if(sid){
+      const e=Store.get(sid);
+      if(e){Home.map.setView([e.coordinates.lat,e.coordinates.lon],16);Detail.open(sid);}
+      else{
+        /* 学校可能在京/沪城市包里：加载包后切城再打开 */
+        const s=document.createElement('script');s.src='city-packs.js';
+        s.onload=function(){
+          Home.packLib=window.STE_CITY_PACKS||{};
+          const cities=Object.keys(Home.packLib);
+          for(let i=0;i<cities.length;i++){
+            const hit=Home.packLib[cities[i]].entities.find(x=>x.ste_id===sid);
+            if(hit){
+              Home.applyCity(cities[i]);$('citySel').value=cities[i];
+              const ee=Store.get(sid);
+              if(ee){Home.map.setView([ee.coordinates.lat,ee.coordinates.lon],15);Detail.open(sid);}
+              return;
+            }
+          }
+        };
+        document.head.appendChild(s);
+      }
+    }
+  }catch(err){}
+})();
 </script>
 </body>
 </html>
