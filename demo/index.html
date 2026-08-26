@@ -948,14 +948,34 @@ const Home={
       ?'<div class="ppphotos">'+vids.map(u=>'<video src="'+u+'" autoplay muted loop playsinline></video>').join('')
         +imgs.map(u=>'<img src="'+u+'" alt=""/>').join('')+'</div>':'';
     const ro=!!Store.histIds[e.ste_id];
+    /* 跨城/迁址（西南联大式）：有轨迹时给"看全程"入口；当前快照明显不在基准城时提示"这一年不在这里" */
+    const pts=trajPoints(e);
+    let trajHtml='';
+    if(pts.length>1){
+      const cur=snapAt(e,y);
+      const away=cur&&cur.coordinates
+        &&(Math.abs(cur.coordinates.lat-e.coordinates.lat)>0.3||Math.abs(cur.coordinates.lon-e.coordinates.lon)>0.3);
+      trajHtml='<div class="ppmeta" style="color:#c95a24;margin-top:4px">'
+        +(away?'📍 这一年校址不在这里（迁址途中）<br>':'')+'✈️ 这所学校几经周折，有完整迁址轨迹</div>';
+    }
     return '<div class="ppcard">'
       +'<div class="ppnm">'+esc(snap.name)+'</div>'
       +'<div class="ppmeta">'+firstY+'–'+(lastEnd?lastEnd+' · 已撤并':'今')+(ro?' · 📦 演示数据包':'')+'</div>'
+      +trajHtml
       +strip
       +(quotes||'<div class="ppq" style="color:var(--sub)">还没有记忆，第一条会很重要</div>')
       +'<div class="ppbtns"><button onclick="Home.map.closePopup();Detail.open(\''+e.ste_id+'\')">看全部 ›</button>'
+      +(pts.length>1?'<button class="sub" onclick="Home.showTraj(\''+e.ste_id+'\')">🗺 全程轨迹</button>':'')
       +(ro?'':'<button class="sub" onclick="Home.map.closePopup();Upload.open(\''+e.ste_id+'\')">＋ 写记忆</button>')
       +'</div></div>';
+  },
+  /* 全程轨迹展演：fitBounds 到迁址路径全程（跨城实体的"几经周折"一眼看完） */
+  showTraj(sid){
+    const e=Store.get(sid);if(!e)return;
+    const pts=trajPoints(e);
+    if(pts.length>1)this.map.fitBounds(L.latLngBounds(pts.map(p=>[p.lat,p.lon])).pad(0.15));
+    this.map.closePopup();
+    toast('橙色虚线=它的完整迁址路 · 拖滑条看它怎么走');
   },
   search(){
     const q=$('searchInput').value.trim(),drop=$('searchDrop');
