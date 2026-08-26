@@ -96,6 +96,24 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
 .ppbtns button{flex:1;padding:7px 0;border-radius:9px;background:var(--pri);color:#fff;font-size:12px;font-weight:700}
 .ppbtns button.sub{background:var(--card);color:var(--pri);border:1.5px solid var(--pri)}
 
+/* ============ 图例折叠 + 城市卡片页 ============ */
+.legendcolors{display:none}
+.legendcolors.show{display:inline}
+.homestat a{color:var(--pri);cursor:pointer;font-weight:700}
+.citypanel{position:fixed;inset:0;z-index:1200;background:rgba(43,38,32,.45);display:none}
+.citypanel.show{display:block}
+.citysheet{position:absolute;left:0;right:0;bottom:0;background:var(--paper);border-radius:20px 20px 0 0;padding:18px 16px 22px;max-height:75%;overflow-y:auto}
+.csttl{font-size:16px;font-weight:800;color:var(--pri-d);margin-bottom:12px}
+.citycard{background:var(--card);border-radius:14px;padding:13px 14px;margin-bottom:10px;box-shadow:0 1px 6px rgba(0,0,0,.08);display:flex;align-items:center;gap:12px}
+.citycard .cnm{font-size:15px;font-weight:800}
+.citycard .chk{font-size:11px;color:var(--sub);margin-top:3px}
+.citycard .cgo{margin-left:auto;color:var(--pri);font-weight:700;font-size:13px;flex:none}
+.citycard.gone{opacity:.6}
+.csclose{display:block;width:100%;margin-top:6px;padding:11px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:13px;color:var(--sub)}
+.moretoggle{margin-top:10px;font-size:12px;color:var(--sub);cursor:pointer}
+.fgridmore{display:none}
+.fgridmore.show{display:block}
+
 /* ============ 通用页头 ============ */
 .phead{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;padding:12px;
   background:rgba(247,244,238,.97);border-bottom:1px solid var(--line)}
@@ -232,35 +250,42 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
   <div class="topbar" style="flex-direction:column;align-items:stretch;gap:0">
     <div class="heroline">你的母校还在这里吗？<span id="heroSub">石家庄 · 1947–2026</span></div>
     <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
-      <select id="citySel" class="citysel" onchange="Home.setCity(this.value)" title="切换城市">
-        <option value="石家庄">石家庄</option>
-        <option value="北京">北京</option>
-        <option value="上海">上海</option>
-      </select>
       <div class="searchbox">
         <input id="searchInput" placeholder="搜索学校（含历史校名）…" autocomplete="off"/>
         <div class="searchdrop" id="searchDrop"></div>
       </div>
       <button class="iconbtn" onclick="Share.year()" title="分享">📤</button>
-      <button class="iconbtn" onclick="Me.open()" title="个人中心">👤</button>
+      <button class="iconbtn" onclick="Me.open()" title="我的记忆匣子">👤</button>
     </div>
   </div>
   <div class="legend">
-    <i style="background:#e8743b"></i>大=当年记忆多&nbsp;
-    <i style="background:#2e9e5b"></i>绿=亲历多&nbsp;
-    <i style="background:#8fa8bd"></i>蓝=还没人留记忆&nbsp;
-    <i style="background:#b8b0a2"></i>灰点=已消失的学校，点开看它的故事
     <button class="legendbtn" onclick="Home.demo(true)">▶ 再看一遍</button>
+    <button class="legendbtn" onclick="$('legendColors').classList.toggle('show')">ⓘ 图例</button>
+    <span id="legendColors" class="legendcolors">
+      <i style="background:#e8743b"></i>大=当年记忆多&nbsp;
+      <i style="background:#2e9e5b"></i>绿=亲历多&nbsp;
+      <i style="background:#8fa8bd"></i>蓝=还没人留记忆&nbsp;
+      <i style="background:#b8b0a2"></i>灰点=已消失的学校，点开看它的故事
+    </span>
   </div>
   <div class="timebar">
     <span class="yr-big" id="yrBig">1986</span><span class="yr-cap">拖动滑条，看学校变回当年的名字</span>
     <button class="yrshare" onclick="Share.year()">📤 分享这一年的 TA</button>
     <input type="range" id="timeSlider" min="1947" max="2026" step="1" value="1986"/>
-    <div class="ticks"><span>1947</span><span>1957</span><span>1967</span><span>1977</span><span>1987</span><span>1997</span><span>2007</span><span>2017</span><span>2026</span></div>
+    <div class="ticks" id="ticks"></div>
   </div>
   <div class="homebot">
-    <div class="homestat" id="homeStat"></div>
+    <div class="homestat"><span id="homeStat"></span> · <a onclick="City.open()">📍 <span id="cityNm">石家庄</span> · 换个城市 ›</a></div>
     <button class="bigadd" onclick="Upload.open()">＋ 添加我的母校记忆</button>
+  </div>
+</div>
+
+<!-- ================= 城市卡片页（底部弹层；未开通城市=留名钩子） ================= -->
+<div class="citypanel" id="cityPanel" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="citysheet">
+    <div class="csttl">你在哪座城找母校？</div>
+    <div id="cityCards"></div>
+    <button class="csclose" onclick="$('cityPanel').classList.remove('show')">关闭</button>
   </div>
 </div>
 
@@ -271,7 +296,6 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
     <div class="ttl" id="schTtl">学校</div>
     <button class="iconbtn" onclick="Share.school()" title="分享这所学校">📤</button>
     <button class="iconbtn" onclick="Share.card()" title="生成分享卡">🖼</button>
-    <button class="iconbtn" onclick="toast('已关注（原型演示）')">⭐</button>
   </div>
   <div class="pbody">
     <div class="schcard" id="schCard"></div>
@@ -299,17 +323,19 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
     <textarea class="rawarea" id="rawText" placeholder="例如：我86年在四中读初一，学费是每学期8块钱，校服是白衬衫蓝裤子，我爸在中山路商店买的"></textarea>
     <div class="talkrow">
       <button class="talkbtn" id="talkBtn">🎤 按住说话</button>
-      <button class="aibtn" onclick="Upload.toAI()">🤖 AI 提取</button>
+      <button class="aibtn" onclick="Upload.toAI()">🤖 帮我整理</button>
     </div>
+    <div class="uplab" style="margin-top:2px">📷 加张老照片（选填）</div>
+    <input type="file" id="photoInput" accept="image/*" style="font-size:12px"/>
 
     <div class="aisteps" id="aiSteps"></div>
 
     <div class="confirmcard" id="confirmCard">
-      <div class="ct">🤖 AI 帮你整理好了，<span>看看对不对</span></div>
+      <div class="ct">🤖 帮你整理好了，<span>看看对不对</span></div>
       <div class="modernval" id="modernBox" style="display:none"></div>
       <div id="fgrid"></div>
-      <div class="uplab" style="margin-top:2px">📷 加张老照片（选填）</div>
-      <input type="file" id="photoInput" accept="image/*" style="font-size:12px"/>
+      <div class="moretoggle" onclick="$('fgridMore').classList.toggle('show')">⚙ 更多选项（关键词 / 金额 / 地点 / 署名）▾</div>
+      <div id="fgridMore" class="fgridmore"></div>
       <div class="privnote">🔒 坐标已做模糊处理，不会暴露精确位置；你的记忆随时可以撤回，撤回后原文彻底删除。</div>
       <div class="errlist" id="pubErr" style="display:none"></div>
       <button class="publishbtn" onclick="Upload.publish()">✓ 发布我的记忆</button>
@@ -322,7 +348,7 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
 <div class="page off-r" id="page-me">
   <div class="phead">
     <button class="back" onclick="Router.home()">←</button>
-    <div class="ttl">个人中心</div>
+    <div class="ttl">我的记忆匣子</div>
   </div>
   <div class="pbody">
     <div class="mestats">
@@ -338,6 +364,24 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
 </div>
 
 <div id="toast"></div>
+
+<!-- ================= admin-lite 看板（?debug=admin，纯前端读 localStorage，无后端） ================= -->
+<div class="page off-r" id="page-admin">
+  <div class="phead">
+    <button class="back" onclick="Router.home()">←</button>
+    <div class="ttl">🛠 admin-lite 看板</div>
+  </div>
+  <div class="pbody">
+    <div class="uplab">📌 留名需求（开城决策依据，同名校多次留名=需求强度）</div>
+    <div id="admReqs"></div>
+    <button class="expbtn" onclick="Admin.exportReqs()">⬇ 导出留名（JSON）</button>
+    <div class="uplab" style="margin-top:18px">📝 孤儿记忆（待挂靠学校）</div>
+    <div id="admOrphans"></div>
+    <div class="uplab" style="margin-top:18px">🧪 全库校验批跑（103 + 75 检查点）</div>
+    <button class="expbtn" onclick="Admin.runChecks()">▶ 跑一遍全库校验</button>
+    <div id="admChecks" style="margin-top:8px"></div>
+  </div>
+</div>
 
 <script>
 /* ==================================================================
@@ -769,6 +813,40 @@ const Router={
 };
 
 /* ================= 首页 · 4D地图 ================= */
+/* ================= 城市（视图维度，不是设置项） ================= */
+const City={
+  /* 城市卡片钩子文案 */
+  HOOKS:{'石家庄':'石家庄的老校门，从 1947 讲起','北京':'北大红楼、四存、北师大附中的西迁路','上海':'圣约翰的钟楼、上医旧影、56 所改名撤并的学校'},
+  /* 浏览器定位落框 → 城市名；落不进任何框返回 null */
+  detect(lat,lon){
+    const BOX={'北京':[39.3,41.1,115.4,117.6],'上海':[30.6,31.9,120.8,122.2],'石家庄':[37.4,38.9,113.5,115.3]};
+    for(const c of Object.keys(BOX)){const b=BOX[c];if(lat>=b[0]&&lat<=b[1]&&lon>=b[2]&&lon<=b[3])return c;}
+    return null;
+  },
+  open(){
+    const self=this;
+    const render=function(){
+      const cards=[{name:'石家庄',count:Store.db.entities.filter(e=>!Store.histIds[e.ste_id]).length}];
+      Object.keys(Home.packLib||{}).forEach(c=>cards.push({name:c,count:Home.packLib[c].entities.length}));
+      $('cityCards').innerHTML=cards.map(c=>
+        '<div class="citycard" onclick="City.pick(\''+c.name+'\')"><div><div class="cnm">'+esc(c.name)
+        +(c.name===Home.city?' <span class="badge live">当前</span>':'')+'</div>'
+        +'<div class="chk">'+esc(City.HOOKS[c.name]||'')+' · '+c.count+' 所学校</div></div>'
+        +'<span class="cgo">去看看 ›</span></div>').join('')
+      +'<div class="citycard gone" onclick="$(\'cityPanel\').classList.remove(\'show\');$(\'searchInput\').focus();toast(\'搜你的校名，搜不到就能留名\')"><div><div class="cnm">其他城市和县城</div>'
+      +'<div class="chk">还没开通——搜一下你的校名，留下它，凑齐就开城</div></div><span class="cgo">留名 ›</span></div>';
+      $('cityPanel').classList.add('show');
+    };
+    if(Home.packLib){render();return;}
+    Home.preloadPacks();
+    let n=0;const t=setInterval(()=>{if(Home.packLib||++n>40){clearInterval(t);render();}},100);
+  },
+  pick(name){
+    $('cityPanel').classList.remove('show');
+    if(name!==Home.city)Home.setCity(name);
+  }
+};
+
 const Home={
   map:null, year:1986, markers:{}, traj:[], historic:false,
   city:'石家庄', viewIds:null, overlayIds:null, packLib:null, packLoading:false,
@@ -779,9 +857,22 @@ const Home={
     $('searchInput').addEventListener('input',()=>this.search());
     document.addEventListener('click',e=>{if(!e.target.closest('.searchbox'))$('searchDrop').classList.remove('show');});
     this.refresh();
+    this.renderTicks();
     if(!localStorage.getItem('ste_demo_seen_v1')&&!/[?&](school|year)=/.test(location.search)){localStorage.setItem('ste_demo_seen_v1','1');setTimeout(()=>this.demo(false),600);}
+    /* 预载城市包（异步不阻塞）：搜索跨城感知 + 城市卡片页都要用 */
+    this.preloadPacks();
+    /* 默认城市=浏览器定位落框（石/京/沪），落不进就留石家庄；有 URL 参数时不抢戏 */
+    if(!/[?&](school|year|debug)=/.test(location.search)&&navigator.geolocation){
+      const self=this;
+      try{navigator.geolocation.getCurrentPosition(pos=>{
+        const c=City.detect(pos.coords.latitude,pos.coords.longitude);
+        if(c&&c!==self.city)self.setCity(c);
+      },()=>{},{timeout:3000,maximumAge:86400000});}catch(e){}
+    }
     /* 联调模式：?debug=historic 叠加历史名校 12 校（只读，内存合并，不写 localStorage、不动种子） */
     if(/[?&]debug=historic/.test(location.search))this.loadHistoric();
+    /* 看板模式：?debug=admin → admin-lite（留名/孤儿挂靠/全库校验，纯前端） */
+    if(/[?&]debug=admin/.test(location.search))Admin.open();
   },
   loadHistoric(){
     const self=this,s=document.createElement('script');
@@ -801,6 +892,15 @@ const Home={
     document.head.appendChild(s);
   },
   /* 城市切换器：石家庄=本地种子（完整 memo 功能）；京/沪=city-packs.js 叠加包（只读演示，不入库） */
+  preloadPacks(){
+    if(this.packLib||this.packLoading)return;
+    this.packLoading=true;
+    const self=this,s=document.createElement('script');
+    s.src='city-packs.js';
+    s.onload=function(){self.packLib=window.STE_CITY_PACKS||{};self.packLoading=false;};
+    s.onerror=function(){self.packLoading=false;};
+    document.head.appendChild(s);
+  },
   setCity(name){
     if(this.packLoading)return;
     if(name==='石家庄'||this.packLib){this.applyCity(name);return;}
@@ -808,8 +908,14 @@ const Home={
     const self=this,s=document.createElement('script');
     s.src='city-packs.js';
     s.onload=function(){self.packLib=window.STE_CITY_PACKS||{};self.packLoading=false;self.applyCity(name);};
-    s.onerror=function(){self.packLoading=false;$('citySel').value=self.city;toast('缺 city-packs.js：请先跑 node dataset/migrate-77.js');};
+    s.onerror=function(){self.packLoading=false;toast('缺 city-packs.js：请先跑 node dataset/migrate-77.js');};
     document.head.appendChild(s);
+  },
+  /* 滑块刻度随城市数据动态生成（石家庄 1947 起，京沪 1879 起） */
+  renderTicks(){
+    const lo=+$('timeSlider').min,hi=2026,n=9,out=[];
+    for(let i=0;i<n;i++)out.push(Math.round(lo+(hi-lo)*i/(n-1)));
+    $('ticks').innerHTML=out.map(y=>'<span>'+y+'</span>').join('');
   },
   applyCity(name){
     /* 卸掉上一个城市叠加层（只移除本层新推入的实体；联调模式先入的同名实体不动） */
@@ -827,7 +933,7 @@ const Home={
       $('heroSub').textContent='石家庄 · 1947–2026';
     }else{
       const pack=this.packLib&&this.packLib[name];
-      if(!pack){$('citySel').value='石家庄';this.city='石家庄';toast('该城市数据包不存在');return;}
+      if(!pack){this.city='石家庄';toast('该城市数据包不存在');return;}
       const have={};Store.db.entities.forEach(e=>{have[e.ste_id]=1;});
       const pushed={},view={};
       pack.entities.forEach(e=>{
@@ -840,6 +946,8 @@ const Home={
       $('heroSub').textContent=name+' · 1879–2026';
       toast('📍 '+name+' · '+(pack.entities.length)+' 所（演示数据包，只读）· 拖滑条看迁址轨迹');
     }
+    $('cityNm').textContent=name;
+    this.renderTicks();
     this.refresh();
   },
   setYear(y){this.year=y;$('timeSlider').value=y;$('yrBig').textContent=y;this.refresh();},
@@ -879,8 +987,9 @@ const Home={
     const y=this.year;
     let visible=0,winTotal=0;
     this.traj.forEach(l=>this.map.removeLayer(l));this.traj=[];
+    /* 先全量清掉旧图层（含幽灵点透明热区 id::hit），再按年份重建 */
+    Object.keys(this.markers).forEach(k=>{this.map.removeLayer(this.markers[k]);delete this.markers[k];});
     Store.db.entities.forEach(e=>{
-      if(this.markers[e.ste_id]){this.map.removeLayer(this.markers[e.ste_id]);delete this.markers[e.ste_id];}
       if(this.viewIds&&!this.viewIds[e.ste_id])return; /* 城市包视图：只画本城实体 */
       const firstY=snapStartY(e.timeline[0]);
       const last=curSnap(e),lastEnd=snapEndY(last);
@@ -897,9 +1006,13 @@ const Home={
         visible++;
         const ghost=L.circleMarker([e.coordinates.lat,e.coordinates.lon],
           {radius:4,color:'#c9c0b2',weight:1,fillColor:'#c9c0b2',fillOpacity:0.25}).addTo(this.map);
-        ghost.bindTooltip(esc(shortName(e))+'（'+firstY+'–'+lastEnd+'）',{direction:'top'});
-        ghost.bindPopup('',{maxWidth:290,className:'stepop'});
-        ghost.on('popupopen',ev=>{ev.popup.setContent(this.popHtml(e));});
+        /* 手机上 8px 目标摸不着：加 18px 透明热区承接点击/悬停 */
+        const hit=L.circleMarker([e.coordinates.lat,e.coordinates.lon],
+          {radius:18,color:'#c9c0b2',weight:0,fillColor:'#c9c0b2',fillOpacity:0,interactive:true}).addTo(this.map);
+        hit.bindTooltip(esc(shortName(e))+'（'+firstY+'–'+lastEnd+'）',{direction:'top'});
+        hit.bindPopup('',{maxWidth:290,className:'stepop'});
+        hit.on('popupopen',ev=>{ev.popup.setContent(this.popHtml(e));});
+        this.markers[e.ste_id+'::hit']=hit;
         this.markers[e.ste_id]=ghost;
         return;
       }
@@ -924,7 +1037,7 @@ const Home={
       mk.on('popupopen',ev=>{ev.popup.setContent(this.popHtml(e));});
       this.markers[e.ste_id]=mk;
     });
-    $('homeStat').textContent=(this.viewIds?'📍 '+this.city+'（演示包） · ':(this.historic?'🧪 联调 · 全国 · ':'📍 石家庄 · '))+y+'年在地图上的学校 '+visible+' 所 · 当年记忆 '+winTotal+' 条 · 全库 '+Store.db.memos.length+' 条';
+    $('homeStat').textContent=(this.viewIds?'📍 '+this.city+'（演示包） · ':(this.historic?'🧪 联调 · 全国 · ':''))+y+'年 · 地图上 '+visible+' 所学校 · 当年 '+winTotal+' 条记忆 · 共 '+Store.db.memos.length+' 条在等待校友';
   },
   /* marker 浮层卡内容：当年校名 + 年代 + 照片横滑（仅真实照片，宁缺毋滥）+ 最多 2 条记忆摘要 + 入口按钮 */
   popHtml(e){
@@ -964,9 +1077,16 @@ const Home={
       +trajHtml
       +strip
       +(quotes||'<div class="ppq" style="color:var(--sub)">还没有记忆，第一条会很重要</div>')
-      +'<div class="ppbtns"><button onclick="Home.map.closePopup();Detail.open(\''+e.ste_id+'\')">看全部 ›</button>'
+      /* 主副按钮分明：0 记忆学校的主按钮是"成为第一个记得它的人" */
+      +'<div class="ppbtns">'
+      +(ro
+        ?'<button onclick="Home.map.closePopup();Detail.open(\''+e.ste_id+'\')">看全部 ›</button>'
+        :(memos.length===0
+          ?'<button onclick="Home.map.closePopup();Upload.open(\''+e.ste_id+'\')">✍️ 成为第一个记得它的人</button>'
+           +'<button class="sub" onclick="Home.map.closePopup();Detail.open(\''+e.ste_id+'\')">看全部 ›</button>'
+          :'<button onclick="Home.map.closePopup();Detail.open(\''+e.ste_id+'\')">看全部 ›</button>'
+           +'<button class="sub" onclick="Home.map.closePopup();Upload.open(\''+e.ste_id+'\')">＋ 写记忆</button>'))
       +(pts.length>1?'<button class="sub" onclick="Home.showTraj(\''+e.ste_id+'\')">🗺 全程轨迹</button>':'')
-      +(ro?'':'<button class="sub" onclick="Home.map.closePopup();Upload.open(\''+e.ste_id+'\')">＋ 写记忆</button>')
       +'</div></div>';
   },
   /* 全程轨迹展演：fitBounds 到迁址路径全程（跨城实体的"几经周折"一眼看完） */
@@ -977,29 +1097,52 @@ const Home={
     this.map.closePopup();
     toast('橙色虚线=它的完整迁址路 · 拖滑条看它怎么走');
   },
+  /* 跨城跳转：命中别城学校 → 切城 → 定位 → 打开详情 */
+  gotoCitySchool(city,sid){
+    $('searchDrop').classList.remove('show');
+    this.setCity(city);
+    const e=Store.get(sid);
+    if(e){this.map.setView([e.coordinates.lat,e.coordinates.lon],15);Detail.open(sid);}
+  },
   search(){
     const q=$('searchInput').value.trim(),drop=$('searchDrop');
     if(!q){drop.classList.remove('show');return;}
+    const matchQ=e=>e.name.primary.includes(q)||(e.name.aliases||[]).some(a=>a.includes(q))||e.timeline.some(s=>s.name.includes(q));
     const hits=Store.db.entities.filter(e=>{
-      if(this.viewIds&&!this.viewIds[e.ste_id])return false; /* 搜索限定当前城市视图 */
-      if(e.name.primary.includes(q))return true;
-      if((e.name.aliases||[]).some(a=>a.includes(q)))return true;
-      return e.timeline.some(s=>s.name.includes(q)); /* 所有时期的名字 */
+      if(this.viewIds&&!this.viewIds[e.ste_id])return false; /* 本城命中优先 */
+      return matchQ(e);
     });
-    drop.innerHTML=hits.length
-      ?hits.map(e=>{
-          const firstY=snapStartY(e.timeline[0]),lastEnd=snapEndY(curSnap(e));
-          return '<div class="sd-item" onclick="Detail.open(\''+e.ste_id+'\');$(\'searchDrop\').classList.remove(\'show\')">'
-            +'<span class="nm">'+esc(e.name.primary)+'</span><span class="yr">'+firstY+'–'+(lastEnd||'今')+'</span></div>';
-        }).join('')
+    /* 跨城感知：真实存在于别城的学校，给"过去看看"而不是谎报不存在 */
+    const cross=[];
+    if(this.packLib){
+      const inDb={};Store.db.entities.forEach(e=>{inDb[e.ste_id]=1;});
+      Object.keys(this.packLib).forEach(c=>{
+        if(c===this.city)return;
+        this.packLib[c].entities.forEach(e=>{
+          if(!inDb[e.ste_id]&&matchQ(e))cross.push({city:c,e});
+        });
+      });
+    }
+    const itemHtml=e=>{
+      const firstY=snapStartY(e.timeline[0]),lastEnd=snapEndY(curSnap(e));
+      return '<div class="sd-item" onclick="Detail.open(\''+e.ste_id+'\');$(\'searchDrop\').classList.remove(\'show\')">'
+        +'<span class="nm">'+esc(e.name.primary)+'</span><span class="yr">'+firstY+'–'+(lastEnd||'今')+'</span></div>';
+    };
+    const crossHtml=cross.slice(0,5).map(x=>{
+      const firstY=snapStartY(x.e.timeline[0]);
+      return '<div class="sd-item" onclick="Home.gotoCitySchool(\''+x.city+'\',\''+x.e.ste_id+'\')">'
+        +'<span class="nm">📍 在'+esc(x.city)+' · '+esc(x.e.name.primary)+'</span><span class="yr" style="color:var(--pri)">过去看看 ›</span></div>';
+    }).join('');
+    drop.innerHTML=(hits.length||cross.length)
+      ?hits.map(itemHtml).join('')+crossHtml
       :'<div class="sd-item" style="display:block" onclick="event.stopPropagation()">'
-        +'<div style="font-size:12px">「'+esc(q)+'」还没开通（当前在'+esc(this.city)+'找的学校里都没有）</div>'
+        +'<div style="font-size:12px">「'+esc(q)+'」还没开通（'+esc(this.city)+'和已开通城市里都没有）</div>'
         +'<input id="missCity" value="'+esc(this.city)+'" placeholder="在哪个城市？" style="width:100%;height:30px;margin-top:8px;padding:0 10px;border:1px solid var(--line);border-radius:8px;font-size:12px"/>'
         +'<div style="display:flex;gap:8px;margin-top:8px">'
         +'<button style="flex:1;padding:7px 0;border-radius:8px;border:1.5px solid var(--pri);color:var(--pri);background:var(--card);font-size:12px;font-weight:700" onclick="Home.missRequest()">📌 留下校名</button>'
         +'<button style="flex:1;padding:7px 0;border-radius:8px;background:var(--pri);color:#fff;font-size:12px;font-weight:700" onclick="Home.missMemo()">✍️ 顺便留条记忆</button>'
         +'</div>'
-        +'<div style="font-size:10px;color:var(--sub);margin-top:6px">学校开通后通知你；记忆会先存进你的个人中心，开通后自动挂靠</div></div>';
+        +'<div style="font-size:10px;color:var(--sub);margin-top:6px">学校开通后通知你；记忆会先存进你的记忆匣子，开通后自动挂靠</div></div>';
     drop.classList.add('show');
   },
   /* 搜索 miss：留名（带城市） */
@@ -1363,13 +1506,16 @@ const Upload={
     const item=(k,inner,why)=>'<div class="fitem"><div class="k">'+k+'</div>'+inner+(why?'<div class="why">'+esc(why)+'</div>':'')+'</div>';
     const y=ext.year?ext.year.y:'';
     const sokWhy=ext.sok.why.split('→')[0].replace(/[，,]\s*$/,'')+'，判为'+(ext.sok.c==='firsthand'?'亲历':'转述');
+    /* 两屏原则：确认卡只留两个必须确认的字段，其余折进"更多选项"（每多一个字段流失一半人） */
     $('fgrid').innerHTML=
       item('哪一年','<input id="cfYear" inputmode="numeric" maxlength="4" value="'+y+'" placeholder="如 1986"/>',ext.year?'从话里听出来的：'+ext.year.why:'没听出年份，请手动填')
-      +item('关键词（逗号分隔）','<input id="cfTags" value="'+esc(ext.tags.join(','))+'" placeholder="如 学费,校服"/>',ext.tags.length?'识别到：'+ext.tags.map(t=>'“'+t+'”').join('、'):'没识别到，请手填')
+      +item('这是你亲历的还是听来的','<select id="cfSok"><option value="firsthand"'+(ext.sok.c==='firsthand'?' selected':'')+'>我亲历的</option><option value="secondhand"'+(ext.sok.c==='secondhand'?' selected':'')+'>听来的</option></select>',sokWhy);
+    $('fgridMore').innerHTML=
+      item('关键词（逗号分隔）','<input id="cfTags" value="'+esc(ext.tags.join(','))+'" placeholder="如 学费,校服"/>',ext.tags.length?'识别到：'+ext.tags.map(t=>'“'+t+'”').join('、'):'没识别到，请手填')
       +item('当年多少钱（选填）','<input id="cfPrice" inputmode="decimal" value="'+(ext.price?ext.price.v:'')+'" placeholder="元 · 当年币值"/>',ext.price?ext.price.why.split('→')[0]:'可空')
       +item('发生在哪儿（选填）','<input id="cfPlace" value="'+esc(ext.place?ext.place.name:'')+'" placeholder="如 中山路商店"/>',ext.place?'听到地名：“'+ext.place.name+'”':'默认记在这所学校名下')
-      +item('这是你亲历的还是听来的','<select id="cfSok"><option value="firsthand"'+(ext.sok.c==='firsthand'?' selected':'')+'>我亲历的</option><option value="secondhand"'+(ext.sok.c==='secondhand'?' selected':'')+'>听来的</option></select>',sokWhy)
       +item('署名方式','<select id="cfAid"><option value="persistent_pseudonym" selected>用笔名</option><option value="escrowed_anonymous">匿名（平台托管，前端只显示「匿名校友」）</option></select>','');
+    $('fgridMore').classList.remove('show');
     const mv=ext.price&&y?cpiModern(y,ext.price.v):null;
     if(mv!=null){
       $('modernBox').style.display='';
@@ -1475,6 +1621,89 @@ const Me={
   }
 };
 
+/* ================= admin-lite 看板（?debug=admin · 纯前端读 localStorage，无后端） ================= */
+const Admin={
+  reqs(){
+    try{return JSON.parse(localStorage.getItem('ste_school_requests')||'[]');}catch(e){return [];}
+  },
+  open(){
+    this.renderReqs();
+    this.renderOrphans();
+    $('admChecks').innerHTML='';
+    Router.open('page-admin');
+  },
+  /* 留名按城市聚合 → 城内按校名计数排序 */
+  renderReqs(){
+    const list=this.reqs();
+    if(!list.length){$('admReqs').innerHTML='<div style="color:var(--sub);font-size:12px;padding:8px 0">还没有留名记录</div>';return;}
+    const byCity={};
+    list.forEach(r=>{
+      const c=r.city||'（未填城市）';
+      (byCity[c]=byCity[c]||{})[r.name]=((byCity[c]||{})[r.name]||0)+1;
+    });
+    $('admReqs').innerHTML=Object.keys(byCity).sort().map(c=>{
+      const names=Object.keys(byCity[c]).sort((a,b)=>byCity[c][b]-byCity[c][a]);
+      return '<div class="memcard" style="margin:0 0 8px"><div class="tx" style="font-weight:700">🏙 '+esc(c)+' <span style="font-weight:400;color:var(--sub);font-size:11px">'+names.length+' 所 · '+list.filter(r=>(r.city||'（未填城市）')===c).length+' 人次</span></div>'
+        +'<div style="margin-top:6px">'+names.map(n=>'<span class="tag">'+esc(n)+(byCity[c][n]>1?' ×'+byCity[c][n]:'')+'</span>').join(' ')+'</div></div>';
+    }).join('');
+  },
+  exportReqs(){
+    const list=this.reqs();
+    Me.download({exported_at:new Date().toISOString(),count:list.length,requests:list},'ste_school_requests_'+Date.now()+'.json');
+    toast('已导出 '+list.length+' 条留名（JSON）');
+  },
+  /* 孤儿 memo：列出 + 挂靠到已开通学校（回填 ste_id + linked_at，重校验后保存） */
+  orphans(){return Store.db.memos.filter(m=>m.ste_id===null&&!m.retracted);},
+  renderOrphans(){
+    const list=this.orphans();
+    if(!list.length){$('admOrphans').innerHTML='<div style="color:var(--sub);font-size:12px;padding:8px 0">没有待挂靠的记忆</div>';return;}
+    const schoolOpts=Store.db.entities.filter(e=>!Store.histIds[e.ste_id])
+      .map(e=>'<option value="'+e.ste_id+'">'+esc(e.name.primary)+'</option>').join('');
+    $('admOrphans').innerHTML=list.map(m=>{
+      const y=memoYear(m);
+      return '<div class="memcard" style="margin:0 0 8px"><div class="tx">'+esc(m.text)+'</div>'
+        +'<div class="ft"><span class="tag">'+esc(m.place_text||'')+'</span><span style="margin-left:auto">'+(y||'')+'</span></div>'
+        +'<div style="display:flex;gap:6px;margin-top:8px"><select id="link-'+m.memo_id+'" style="flex:1;height:32px;border:1px solid var(--line);border-radius:8px;font-size:12px;padding:0 8px">'
+        +'<option value="">选择要挂靠的学校…</option>'+schoolOpts+'</select>'
+        +'<button style="padding:0 14px;border-radius:8px;background:var(--pri);color:#fff;font-size:12px;font-weight:700" onclick="Admin.link(\''+m.memo_id+'\')">挂靠</button></div></div>';
+    }).join('');
+  },
+  link(memoId){
+    const sel=$('link-'+memoId);
+    const sid=sel?sel.value:'';
+    if(!sid){toast('先选一所学校');return;}
+    const idx=Store.db.memos.findIndex(x=>x.memo_id===memoId);
+    if(idx<0)return;
+    const m=JSON.parse(JSON.stringify(Store.db.memos[idx]));
+    m.ste_id=sid;m.linked_at=new Date().toISOString();
+    const v=validateMEMO(m);
+    if(!v.ok){toast('挂靠后未过校验：'+v.errors[0].msg);return;}
+    Store.db.memos[idx]=m;
+    Store.save();
+    const e=Store.get(sid);
+    toast('已挂靠到「'+(e?e.name.primary:'')+'」');
+    this.renderOrphans();
+  },
+  /* 全库校验批跑：实体过 validateSTE（103），memo 过 validateMEMO（75） */
+  runChecks(){
+    const eBad=[],mBad=[];
+    Store.db.entities.forEach(e=>{
+      const r=validateSTE(e);
+      if(!r.ok)eBad.push(e.name.primary+'：'+r.errors[0].path+' '+r.errors[0].rule);
+    });
+    Store.db.memos.forEach(m=>{
+      const r=validateMEMO(m);
+      if(!r.ok)mBad.push((m.memo_id||'').slice(0,8)+'：'+r.errors[0].path+' '+r.errors[0].rule);
+    });
+    $('admChecks').innerHTML='<div class="memcard" style="margin:0"><div class="tx">'
+      +'实体 '+Store.db.entities.length+' 份 · '+(eBad.length?'✗ '+eBad.length+' 份未过':'✓ 全过')
+      +'<br>记忆 '+Store.db.memos.length+' 条 · '+(mBad.length?'✗ '+mBad.length+' 条未过':'✓ 全过')+'</div>'
+      +(eBad.length||mBad.length?'<div style="font-size:11px;color:#a33;margin-top:6px">'
+        +eBad.concat(mBad).slice(0,10).map(esc).join('<br>')+'</div>':'')
+      +'</div>';
+  }
+};
+
 /* ================= 启动 ================= */
 Store.load();
 Home.init();
@@ -1496,7 +1725,7 @@ Home.init();
           for(let i=0;i<cities.length;i++){
             const hit=Home.packLib[cities[i]].entities.find(x=>x.ste_id===sid);
             if(hit){
-              Home.applyCity(cities[i]);$('citySel').value=cities[i];
+              Home.applyCity(cities[i]);
               const ee=Store.get(sid);
               if(ee){Home.map.setView([ee.coordinates.lat,ee.coordinates.lon],15);Detail.open(sid);}
               return;
