@@ -1,0 +1,356 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-08-27T07:09:28Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 11952218548,
+  "lat": 39.9148781,
+  "lon": 116.5426764,
+  "tags": {
+    "historic": "boundary_stone",
+    "inscription": "通縣界",
+    "material": "marble",
+    "name": "通县界碑",
+    "name:zh-Hans": "通县界碑",
+    "name:zh-Hant": "通縣界碑",
+    "start_date": "1928"
+  }
+},
+{
+  "type": "node",
+  "id": 12979711877,
+  "lat": 39.9423989,
+  "lon": 116.4714330,
+  "tags": {
+    "historic": "memorial",
+    "inscription": "1887年波兰医生柴门霍夫（1859.12.15-1917.4.14）创造了世界语，旨在消除国际语言障碍，促进人类和平与友谊。一百多年來，世界语得到包括中国在内的许多国家政府以及联合国教科文组织的文持。2004年7月，第89届国际世界语大会在北京召开之际，各国世界语者在此建立世界语林，以为纪念。",
+    "material": "stone",
+    "memorial": "stele",
+    "name": "世界语林",
+    "name:eo": "Esperanto-Bosko",
+    "start_date": "2004.7"
+  }
+},
+{
+  "type": "node",
+  "id": 13267247603,
+  "lat": 40.0012092,
+  "lon": 116.3232387,
+  "tags": {
+    "denotation": "religious",
+    "historic": "yes",
+    "leaf_cycle": "deciduous",
+    "leaf_type": "broadleaved",
+    "name": "雄银杏",
+    "natural": "tree",
+    "start_date": "1819-01-01",
+    "wikidata": "Q43284",
+    "wikipedia": "zh:银杏"
+  }
+},
+{
+  "type": "node",
+  "id": 13267247604,
+  "lat": 40.0012053,
+  "lon": 116.3231117,
+  "tags": {
+    "denotation": "religious",
+    "historic": "yes",
+    "leaf_cycle": "deciduous",
+    "leaf_type": "broadleaved",
+    "name": "雌银杏",
+    "natural": "tree",
+    "start_date": "1827-01-01",
+    "wikidata": "Q43284",
+    "wikipedia": "zh:银杏"
+  }
+},
+{
+  "type": "node",
+  "id": 13267247605,
+  "lat": 40.0013743,
+  "lon": 116.3231393,
+  "tags": {
+    "denotation": "landmark",
+    "description": "清华大学校园内树龄最长的这株古树，是一株约382年的国槐，被人称为“至尊长者”。树高18米，树势高大伟岸、粗壮；树冠完整、均衡，冠幅达15米；胸径1.27米，需三人才能合抱；分枝浑厚，挺拔，立于三教和六教两座现代化建筑间，更显得苍劲端庄，极具承载力。清华的古树，绝大多数都是清代栽种，唯有这棵国槐，长于明代崇祯年间的万泉河东坡上。",
+    "diameter": "1.27 m",
+    "diameter_crown": "15 m",
+    "height": "18 m",
+    "historic": "yes",
+    "leaf_cycle": "deciduous",
+    "leaf_type": "broadleaved",
+    "name": "“至尊长者”国槐",
+    "natural": "tree",
+    "start_date": "1642-01-01",
+    "wikidata": "Q288558",
+    "wikipedia": "zh:槐"
+  }
+},
+{
+  "type": "node",
+  "id": 13267247606,
+  "lat": 40.0018079,
+  "lon": 116.3232007,
+  "tags": {
+    "denotation": "religious",
+    "historic": "yes",
+    "leaf_cycle": "deciduous",
+    "leaf_type": "needleleaved",
+    "name": "桧柏",
+    "natural": "tree",
+    "start_date": "1822-01-01",
+    "wikipedia": "zh:圆柏"
+  }
+},
+{
+  "type": "node",
+  "id": 13267247607,
+  "lat": 40.0018111,
+  "lon": 116.3230807,
+  "tags": {
+    "denotation": "religious",
+    "historic": "yes",
+    "leaf_cycle": "deciduous",
+    "leaf_type": "needleleaved",
+    "name": "桧柏",
+    "natural": "tree",
+    "start_date": "1815-01-01",
+    "wikipedia": "zh:圆柏"
+  }
+},
+{
+  "type": "way",
+  "id": 24824550,
+  "center": {
+    "lat": 39.8798919,
+    "lon": 116.4041826
+  },
+  "tags": {
+    "alt_name:eo": "Ĉiela Altaro",
+    "boundary": "protected_area",
+    "heritage": "1",
+    "heritage:operator": "whc;ncha",
+    "heritage:operator:wikidata": "Q7603002",
+    "heritage:operator:wikipedia": "zh:国家文物局",
+    "heritage:since": "1961",
+    "historic": "heritage",
+    "historic:civilization": "imperial_chinese",
+    "historic:period": "ming",
+    "layer": "1",
+    "leisure": "park",
+    "name": "天坛公园",
+    "name:de": "Himmelstempel",
+    "name:en": "Temple of Heaven",
+    "name:es": "Templo del Cielo",
+    "name:fi": "Taivaan temppeli",
+    "name:fr": "Temple du ciel",
+    "name:hi": "स्वर्ग का मंदिर",
+    "name:it": "Tempio del cielo",
+    "name:ko": "천단 공원",
+    "name:ml": "സ്വർഗ്ഗ ക്ഷേത്രം",
+    "name:nl": "Tempel van de Hemel",
+    "name:pt": "Templo do Céu",
+    "name:ro": "Templul cerului",
+    "name:ru": "Храм Неба",
+    "name:zh": "天坛公园",
+    "name:zh-Hans": "天坛",
+    "name:zh-Hant": "天壇",
+    "name:zh-Latn-pinyin": "Tiāntán",
+    "ncha:inscription_date": "1961-03-04",
+    "ncha:name": "天坛",
+    "ncha:type": "古建筑",
+    "opening_hours": "opening_hours=Apr 1-Oct 31 06:00-21:00; Nov 1-Mar 31 06:30-21:00",
+    "place": "plot",
+    "protected_area": "historic_district",
+    "protection_title": "世界遗产;全国重点文物保护单位;国家重点公园",
+    "ref:heritage:CN": "1-0105-3-058",
+    "ref:whc": "881",
+    "short_name": "天坛",
+    "start_date": "1420",
+    "tourism": "attraction",
+    "tourism:level:CN": "AAAAA",
+    "website": "https://www.tiantanpark.cn/",
+    "whc:criteria": "(i),(ii),(iii)",
+    "whc:inscription_date": "1998",
+    "whc:name": "北京皇家祭坛—天坛",
+    "wikidata": "Q125445",
+    "wikimedia_commons": "Category:Temple of Heaven",
+    "wikipedia": "zh:天坛"
+  }
+},
+{
+  "type": "way",
+  "id": 29228773,
+  "center": {
+    "lat": 39.9901784,
+    "lon": 116.2659253
+  },
+  "tags": {
+    "addr:district": "海淀区",
+    "addr:housenumber": "19",
+    "addr:postcode": "100091",
+    "addr:province": "北京市",
+    "addr:street": "新建宫门路",
+    "alt_name:eo": "Somera Palaco",
+    "boundary": "protected_area",
+    "dog": "no",
+    "fax": "+86 10 6288 1077",
+    "heritage": "1",
+    "heritage:operator": "whc;ncha",
+    "heritage:operator:wikidata": "Q7603002",
+    "heritage:operator:wikipedia": "zh:国家文物局",
+    "heritage:since": "1961",
+    "historic": "heritage",
+    "historic:civilization": "imperial_chinese",
+    "historic:period": "qing",
+    "leisure": "park",
+    "name": "颐和园",
+    "name:de": "Sommerpalast",
+    "name:en": "Summer Palace",
+    "name:fr": "Palais d'Été",
+    "name:hi": "ग्रीष्मकालीन महल (समर पैलस)",
+    "name:it": "Palazzo d'estate",
+    "name:ko": "이화원",
+    "name:nl": "Zomerpaleis",
+    "name:ru": "Летний дворец",
+    "name:zh": "颐和园",
+    "name:zh-Hans": "颐和园",
+    "name:zh-Hant": "頤和園",
+    "name:zh-Latn-pinyin": "Yíhéyuán",
+    "ncha:inscription_date": "1961-03-04",
+    "ncha:name": "颐和园",
+    "ncha:type": "古建筑",
+    "opening_hours": "Mo-Su 06:30-18:00",
+    "operator": "北京市颐和园管理处",
+    "phone": "+86 10 6288 1144",
+    "protected_area": "historic_district",
+    "protection_title": "世界遗产;全国重点文物保护单位;国家重点公园",
+    "ref:heritage:CN": "1-0122-3-075",
+    "ref:whc": "880",
+    "smoking": "no",
+    "start_date": "1873",
+    "tourism": "attraction",
+    "tourism:level:CN": "AAAAA",
+    "website": "https://www.summerpalace-china.com/English/index.htm",
+    "whc:criteria": "(i),(ii),(iii)",
+    "whc:inscription_date": "1998",
+    "whc:name": "北京皇家园林-颐和园",
+    "wikidata": "Q4132",
+    "wikipedia": "en:Summer Palace"
+  }
+},
+{
+  "type": "way",
+  "id": 40629275,
+  "center": {
+    "lat": 39.9204656,
+    "lon": 116.3940257
+  },
+  "tags": {
+    "building": "yes",
+    "historic": "yes",
+    "name": "景祺阁",
+    "name:en": "Jingqi Pavilion",
+    "name:vi": "Cảnh Kì Các",
+    "name:zh": "景祺阁",
+    "start_date": "1771"
+  }
+},
+{
+  "type": "way",
+  "id": 43525095,
+  "center": {
+    "lat": 39.9202321,
+    "lon": 116.3940419
+  },
+  "tags": {
+    "building": "yes",
+    "historic": "yes",
+    "name": "颐和轩",
+    "name:en": "Yihexuan",
+    "name:vi": "Di Hoà Hiên",
+    "name:zh": "颐和轩",
+    "start_date": "1772"
+  }
+},
+{
+  "type": "way",
+  "id": 43921139,
+  "center": {
+    "lat": 39.8822505,
+    "lon": 116.4066236
+  },
+  "tags": {
+    "building": "yes",
+    "height": "38",
+    "historic": "building",
+    "name": "祈年殿",
+    "name:de": "Himmelsaltar",
+    "name:en": "Hall of Prayer for Good Harvests",
+    "name:es": "Templo del Cielo",
+    "name:fr": "Salle des prières pour la récolte",
+    "name:ko": "천단공원",
+    "name:ru": "Зал молитвы за хороший урожай",
+    "name:tr": "Cennet Tapınağı",
+    "name:zh": "祈年殿",
+    "old_name:en": "Great Sacrificial Hall",
+    "opening_hours": "Apr 1-Oct 31: 08:00-17:30; Mo off \"except public holidays or Jul 15-Aug 31\"; Nov 1-Mar 31: 08:00-16:30; Mo off \"except public holidays\"",
+    "roof:colour": "gray",
+    "roof:material": "roof_tiles",
+    "roof:shape": "pyramidal",
+    "start_date": "1420",
+    "tourism": "attraction",
+    "wikimedia_commons": "Category:Hall of Prayer for Good Harvests",
+    "wikipedia": "zh:祈年殿"
+  }
+},
+{
+  "type": "way",
+  "id": 187289006,
+  "center": {
+    "lat": 39.9261085,
+    "lon": 116.3903554
+  },
+  "tags": {
+    "castle_type": "palace",
+    "historic": "castle",
+    "historic:civilization": "imperial_chinese",
+    "historic:period": "qing",
+    "name": "寿皇殿",
+    "name:en": "Shouhuang Palace",
+    "name:zh": "寿皇殿",
+    "start_date": "1749",
+    "tourism": "attraction"
+  }
+},
+{
+  "type": "way",
+  "id": 255625137,
+  "center": {
+    "lat": 39.9063193,
+    "lon": 116.3797081
+  },
+  "tags": {
+    "building": "yes",
+    "historic": "city_gate",
+    "historic:civilization": "imperial_chinese",
+    "name": "新华门",
+    "name:en": "Xinhua Gate",
+    "name:zh": "新华门",
+    "name:zh-Hans": "新华门",
+    "name:zh-Hant": "新華門",
+    "start_date": "1758",
+    "wikidata": "Q11081673",
+    "wikimedia_commons": "Category:Xinhuamen (Beijing)",
+    "wikipedia": "zh:新华门"
+  }
+}
+
+  ]
+}

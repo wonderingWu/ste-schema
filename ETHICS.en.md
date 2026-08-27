@@ -1,4 +1,4 @@
-﻿# TimeTrace · Content & Ethics Charter v0.2
+# TimeTrace · Content & Ethics Charter v0.2
 
 > **Version note**: v0.2 completes the enforcement mechanisms on top of the v0.1 value statement. It has four parts: Beliefs (what we believe), Rules (how data is governed), Mechanism (how disputes are handled), Commitments (platform self-restraint).
 > Items marked ⚠️ depend on technical capabilities not yet implemented; see Appendix A for the rollout timeline.
@@ -76,7 +76,7 @@ Boundary changes are normal data in a historical-geography project, not sensitiv
 - Only when the mechanism itself is abused (fabricated sources, organized manipulation) does the case escalate to the committee
 
 ### R8 Licensing
-- Contributors grant the platform and the public a license under [ODbL / CC BY-SA 4.0 — to be decided by the project; choose one]; contributors retain copyright; the platform is a licensee, not the rights holder
+- Contributors grant the platform and the public a license under **ODbL 1.0** (decided 2026-08-27, consistent with GOVERNANCE.md §2: ODbL chosen for direct OSM-ecosystem compatibility and its attribution + share-alike protection against data enclosure; schema text and this charter are published under CC0 1.0); contributors retain copyright; the platform is a licensee, not the rights holder
 - The license for escrowed-anonymous content holds equally; attribution obligations are fulfilled via pseudonym/anonymous identifiers
 
 ### R9 AI Training Use

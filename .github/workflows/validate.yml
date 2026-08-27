@@ -8,6 +8,8 @@ on:
       - 'examples/**'
       - 'test/**'
       - 'scripts/**'
+      - 'validator/**'
+      - 'demo/ste-validator.js'
       - '.github/workflows/validate.yml'
   pull_request:
     paths:
@@ -15,6 +17,8 @@ on:
       - 'examples/**'
       - 'test/**'
       - 'scripts/**'
+      - 'validator/**'
+      - 'demo/ste-validator.js'
       - '.github/workflows/validate.yml'
 
 jobs:
@@ -115,3 +119,7 @@ jobs:
         run: |
           node scripts/check-parity.mjs v0.1/schema.json v0.1/schema.zh.json
           node scripts/check-parity.mjs v0.2/schema.json v0.2/schema.zh.json
+
+      # ---------- Step 5: 官方校验器与 demo 副本防漂移 ----------
+      - name: Check validator sync (validator/ vs demo/)
+        run: node scripts/check-validator-sync.mjs

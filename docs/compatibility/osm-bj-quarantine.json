@@ -1,0 +1,42 @@
+[
+  {
+    "osm": "node/12979711877",
+    "name": "世界语林",
+    "reason": "start_date \"2004.7\" does not match ohm_date pattern (not normalized — policy: no invention)"
+  },
+  {
+    "osm": "node/13267247603",
+    "name": "雄银杏",
+    "reason": "historic=yes carries no usable type value"
+  },
+  {
+    "osm": "node/13267247604",
+    "name": "雌银杏",
+    "reason": "historic=yes carries no usable type value"
+  },
+  {
+    "osm": "node/13267247605",
+    "name": "“至尊长者”国槐",
+    "reason": "historic=yes carries no usable type value"
+  },
+  {
+    "osm": "node/13267247606",
+    "name": "桧柏",
+    "reason": "historic=yes carries no usable type value"
+  },
+  {
+    "osm": "node/13267247607",
+    "name": "桧柏",
+    "reason": "historic=yes carries no usable type value"
+  },
+  {
+    "osm": "way/40629275",
+    "name": "景祺阁",
+    "reason": "historic=yes carries no usable type value"
+  },
+  {
+    "osm": "way/43525095",
+    "name": "颐和轩",
+    "reason": "historic=yes carries no usable type value"
+  }
+]

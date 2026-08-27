@@ -1,0 +1,356 @@
+[
+  {
+    "ste_id": "d47969cb-0aa6-448e-9fe1-beb5d6856bcf",
+    "ste_version": "0.2",
+    "name": {
+      "primary": "通县界碑",
+      "localized": {
+        "zh": "通县界碑"
+      }
+    },
+    "coordinates": {
+      "lat": 39.9148781,
+      "lon": 116.5426764
+    },
+    "external_ids": {
+      "osm": {
+        "id": "node/11952218548",
+        "verified": false,
+        "note": "Imported from Overpass API 2026-08-27"
+      }
+    },
+    "tags": {
+      "historic": "boundary_stone",
+      "inscription": "通縣界",
+      "material": "marble",
+      "name:zh-Hans": "通县界碑",
+      "name:zh-Hant": "通縣界碑",
+      "ste:import_batch": "osm-overpass-2026-08-27"
+    },
+    "timeline": [
+      {
+        "start_date": "1928",
+        "name": "通县界碑",
+        "type": "boundary_stone",
+        "description": "Imported from OpenStreetMap node/11952218548 (historic=boundary_stone, start_date=1928) via Overpass API.",
+        "description_provenance": "imported",
+        "sources": [
+          "https://www.openstreetmap.org/node/11952218548"
+        ]
+      }
+    ]
+  },
+  {
+    "ste_id": "9b54b968-f2a9-4dd3-96a2-624d88c91614",
+    "ste_version": "0.2",
+    "name": {
+      "primary": "天坛公园",
+      "localized": {
+        "zh": "天坛公园"
+      }
+    },
+    "coordinates": {
+      "lat": 39.8798919,
+      "lon": 116.4041826
+    },
+    "external_ids": {
+      "osm": {
+        "id": "way/24824550",
+        "verified": false,
+        "note": "Imported from Overpass API 2026-08-27"
+      }
+    },
+    "tags": {
+      "alt_name:eo": "Ĉiela Altaro",
+      "boundary": "protected_area",
+      "heritage": "1",
+      "heritage:operator": "whc;ncha",
+      "heritage:operator:wikidata": "Q7603002",
+      "heritage:operator:wikipedia": "zh:国家文物局",
+      "heritage:since": "1961",
+      "historic": "heritage",
+      "historic:civilization": "imperial_chinese",
+      "historic:period": "ming",
+      "layer": "1",
+      "leisure": "park",
+      "name:de": "Himmelstempel",
+      "name:en": "Temple of Heaven",
+      "name:es": "Templo del Cielo",
+      "name:fi": "Taivaan temppeli",
+      "name:fr": "Temple du ciel",
+      "name:hi": "स्वर्ग का मंदिर",
+      "name:it": "Tempio del cielo",
+      "name:ko": "천단 공원",
+      "name:ml": "സ്വർഗ്ഗ ക്ഷേത്രം",
+      "name:nl": "Tempel van de Hemel",
+      "name:pt": "Templo do Céu",
+      "name:ro": "Templul cerului",
+      "name:ru": "Храм Неба",
+      "name:zh": "天坛公园",
+      "name:zh-Hans": "天坛",
+      "name:zh-Hant": "天壇",
+      "name:zh-Latn-pinyin": "Tiāntán",
+      "ncha:inscription_date": "1961-03-04",
+      "ncha:name": "天坛",
+      "ncha:type": "古建筑",
+      "opening_hours": "opening_hours=Apr 1-Oct 31 06:00-21:00; Nov 1-Mar 31 06:30-21:00",
+      "place": "plot",
+      "protected_area": "historic_district",
+      "protection_title": "世界遗产;全国重点文物保护单位;国家重点公园",
+      "ref:heritage:CN": "1-0105-3-058",
+      "ref:whc": "881",
+      "short_name": "天坛",
+      "tourism": "attraction",
+      "tourism:level:CN": "AAAAA",
+      "website": "https://www.tiantanpark.cn/",
+      "whc:criteria": "(i),(ii),(iii)",
+      "whc:inscription_date": "1998",
+      "whc:name": "北京皇家祭坛—天坛",
+      "wikidata": "Q125445",
+      "wikimedia_commons": "Category:Temple of Heaven",
+      "wikipedia": "zh:天坛",
+      "ste:import_batch": "osm-overpass-2026-08-27"
+    },
+    "timeline": [
+      {
+        "start_date": "1420",
+        "name": "天坛公园",
+        "type": "heritage",
+        "description": "Imported from OpenStreetMap way/24824550 (historic=heritage, start_date=1420) via Overpass API.",
+        "description_provenance": "imported",
+        "sources": [
+          "https://www.openstreetmap.org/way/24824550"
+        ]
+      }
+    ]
+  },
+  {
+    "ste_id": "e30dd0b8-ade0-44db-b602-d3e2ff0a5152",
+    "ste_version": "0.2",
+    "name": {
+      "primary": "颐和园",
+      "localized": {
+        "zh": "颐和园"
+      }
+    },
+    "coordinates": {
+      "lat": 39.9901784,
+      "lon": 116.2659253
+    },
+    "external_ids": {
+      "osm": {
+        "id": "way/29228773",
+        "verified": false,
+        "note": "Imported from Overpass API 2026-08-27"
+      }
+    },
+    "tags": {
+      "addr:district": "海淀区",
+      "addr:housenumber": "19",
+      "addr:postcode": "100091",
+      "addr:province": "北京市",
+      "addr:street": "新建宫门路",
+      "alt_name:eo": "Somera Palaco",
+      "boundary": "protected_area",
+      "dog": "no",
+      "fax": "+86 10 6288 1077",
+      "heritage": "1",
+      "heritage:operator": "whc;ncha",
+      "heritage:operator:wikidata": "Q7603002",
+      "heritage:operator:wikipedia": "zh:国家文物局",
+      "heritage:since": "1961",
+      "historic": "heritage",
+      "historic:civilization": "imperial_chinese",
+      "historic:period": "qing",
+      "leisure": "park",
+      "name:de": "Sommerpalast",
+      "name:en": "Summer Palace",
+      "name:fr": "Palais d'Été",
+      "name:hi": "ग्रीष्मकालीन महल (समर पैलस)",
+      "name:it": "Palazzo d'estate",
+      "name:ko": "이화원",
+      "name:nl": "Zomerpaleis",
+      "name:ru": "Летний дворец",
+      "name:zh": "颐和园",
+      "name:zh-Hans": "颐和园",
+      "name:zh-Hant": "頤和園",
+      "name:zh-Latn-pinyin": "Yíhéyuán",
+      "ncha:inscription_date": "1961-03-04",
+      "ncha:name": "颐和园",
+      "ncha:type": "古建筑",
+      "opening_hours": "Mo-Su 06:30-18:00",
+      "operator": "北京市颐和园管理处",
+      "phone": "+86 10 6288 1144",
+      "protected_area": "historic_district",
+      "protection_title": "世界遗产;全国重点文物保护单位;国家重点公园",
+      "ref:heritage:CN": "1-0122-3-075",
+      "ref:whc": "880",
+      "smoking": "no",
+      "tourism": "attraction",
+      "tourism:level:CN": "AAAAA",
+      "website": "https://www.summerpalace-china.com/English/index.htm",
+      "whc:criteria": "(i),(ii),(iii)",
+      "whc:inscription_date": "1998",
+      "whc:name": "北京皇家园林-颐和园",
+      "wikidata": "Q4132",
+      "wikipedia": "en:Summer Palace",
+      "ste:import_batch": "osm-overpass-2026-08-27"
+    },
+    "timeline": [
+      {
+        "start_date": "1873",
+        "name": "颐和园",
+        "type": "heritage",
+        "description": "Imported from OpenStreetMap way/29228773 (historic=heritage, start_date=1873) via Overpass API.",
+        "description_provenance": "imported",
+        "sources": [
+          "https://www.openstreetmap.org/way/29228773"
+        ]
+      }
+    ]
+  },
+  {
+    "ste_id": "0987fd1b-abba-4bc5-97af-0fa3bed1845e",
+    "ste_version": "0.2",
+    "name": {
+      "primary": "祈年殿",
+      "localized": {
+        "zh": "祈年殿"
+      }
+    },
+    "coordinates": {
+      "lat": 39.8822505,
+      "lon": 116.4066236
+    },
+    "external_ids": {
+      "osm": {
+        "id": "way/43921139",
+        "verified": false,
+        "note": "Imported from Overpass API 2026-08-27"
+      }
+    },
+    "tags": {
+      "building": "yes",
+      "height": "38",
+      "historic": "building",
+      "name:de": "Himmelsaltar",
+      "name:en": "Hall of Prayer for Good Harvests",
+      "name:es": "Templo del Cielo",
+      "name:fr": "Salle des prières pour la récolte",
+      "name:ko": "천단공원",
+      "name:ru": "Зал молитвы за хороший урожай",
+      "name:tr": "Cennet Tapınağı",
+      "name:zh": "祈年殿",
+      "old_name:en": "Great Sacrificial Hall",
+      "opening_hours": "Apr 1-Oct 31: 08:00-17:30; Mo off \"except public holidays or Jul 15-Aug 31\"; Nov 1-Mar 31: 08:00-16:30; Mo off \"except public holidays\"",
+      "roof:colour": "gray",
+      "roof:material": "roof_tiles",
+      "roof:shape": "pyramidal",
+      "tourism": "attraction",
+      "wikimedia_commons": "Category:Hall of Prayer for Good Harvests",
+      "wikipedia": "zh:祈年殿",
+      "ste:import_batch": "osm-overpass-2026-08-27"
+    },
+    "timeline": [
+      {
+        "start_date": "1420",
+        "name": "祈年殿",
+        "type": "building",
+        "description": "Imported from OpenStreetMap way/43921139 (historic=building, start_date=1420) via Overpass API.",
+        "description_provenance": "imported",
+        "sources": [
+          "https://www.openstreetmap.org/way/43921139"
+        ]
+      }
+    ]
+  },
+  {
+    "ste_id": "e21f685e-1e9c-47e8-944e-72852a003d22",
+    "ste_version": "0.2",
+    "name": {
+      "primary": "寿皇殿",
+      "localized": {
+        "zh": "寿皇殿"
+      }
+    },
+    "coordinates": {
+      "lat": 39.9261085,
+      "lon": 116.3903554
+    },
+    "external_ids": {
+      "osm": {
+        "id": "way/187289006",
+        "verified": false,
+        "note": "Imported from Overpass API 2026-08-27"
+      }
+    },
+    "tags": {
+      "castle_type": "palace",
+      "historic": "castle",
+      "historic:civilization": "imperial_chinese",
+      "historic:period": "qing",
+      "name:en": "Shouhuang Palace",
+      "name:zh": "寿皇殿",
+      "tourism": "attraction",
+      "ste:import_batch": "osm-overpass-2026-08-27"
+    },
+    "timeline": [
+      {
+        "start_date": "1749",
+        "name": "寿皇殿",
+        "type": "castle",
+        "description": "Imported from OpenStreetMap way/187289006 (historic=castle, start_date=1749) via Overpass API.",
+        "description_provenance": "imported",
+        "sources": [
+          "https://www.openstreetmap.org/way/187289006"
+        ]
+      }
+    ]
+  },
+  {
+    "ste_id": "2ad12d85-26f8-477a-8490-46f28c7bfe52",
+    "ste_version": "0.2",
+    "name": {
+      "primary": "新华门",
+      "localized": {
+        "zh": "新华门"
+      }
+    },
+    "coordinates": {
+      "lat": 39.9063193,
+      "lon": 116.3797081
+    },
+    "external_ids": {
+      "osm": {
+        "id": "way/255625137",
+        "verified": false,
+        "note": "Imported from Overpass API 2026-08-27"
+      }
+    },
+    "tags": {
+      "building": "yes",
+      "historic": "city_gate",
+      "historic:civilization": "imperial_chinese",
+      "name:en": "Xinhua Gate",
+      "name:zh": "新华门",
+      "name:zh-Hans": "新华门",
+      "name:zh-Hant": "新華門",
+      "wikidata": "Q11081673",
+      "wikimedia_commons": "Category:Xinhuamen (Beijing)",
+      "wikipedia": "zh:新华门",
+      "ste:import_batch": "osm-overpass-2026-08-27"
+    },
+    "timeline": [
+      {
+        "start_date": "1758",
+        "name": "新华门",
+        "type": "city_gate",
+        "description": "Imported from OpenStreetMap way/255625137 (historic=city_gate, start_date=1758) via Overpass API.",
+        "description_provenance": "imported",
+        "sources": [
+          "https://www.openstreetmap.org/way/255625137"
+        ]
+      }
+    ]
+  }
+]

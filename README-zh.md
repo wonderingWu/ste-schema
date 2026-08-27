@@ -28,16 +28,24 @@ ste-schema/
 ├── test/
 │   ├── valid/               # v0.2 应该通过校验的样例
 │   └── invalid/             # v0.2 负向测试（25 个 fixture，一条规则一个）
+├── validator/
+│   └── ste-validator.js       # 官方参考校验器（零依赖 UMD，103 检查点）
 ├── ETHICS.md                # 伦理章程 v0.2（中文原文）
 ├── ETHICS.en.md             # 伦理章程 v0.2（英文版）
 ├── docs/
-│   └── schema-v0.2-notes.md # v0.2 变更对照与设计说明
+│   ├── schema-v0.2-notes.md # v0.2 变更对照与设计说明
+│   └── proposals/           # 草案提案（v0.3 生命周期、质疑 profile）
 ├── scripts/
 │   ├── check-parity.mjs     # 中英文版结构一致性检查
+│   ├── check-validator-sync.mjs # validator/ 与 demo/ 副本防漂移
 │   └── local-validate.mjs   # 本地预推送验证（双版本）
+├── LICENSE                  # MIT（代码）+ 分层许可说明
+├── LICENSE-CC0-1.0          # 标准文本 / profiles / 伦理章程
+├── LICENSE-ODbL-1.0         # 精选数据集
+├── GOVERNANCE.md            # 项目治理（草案 v0.1）：角色、许可、质量门
 └── .github/
     └── workflows/
-        └── validate.yml     # CI：strict 编译 + valid/invalid fixture + parity
+        └── validate.yml     # CI：strict 编译 + valid/invalid fixture + parity + validator 同步
 ```
 
 ## 设计原则
@@ -114,7 +122,7 @@ JSON Schema 表达不了的规则，由应用层保证。**通过 schema 校验 
 ## 与 OSM/OHM 的兼容策略
 
 - `type`、`tags`、`amenity`、`start_date`、`end_date` 直接复用 OSM/OHM 命名
-- 独有的叙事和证据字段加 `ste_` 前缀以示区分（v1 起引入）
+- STE 自有顶层字段加 `ste_` 前缀以示区分（已在用：`ste_id`、`ste_version`、`ste_asset_id`）；非 OSM 惯例的 **tag 键**用 `ste:` 前缀（见应用层校验清单第 06 条）
 - 目标是：任何现有 OHM 工具（Overpass API、JOSM）能部分识别 STE 数据
 - STE 是 OSM/OHM 的**超集**，不是平行宇宙
 
@@ -124,7 +132,7 @@ JSON Schema 表达不了的规则，由应用层保证。**通过 schema 校验 
 
 - **77 个真实实体**，由北京/上海消失、停办、搬迁、更名中小学的整理数据构建（1950s–2026）
 - 每所学校是一个 STE 实体：稳定 UUID、WGS84 坐标（OSM 地理编码）、完整 `timeline[]` 快照（开办 → 更名/搬迁/停办 → 恢复）
-- 全部数据通过 `v0.1/schema.json` 校验（见 `demo/data/schools.json`；5 个代表样例在 `examples/valid/`）
+- 全部数据通过 `v0.1/schema.json` 校验（见 `demo/data/schools.json`；6 个代表样例在 `examples/valid/`）
 - 随时可重新生成：`node scripts/build-schools.mjs`（CSV → STE）再 `node scripts/build-demo.mjs`（注入 Demo 页面）
 
 ## 本地验证
@@ -134,7 +142,24 @@ npm install
 node scripts/local-validate.mjs   # 双版本：valid 必须全过、invalid 必须全拒、strict 编译 + parity
 ```
 
-推送后 CI（`.github/workflows/validate.yml`）自动执行同样的闸门：strict schema 编译（en/zh × v0.1/v0.2）→ valid fixture 校验 → invalid 负向测试 → en/zh parity。
+推送后 CI（`.github/workflows/validate.yml`）自动执行同样的闸门：strict schema 编译（en/zh × v0.1/v0.2）→ valid fixture 校验 → invalid 负向测试 → en/zh parity → validator 同步检查。
+
+## 参考校验器
+
+[`validator/ste-validator.js`](validator/) 是 STE v0.2 的**官方参考校验器**：零依赖 UMD 单文件（浏览器 + Node 通用），除 schema 规则外还覆盖 JSON Schema 表达不了的应用层规则（日历有效性、时间线排序与重叠、单开口末段等）。只过 ajv 校验 ≠ 数据干净——请同时跑本校验器。`demo/ste-validator.js` 是打包副本，由 CI 强制与本目录字节一致。
+
+## 兼容性实证
+
+- [`docs/compatibility/2026-08-27-osm-overpass-report.md`](docs/compatibility/2026-08-27-osm-overpass-report.md) —— 首次第三方数据验证：14 个 OSM/Overpass 北京历史要素经 `scripts/import-osm-overpass.mjs` 导入；可映射记录 6/6 双验证通过（ajv + 参考校验器），8 条按"不发明"原则隔离并注明原因。
+- [`docs/repo-layout.md`](docs/repo-layout.md) —— 仓库分区纪律与拆仓触发条件（为什么协议/demo/章程暂时共居一仓）。
+
+## 许可
+
+分层许可（依 [GOVERNANCE.md](GOVERNANCE.md) §2，落实伦理章程 R8）：
+
+- **代码**（`scripts/`、`validator/`、demo 源码、CI）：[MIT](LICENSE)
+- **标准文本**（`v0.1/`、`v0.2/`、`docs/`、官方 profiles）与**伦理章程**（`ETHICS.md`、`ETHICS.en.md`）：[CC0 1.0](LICENSE-CC0-1.0)——标准文本零摩擦复用
+- **精选数据集**（`demo/data/*.json`）：[ODbL 1.0](LICENSE-ODbL-1.0)——署名+相同方式共享，与 OSM 生态兼容
 
 ## 版本计划
 

@@ -1,21 +1,24 @@
 {
-  "name": "ste-schema-remote",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "example": "examples"
-  },
+  "name": "ste-schema",
+  "version": "0.2.0",
+  "description": "STE (SpatioTemporal Entity) schema — a spatiotemporal snapshot of a place. OSM/OHM-compatible; time is a first-class citizen.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node scripts/local-validate.mjs && node scripts/check-validator-sync.mjs && node scripts/test-importer.mjs"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wonderingWu/ste-schema.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "ste",
+    "spatiotemporal",
+    "openhistoricalmap",
+    "osm",
+    "ohm",
+    "json-schema",
+    "historical-geography"
+  ],
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/wonderingWu/ste-schema/issues"
   },

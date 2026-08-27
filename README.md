@@ -28,16 +28,24 @@ ste-schema/
 ├── test/
 │   ├── valid/               # v0.2 samples that MUST pass validation
 │   └── invalid/             # v0.2 negative tests (25 fixtures, one per rule)
+├── validator/
+│   └── ste-validator.js       # Canonical reference validator (zero-dep UMD, 103 checks)
 ├── ETHICS.md                # Ethics Charter v0.2 (Chinese original)
 ├── ETHICS.en.md             # Ethics Charter v0.2 (English)
 ├── docs/
-│   └── schema-v0.2-notes.md # v0.2 change log & design notes
+│   ├── schema-v0.2-notes.md # v0.2 change log & design notes
+│   └── proposals/           # Draft proposals (v0.3 lifecycle, challenge profile)
 ├── scripts/
 │   ├── check-parity.mjs     # En/zh structural parity check
+│   ├── check-validator-sync.mjs # validator/ vs demo/ copy drift guard
 │   └── local-validate.mjs   # Pre-push local validation (both versions)
+├── LICENSE                  # MIT (code) + licensing map
+├── LICENSE-CC0-1.0          # Schema text / profiles / Ethics Charter
+├── LICENSE-ODbL-1.0         # Curated datasets
+├── GOVERNANCE.md            # Project governance (draft v0.1): roles, licensing, quality gates
 └── .github/
     └── workflows/
-        └── validate.yml     # CI: strict compile + valid/invalid fixtures + parity
+        └── validate.yml     # CI: strict compile + valid/invalid fixtures + parity + validator sync
 ```
 
 ## Design Principles
@@ -114,7 +122,7 @@ Rules that JSON Schema cannot express. **Passing schema validation ≠ clean dat
 ## Compatibility with OSM / OHM
 
 - `type`, `tags`, `amenity`, `start_date`, `end_date` directly reuse OSM/OHM naming
-- STE-specific fields (narrative, evidence) use a `ste_` prefix for clear separation (introduced from v1 onward)
+- STE's own top-level fields use a `ste_` prefix for clear separation (already in use: `ste_id`, `ste_version`, `ste_asset_id`); non-OSM-convention **tag keys** use a `ste:` prefix (see Application-Level Validation rule 06)
 - Goal: any existing OHM tool (Overpass API, JOSM) can partially recognize STE data
 - STE is a **superset** of OSM/OHM, not a parallel universe
 
@@ -124,7 +132,7 @@ Rules that JSON Schema cannot express. **Passing schema validation ≠ clean dat
 
 - **77 real entities** built from curated CSV data of disappeared/renamed/relocated schools in Beijing & Shanghai (1950s–2026)
 - Each school is a STE entity: stable UUID, WGS84 coordinates (OSM geocoded), full `timeline[]` snapshots (opened → renamed/moved/demolished → resumed)
-- All data passes `v0.1/schema.json` (see `demo/data/schools.json`; 5 representative samples in `examples/valid/`)
+- All data passes `v0.1/schema.json` (see `demo/data/schools.json`; 6 representative samples in `examples/valid/`)
 - Regenerate anytime: `node scripts/build-schools.mjs` (CSV → STE) then `node scripts/build-demo.mjs` (inject into demo page)
 
 ## Local Validation
@@ -134,7 +142,24 @@ npm install
 node scripts/local-validate.mjs   # both versions: valid must PASS, invalid must FAIL, strict compile + parity
 ```
 
-CI (`.github/workflows/validate.yml`) runs the same gates on push/PR: strict schema compile (en + zh, v0.1 + v0.2) → valid fixture validation → invalid negative tests → en/zh parity.
+CI (`.github/workflows/validate.yml`) runs the same gates on push/PR: strict schema compile (en + zh, v0.1 + v0.2) → valid fixture validation → invalid negative tests → en/zh parity → validator sync check.
+
+## Reference Validator
+
+[`validator/ste-validator.js`](validator/) is the **canonical reference validator** for STE v0.2: a zero-dependency UMD single file (browser + Node) covering the schema rules plus the application-level rules JSON Schema cannot express (calendar validity, timeline ordering/overlap, single open-ended last snapshot, …). Passing ajv validation alone does NOT guarantee clean data — run this validator too. `demo/ste-validator.js` is a bundled copy kept byte-identical by CI.
+
+## Compatibility
+
+- [`docs/compatibility/2026-08-27-osm-overpass-report.md`](docs/compatibility/2026-08-27-osm-overpass-report.md) — first third-party data validation: 14 OSM/Overpass historic features (Beijing) imported by `scripts/import-osm-overpass.mjs`; 6/6 mappable records PASS both ajv and the reference validator, 8 quarantined with stated reasons (no-invention policy).
+- [`docs/repo-layout.md`](docs/repo-layout.md) — repository zone discipline and split triggers (why schema/demo/charter share one repo for now).
+
+## License
+
+Layered licensing (per [GOVERNANCE.md](GOVERNANCE.md) §2, implements Ethics Charter rule R8):
+
+- **Code** (`scripts/`, `validator/`, demo source, CI): [MIT](LICENSE)
+- **Schema text** (`v0.1/`, `v0.2/`, `docs/`, official profiles) and the **Ethics Charter** (`ETHICS.md`, `ETHICS.en.md`): [CC0 1.0](LICENSE-CC0-1.0) — standards text reusable with zero friction
+- **Curated datasets** (`demo/data/*.json`): [ODbL 1.0](LICENSE-ODbL-1.0) — attribution + share-alike, OSM-ecosystem compatible
 
 ## Version Plan
 
