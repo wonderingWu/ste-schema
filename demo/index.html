@@ -317,6 +317,7 @@ input,textarea,select{font-family:inherit;font-size:14px;color:var(--ink)}
   </div>
   <div class="pbody">
     <div class="uplab">📍 选择学校</div>
+    <div id="roBanner" style="display:none;margin:0 0 10px;padding:10px 12px;background:#fdf3e7;border:1px solid #f0dcc0;border-radius:10px;font-size:12px;line-height:1.7;color:#8a6a3b"></div>
     <div class="chips" id="schChips"></div>
 
     <div class="uplab">📝 说说你的记忆（按住说话 🎤 或直接打字）</div>
@@ -800,6 +801,71 @@ const Store={
   memoById(id){return this.db.memos.find(m=>m.memo_id===id);}
 };
 
+/* ================= 后端同步（2026-08-27 owner 拍板真后端） =================
+   本地联调默认 http://localhost:7101；?api=<base> 覆盖；线上（GitHub Pages）无后端 → 纯本地，行为不变。
+   原则：离线可用——同步失败一律静默降级，不挡本地流程。 */
+const Api={
+  base:(()=>{
+    const m=location.search.match(/[?&]api=([^&]+)/);
+    if(m){try{return decodeURIComponent(m[1]);}catch(e){return null;}} /* ?api=% 之类畸形参数不能白屏 */
+    return (location.hostname==='localhost'||location.hostname==='127.0.0.1')?'http://localhost:7101':null;
+  })(),
+  online:false,
+  _outboxKey:'ste_api_outbox',
+  /* 拉全库 memo 合并进本地：远端内容不信任——先过 validateMEMO 再入库（评审🔴#2 纵深防御）；
+     远端墓碑只在作者一致时覆盖本地原文 */
+  async pull(){
+    if(!this.base)return;
+    try{
+      const r=await fetch(this.base+'/api/memos');
+      if(!r.ok)return;
+      const data=await r.json();
+      const list=Array.isArray(data.memos)?data.memos:[];
+      let changed=0;
+      list.forEach(m=>{
+        if(!m||!m.memo_id)return;
+        if(typeof validateMEMO==='function'&&!validateMEMO(m).ok)return;
+        const i=Store.db.memos.findIndex(x=>x.memo_id===m.memo_id);
+        if(i<0){Store.db.memos.push(m);changed++;}
+        else if(m.retracted&&!Store.db.memos[i].retracted&&m.author===Store.db.memos[i].author){Store.db.memos[i]=m;changed++;}
+      });
+      this.online=true;
+      if(changed){Store.save();Home.refresh();}
+      await this._flush(); /* 后端活了：补投 outbox 里没发出去的记忆/墓碑/留名 */
+    }catch(e){this.online=false;}
+  },
+  pushMemo(m){this._send('memo',m);},
+  pushRequest(name,city){this._send('request',{name:name,city:city||null});},
+  /* 发送失败进 outbox（localStorage，上限 50 条）：分享承诺不因一时离线落空（评审🟡） */
+  _send(kind,payload){
+    if(!this.base)return;
+    const url=kind==='memo'?'/api/memos':'/api/requests';
+    fetch(this.base+url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+      .then(r=>{if(!r.ok)this._queue(kind,payload);})
+      .catch(()=>this._queue(kind,payload));
+  },
+  _queue(kind,payload){
+    try{
+      const q=JSON.parse(localStorage.getItem(this._outboxKey)||'[]');
+      q.push({kind:kind,payload:payload,at:new Date().toISOString()});
+      localStorage.setItem(this._outboxKey,JSON.stringify(q.slice(-50)));
+    }catch(e){}
+  },
+  async _flush(){
+    let q=[];try{q=JSON.parse(localStorage.getItem(this._outboxKey)||'[]');}catch(e){}
+    if(!q.length)return;
+    const remain=[];
+    for(const it of q){
+      try{
+        const url=it.kind==='memo'?'/api/memos':'/api/requests';
+        const r=await fetch(this.base+url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(it.payload)});
+        if(!r.ok)remain.push(it);
+      }catch(e){remain.push(it);}
+    }
+    try{localStorage.setItem(this._outboxKey,JSON.stringify(remain));}catch(e){}
+  }
+};
+
 /* ================= 路由 ================= */
 const Router={
   stack:['page-home'],
@@ -816,7 +882,7 @@ const Router={
 /* ================= 城市（视图维度，不是设置项） ================= */
 const City={
   /* 城市卡片钩子文案 */
-  HOOKS:{'石家庄':'石家庄的老校门，从 1947 讲起','北京':'北大红楼、四存、北师大附中的西迁路','上海':'圣约翰的钟楼、上医旧影、56 所改名撤并的学校'},
+  HOOKS:{'全国':'城市包 + 历史名校，一眼看完','石家庄':'石家庄的老校门，从 1947 讲起','北京':'北大红楼、四存、北师大附中的西迁路','上海':'圣约翰的钟楼、上医旧影、56 所改名撤并的学校'},
   /* 浏览器定位落框 → 城市名；落不进任何框返回 null */
   detect(lat,lon){
     const BOX={'北京':[39.3,41.1,115.4,117.6],'上海':[30.6,31.9,120.8,122.2],'石家庄':[37.4,38.9,113.5,115.3]};
@@ -826,7 +892,12 @@ const City={
   open(){
     const self=this;
     const render=function(){
-      const cards=[{name:'石家庄',count:Store.db.entities.filter(e=>!Store.histIds[e.ste_id]).length}];
+      const seedN=Store.db.entities.filter(e=>!Store.histIds[e.ste_id]).length;
+      /* 全国卡计数按 ste_id 去重：京沪包与历史名校有 7 所同源两副本，重复计会虚高 */
+      const uniq={};Store.db.entities.forEach(e=>uniq[e.ste_id]=1);
+      Object.keys(Home.packLib||{}).forEach(c=>Home.packLib[c].entities.forEach(e=>uniq[e.ste_id]=1));
+      if(window.STE_HISTORIC)window.STE_HISTORIC.entities.forEach(e=>uniq[e.ste_id]=1);
+      const cards=[{name:'全国',count:Object.keys(uniq).length},{name:'石家庄',count:seedN}];
       Object.keys(Home.packLib||{}).forEach(c=>cards.push({name:c,count:Home.packLib[c].entities.length}));
       $('cityCards').innerHTML=cards.map(c=>
         '<div class="citycard" onclick="City.pick(\''+c.name+'\')"><div><div class="cnm">'+esc(c.name)
@@ -843,36 +914,56 @@ const City={
   },
   pick(name){
     $('cityPanel').classList.remove('show');
+    Home.cityLocked=true; /* 手动选城=用户意图，定位晚到不劫持 */
+    if(name==='全国'){Home.applyNational();return;}
     if(name!==Home.city)Home.setCity(name);
   }
 };
 
 const Home={
-  map:null, year:1986, markers:{}, traj:[], historic:false,
+  map:null, year:1986, markers:{}, traj:[], historic:false, national:false, natLoading:false, cityLocked:false,
   city:'石家庄', viewIds:null, overlayIds:null, packLib:null, packLoading:false,
   init(){
-    this.map=L.map('map',{zoomControl:false,attributionControl:false}).setView([38.0395,114.5120],14);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{maxZoom:19}).addTo(this.map);
+    /* 全国图=首页第一视图（2026-08-27 乔布斯定案）：无 URL 参数时默认落全国 */
+    const nat0=!/[?&](school|year|debug)=/.test(location.search);
+    this.map=L.map('map',{zoomControl:false,attributionControl:false}).setView(nat0?[35.6,104.8]:[38.0395,114.5120],nat0?4:14);
+    /* 2026-08-27：CARTO 底图改收费带"API key required"水印（owner 点验抓到）→ 换 OSM 标准层（免 key） */
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(this.map);
     $('timeSlider').addEventListener('input',e=>{this.year=+e.target.value;$('yrBig').textContent=this.year;this.refresh();});
     $('searchInput').addEventListener('input',()=>this.search());
     document.addEventListener('click',e=>{if(!e.target.closest('.searchbox'))$('searchDrop').classList.remove('show');});
+    /* 全国图空白处点击 → 留名钩子（Leaflet 1.9 marker/path 默认不向 map 冒泡，只在真空白处触发） */
+    this.map.on('click',e=>{
+      if(!this.national)return;
+      L.popup({maxWidth:240,className:'stepop'}).setLatLng(e.latlng)
+        .setContent('<div style="font-size:13px;line-height:1.7">这一带还没有人留下母校记忆<br><b>你的母校在这里吗？</b></div>'
+          +'<button style="margin-top:8px;width:100%;padding:8px 0;border-radius:8px;border:1.5px solid var(--pri);color:var(--pri);background:var(--card);font-size:12px;font-weight:700" '
+          +'onclick="Home.map.closePopup();$(\'searchInput\').focus();toast(\'搜你的校名，搜不到就能留名\')">📌 为我的母校留名</button>')
+        .openOn(this.map);
+    });
     this.refresh();
     this.renderTicks();
     if(!localStorage.getItem('ste_demo_seen_v1')&&!/[?&](school|year)=/.test(location.search)){localStorage.setItem('ste_demo_seen_v1','1');setTimeout(()=>this.demo(false),600);}
     /* 预载城市包（异步不阻塞）：搜索跨城感知 + 城市卡片页都要用 */
     this.preloadPacks();
-    /* 默认城市=浏览器定位落框（石/京/沪），落不进就留石家庄；有 URL 参数时不抢戏 */
-    if(!/[?&](school|year|debug)=/.test(location.search)&&navigator.geolocation){
-      const self=this;
-      try{navigator.geolocation.getCurrentPosition(pos=>{
-        const c=City.detect(pos.coords.latitude,pos.coords.longitude);
-        if(c&&c!==self.city)self.setCity(c);
-      },()=>{},{timeout:3000,maximumAge:86400000});}catch(e){}
+    if(nat0){
+      /* 全国视图落地；定位命中三城 → 直接落城，落不进/被拒 → 留在全国 */
+      this.applyNational();
+      if(navigator.geolocation){
+        const self=this;
+        try{navigator.geolocation.getCurrentPosition(pos=>{
+          /* cityLocked：用户已手动选过城，定位晚到不劫持 */
+          const c=City.detect(pos.coords.latitude,pos.coords.longitude);
+          if(c&&c!==self.city&&!self.cityLocked)self.setCity(c);
+        },()=>{},{timeout:3000,maximumAge:86400000});}catch(e){}
+      }
     }
-    /* 联调模式：?debug=historic 叠加历史名校 12 校（只读，内存合并，不写 localStorage、不动种子） */
+    /* 联调模式：?debug=historic 叠加历史名校 12 校（内存合并，不写 localStorage、不动种子；2026-08-27 起可上传 memo） */
     if(/[?&]debug=historic/.test(location.search))this.loadHistoric();
     /* 看板模式：?debug=admin → admin-lite（留名/孤儿挂靠/全库校验，纯前端） */
     if(/[?&]debug=admin/.test(location.search))Admin.open();
+    /* 真后端：拉取共享记忆（分享接收方在此看到对方发的记忆）；不可达时纯本地 */
+    Api.pull();
   },
   loadHistoric(){
     const self=this,s=document.createElement('script');
@@ -885,13 +976,13 @@ const Home={
       H.entities.forEach(e=>{if(!have[e.ste_id]){Store.db.entities.push(e);Store.histIds[e.ste_id]=1;}});
       $('timeSlider').min=1879;
       self.map.fitBounds(L.latLngBounds(Store.db.entities.map(e=>[e.coordinates.lat,e.coordinates.lon])).pad(0.12));
-      toast('联调模式：叠加历史名校 '+H.entities.length+' 所（只读）· 拖滑条看迁址轨迹');
+      toast('联调模式：叠加历史名校 '+H.entities.length+' 所 · 拖滑条看迁址轨迹');
       self.refresh();
     };
     s.onerror=function(){toast('缺 historic-seed.js：请先跑 node dataset/export-historic.js');};
     document.head.appendChild(s);
   },
-  /* 城市切换器：石家庄=本地种子（完整 memo 功能）；京/沪=city-packs.js 叠加包（只读演示，不入库） */
+  /* 城市切换器：石家庄=本地种子；京/沪=city-packs.js 叠加包（2026-08-27 起可写：memo 可挂包实体，实体本身不入 localStorage） */
   preloadPacks(){
     if(this.packLib||this.packLoading)return;
     this.packLoading=true;
@@ -902,7 +993,15 @@ const Home={
     document.head.appendChild(s);
   },
   setCity(name){
-    if(this.packLoading)return;
+    /* 全国图/城市包异步装载期间不丢请求：排队等就绪（定位落城、跨城跳转都会经过这里） */
+    if(this.packLoading||this.natLoading){
+      const self=this;let n=0;
+      const t=setInterval(()=>{
+        if(!self.packLoading&&!self.natLoading){clearInterval(t);self.setCity(name);}
+        else if(++n>40)clearInterval(t); /* ~6s 等不到就放弃，留在当前视图 */
+      },150);
+      return;
+    }
     if(name==='石家庄'||this.packLib){this.applyCity(name);return;}
     this.packLoading=true;
     const self=this,s=document.createElement('script');
@@ -911,14 +1010,14 @@ const Home={
     s.onerror=function(){self.packLoading=false;toast('缺 city-packs.js：请先跑 node dataset/migrate-77.js');};
     document.head.appendChild(s);
   },
-  /* 滑块刻度随城市数据动态生成（石家庄 1947 起，京沪 1879 起） */
+  /* 滑块刻度随城市数据动态生成（石家庄 1947 起，京沪/全国 1879 起） */
   renderTicks(){
     const lo=+$('timeSlider').min,hi=2026,n=9,out=[];
     for(let i=0;i<n;i++)out.push(Math.round(lo+(hi-lo)*i/(n-1)));
     $('ticks').innerHTML=out.map(y=>'<span>'+y+'</span>').join('');
   },
-  applyCity(name){
-    /* 卸掉上一个城市叠加层（只移除本层新推入的实体；联调模式先入的同名实体不动） */
+  /* 卸掉当前叠加层（只移除本层新推入的实体；联调模式 debug=historic 先入的同名实体不动） */
+  _clearOverlay(){
     if(this.overlayIds){Object.keys(this.overlayIds).forEach(id=>{
       const i=Store.db.entities.findIndex(e=>e.ste_id===id);
       if(i>=0)Store.db.entities.splice(i,1);
@@ -926,6 +1025,61 @@ const Home={
       if(this.markers[id]){this.map.removeLayer(this.markers[id]);delete this.markers[id];}
     });}
     this.overlayIds=null;this.viewIds=null;
+  },
+  /* 全国图：全部城市包 + 历史名校叠加（实体不入 localStorage，memo 可写可同步），fitBounds 全国（首页第一视图；2026-08-27 乔布斯定案） */
+  applyNational(){
+    if(this.national)return;
+    this._clearOverlay();
+    this.national=true;this.natLoading=true;this.city='全国';
+    $('cityNm').textContent='全国';
+    $('heroSub').textContent='全国 · 1879–2026';
+    $('timeSlider').min=1879;
+    const self=this,overlays={};
+    const merge=function(list){
+      const have={};Store.db.entities.forEach(e=>{have[e.ste_id]=1;});
+      (list||[]).forEach(e=>{
+        if(!have[e.ste_id]&&!overlays[e.ste_id]){
+          Store.db.entities.push(e);Store.histIds[e.ste_id]=1;overlays[e.ste_id]=1;
+        }
+      });
+    };
+    /* 评审🔴修复：脚本只负责取数，merge 在 both() 汇合点按固定顺序执行——
+       历史名校修正版先占位（同源 7 校），城市包后补；先到先 merge 会让顺序失效 */
+    let histDone=!!window.STE_HISTORIC,packsDone=!!this.packLib;
+    const both=function(){
+      if(!histDone||!packsDone)return;
+      merge((window.STE_HISTORIC||{}).entities);
+      if(self.packLib)Object.keys(self.packLib).forEach(c=>merge(self.packLib[c].entities));
+      self.overlayIds=overlays;
+      self.natLoading=false;
+      self.renderTicks();self.refresh();
+      self.map.fitBounds(L.latLngBounds(Store.db.entities.map(e=>[e.coordinates.lat,e.coordinates.lon])).pad(0.12));
+      if(!window.STE_HISTORIC||!Object.keys(self.packLib||{}).length)toast('部分数据包没加载到，全国图不完整');
+    };
+    /* 历史名校 12 校（西南联大等，迁址轨迹素材）；缺包不挡路 */
+    if(!histDone){
+      const s2=document.createElement('script');s2.src='historic-seed.js';
+      s2.onload=function(){histDone=true;both();};
+      s2.onerror=function(){histDone=true;both();};
+      document.head.appendChild(s2);
+    }
+    /* 城市包（京/沪 77 校）：preloadPacks 在飞就轮询复用，不重复插标签 */
+    if(!packsDone){
+      if(this.packLoading){
+        const t=setInterval(()=>{if(self.packLib||!self.packLoading){clearInterval(t);packsDone=true;both();}},150);
+      }else{
+        this.packLoading=true;
+        const s=document.createElement('script');s.src='city-packs.js';
+        s.onload=function(){self.packLib=window.STE_CITY_PACKS||{};self.packLoading=false;packsDone=true;both();};
+        s.onerror=function(){self.packLoading=false;packsDone=true;both();};
+        document.head.appendChild(s);
+      }
+    }
+    both(); /* 两包都在内存时同步完成 */
+  },
+  applyCity(name){
+    this._clearOverlay();
+    this.national=false;
     this.city=name;
     if(name==='石家庄'){
       this.map.setView([38.0395,114.5120],14);
@@ -933,7 +1087,15 @@ const Home={
       $('heroSub').textContent='石家庄 · 1947–2026';
     }else{
       const pack=this.packLib&&this.packLib[name];
-      if(!pack){this.city='石家庄';toast('该城市数据包不存在');return;}
+      if(!pack){ /* 包缺失兜底：完整回到石家庄态（此前只改 city 名，视图/文案/刻度都不自洽） */
+        this.city='石家庄';
+        $('cityNm').textContent='石家庄';
+        $('heroSub').textContent='石家庄 · 1947–2026';
+        $('timeSlider').min=1947;
+        this.map.setView([38.0395,114.5120],14);
+        this.renderTicks();this.refresh();
+        toast('该城市数据包不存在');return;
+      }
       const have={};Store.db.entities.forEach(e=>{have[e.ste_id]=1;});
       const pushed={},view={};
       pack.entities.forEach(e=>{
@@ -944,7 +1106,7 @@ const Home={
       this.map.setView(pack.center,pack.zoom);
       $('timeSlider').min=1879;
       $('heroSub').textContent=name+' · 1879–2026';
-      toast('📍 '+name+' · '+(pack.entities.length)+' 所（演示数据包，只读）· 拖滑条看迁址轨迹');
+      toast('📍 '+name+' · '+(pack.entities.length)+' 所 · 拖滑条看迁址轨迹');
     }
     $('cityNm').textContent=name;
     this.renderTicks();
@@ -1037,7 +1199,7 @@ const Home={
       mk.on('popupopen',ev=>{ev.popup.setContent(this.popHtml(e));});
       this.markers[e.ste_id]=mk;
     });
-    $('homeStat').textContent=(this.viewIds?'📍 '+this.city+'（演示包） · ':(this.historic?'🧪 联调 · 全国 · ':''))+y+'年 · 地图上 '+visible+' 所学校 · 当年 '+winTotal+' 条记忆 · 共 '+Store.db.memos.length+' 条在等待校友';
+    $('homeStat').textContent=(this.national?'🌏 全国 · ':(this.viewIds?'📍 '+this.city+' · ':(this.historic?'🧪 联调 · 全国 · ':'')))+y+'年 · 地图上 '+visible+' 所学校 · 当年 '+winTotal+' 条记忆 · 共 '+Store.db.memos.length+' 条在等待校友';
   },
   /* marker 浮层卡内容：当年校名 + 年代 + 照片横滑（仅真实照片，宁缺毋滥）+ 最多 2 条记忆摘要 + 入口按钮 */
   popHtml(e){
@@ -1052,15 +1214,16 @@ const Home={
       +'”<span>—— '+esc(authorLabel(m.author))+(memoYear(m)?' · '+memoYear(m):'')+'</span></div>').join('');
     /* 媒体条：真实照片横滑；视频静音循环自动播（容器预留） */
     const imgs=[],vids=[];
+    /* 媒体条：真实照片横滑；视频静音循环自动播（容器预留）。
+       远端同步的 memo 不可信：url 一律 esc 消毒，video 仅放行 https:/data:video 协议（评审🔴#2 存储型 XSS） */
     memos.forEach(m=>(m.media||[]).forEach(x=>{
-      if(!x.url)return;
-      if(x.type==='photo'&&x.url.indexOf('data:image')===0)imgs.push(x.url);
-      if(x.type==='video')vids.push(x.url);
+      if(!x.url||typeof x.url!=='string')return;
+      if(x.type==='photo'&&x.url.indexOf('data:image')===0)imgs.push(esc(x.url));
+      if(x.type==='video'&&/^(https:|data:video)/.test(x.url))vids.push(esc(x.url));
     }));
     const strip=(imgs.length||vids.length)
       ?'<div class="ppphotos">'+vids.map(u=>'<video src="'+u+'" autoplay muted loop playsinline></video>').join('')
         +imgs.map(u=>'<img src="'+u+'" alt=""/>').join('')+'</div>':'';
-    const ro=!!Store.histIds[e.ste_id];
     /* 跨城/迁址（西南联大式）：有轨迹时给"看全程"入口；当前快照明显不在基准城时提示"这一年不在这里" */
     const pts=trajPoints(e);
     let trajHtml='';
@@ -1073,19 +1236,17 @@ const Home={
     }
     return '<div class="ppcard">'
       +'<div class="ppnm">'+esc(snap.name)+'</div>'
-      +'<div class="ppmeta">'+firstY+'–'+(lastEnd?lastEnd+' · 已撤并':'今')+(ro?' · 📦 演示数据包':'')+'</div>'
+      +'<div class="ppmeta">'+firstY+'–'+(lastEnd?lastEnd+' · 已撤并':'今')+'</div>'
       +trajHtml
       +strip
       +(quotes||'<div class="ppq" style="color:var(--sub)">还没有记忆，第一条会很重要</div>')
       /* 主副按钮分明：0 记忆学校的主按钮是"成为第一个记得它的人" */
       +'<div class="ppbtns">'
-      +(ro
-        ?'<button onclick="Home.map.closePopup();Detail.open(\''+e.ste_id+'\')">看全部 ›</button>'
-        :(memos.length===0
-          ?'<button onclick="Home.map.closePopup();Upload.open(\''+e.ste_id+'\')">✍️ 成为第一个记得它的人</button>'
-           +'<button class="sub" onclick="Home.map.closePopup();Detail.open(\''+e.ste_id+'\')">看全部 ›</button>'
-          :'<button onclick="Home.map.closePopup();Detail.open(\''+e.ste_id+'\')">看全部 ›</button>'
-           +'<button class="sub" onclick="Home.map.closePopup();Upload.open(\''+e.ste_id+'\')">＋ 写记忆</button>'))
+      +(memos.length===0
+        ?'<button onclick="Home.map.closePopup();Upload.open(\''+e.ste_id+'\')">✍️ 成为第一个记得它的人</button>'
+         +'<button class="sub" onclick="Home.map.closePopup();Detail.open(\''+e.ste_id+'\')">看全部 ›</button>'
+        :'<button onclick="Home.map.closePopup();Detail.open(\''+e.ste_id+'\')">看全部 ›</button>'
+         +'<button class="sub" onclick="Home.map.closePopup();Upload.open(\''+e.ste_id+'\')">＋ 写记忆</button>')
       +(pts.length>1?'<button class="sub" onclick="Home.showTraj(\''+e.ste_id+'\')">🗺 全程轨迹</button>':'')
       +'</div></div>';
   },
@@ -1136,8 +1297,8 @@ const Home={
     drop.innerHTML=(hits.length||cross.length)
       ?hits.map(itemHtml).join('')+crossHtml
       :'<div class="sd-item" style="display:block" onclick="event.stopPropagation()">'
-        +'<div style="font-size:12px">「'+esc(q)+'」还没开通（'+esc(this.city)+'和已开通城市里都没有）</div>'
-        +'<input id="missCity" value="'+esc(this.city)+'" placeholder="在哪个城市？" style="width:100%;height:30px;margin-top:8px;padding:0 10px;border:1px solid var(--line);border-radius:8px;font-size:12px"/>'
+        +'<div style="font-size:12px">「'+esc(q)+'」还没开通（'+(this.national?'全国范围':esc(this.city)+'和已开通城市里')+'都没有）</div>'
+        +'<input id="missCity" value="'+esc(this.national?'':this.city)+'" placeholder="在哪个城市？" style="width:100%;height:30px;margin-top:8px;padding:0 10px;border:1px solid var(--line);border-radius:8px;font-size:12px"/>'
         +'<div style="display:flex;gap:8px;margin-top:8px">'
         +'<button style="flex:1;padding:7px 0;border-radius:8px;border:1.5px solid var(--pri);color:var(--pri);background:var(--card);font-size:12px;font-weight:700" onclick="Home.missRequest()">📌 留下校名</button>'
         +'<button style="flex:1;padding:7px 0;border-radius:8px;background:var(--pri);color:#fff;font-size:12px;font-weight:700" onclick="Home.missMemo()">✍️ 顺便留条记忆</button>'
@@ -1170,6 +1331,7 @@ function requestSchool(name,city){
     a.push({name:name,city:city||null,at:new Date().toISOString()});
     localStorage.setItem('ste_school_requests',JSON.stringify(a));
   }catch(e){}
+  Api.pushRequest(name,city); /* 真后端：留名进共享池，开城决策不再只看一台设备 */
   toast('已记下'+(city?'（'+city+'）':'')+'，母校开通后第一时间告诉你');
 }
 const Share={
@@ -1276,11 +1438,8 @@ const Detail={
       +'<div class="meta">🏫 '+firstY+'–'+(lastEnd?lastEnd+' 年存在':'今')
       +' '+(lastEnd?'<span class="badge gone">已撤并</span>':'<span class="badge live">现存</span>')+'</div>'
       +'<div class="stat"><span>👥 校友 <b>'+alumni.length+'</b> 位</span><span>💬 记忆 <b>'+memos.length+'</b> 条</span><span>📷 照片 <b>'+mediaCount+'</b> 份</span></div>';
-      +(Store.histIds[sid]?'<div class="meta" style="margin-top:6px">📦 演示数据包 · 只读，暂不能上传记忆</div>':'');
-    /* 叠加包实体（histIds）不入库，memo 上传会成孤儿 → 禁用入口 */
-    $('schAddBtn').onclick=Store.histIds[sid]
-      ?()=>toast('演示数据包为只读，暂不能上传记忆')
-      :()=>Upload.open(sid);
+    /* 2026-08-27 owner 拍板：京沪/历史名校包不再只读——详情页"添加记忆"全部真上传（🐞#1 假按钮修复） */
+    $('schAddBtn').onclick=()=>Upload.open(this.sid);
     this.tab('tl');
     Router.open('page-school');
   },
@@ -1305,8 +1464,9 @@ const Detail={
     if(ev.retracted)return '<span class="evchip">🪦 证据已被撤回</span>';
     const ICON={photo:'📷',document:'📄',oral:'🎙',audio:'🎙',video:'🎬',map:'🗺',satellite:'🛰'};
     const yr=ev.date?+String(ev.date).slice(0,4):null;
-    /* 真实照片（用户上传的 data URL）直接渲染；asset 占位才用 SVG 占位图 */
-    const imgSrc=ev.type==='photo'?(ev.url&&ev.url.indexOf('data:image')===0?ev.url:memoryPhoto(ev.title||'照片',yr)):null;
+    /* 真实照片（用户上传的 data URL）直接渲染；asset 占位才用 SVG 占位图。
+       远端 memo 不可信：url 必须 esc 消毒（QA 门禁🔴：evChip 链路残留 XSS） */
+    const imgSrc=ev.type==='photo'?(ev.url&&ev.url.indexOf('data:image')===0?esc(ev.url):memoryPhoto(ev.title||'照片',yr)):null;
     const thumb=imgSrc?'<img src="'+imgSrc+'" alt=""/>':'';
     const ptr=ev.offline?'线下':(ev.ste_asset_id?'资产':(ev.url&&ev.url.indexOf('data:')===0?'照片':'链接'));
     return '<span class="evchip" title="'+esc(ptr)+'">'
@@ -1404,10 +1564,9 @@ const Detail={
 const Upload={
   sid:null, draft:null, recog:null, recText:'', photoData:null, orphanPlace:null,
   open(sid,orphanPlace){
-    if(sid&&Store.histIds[sid]){toast('演示数据包为只读，暂不能上传记忆');return;}
     this.orphanPlace=orphanPlace||null;
-    /* 默认落第一所可上传实体（跳过叠加包只读实体）；孤儿模式不选学校 */
-    if(!sid&&!orphanPlace){const first=Store.db.entities.find(e=>!Store.histIds[e.ste_id]);sid=first?first.ste_id:Store.db.entities[0].ste_id;}
+    /* 默认落当前视图第一所学校（2026-08-27：包实体可写，按视图过滤而不是按 histIds 排除）；孤儿模式不选学校 */
+    if(!sid&&!orphanPlace){const pool=Store.db.entities.filter(x=>!Home.viewIds||Home.viewIds[x.ste_id]);sid=pool.length?pool[0].ste_id:null;}
     this.sid=sid||null;
     this.draft=null;this.photoData=null;
     $('rawText').value='';$('confirmCard').classList.remove('show');$('aiSteps').classList.remove('show');
@@ -1444,10 +1603,16 @@ const Upload={
     }
   },
   renderChips(){
+    /* 全国视图下给一句导向（2026-08-27：包实体已可写，chips=当前视图全部学校） */
+    const roBanner=$('roBanner'),roCtx=!this.orphanPlace&&Home.national;
+    if(roBanner){
+      roBanner.style.display=roCtx?'block':'none';
+      if(roCtx)roBanner.textContent='🌏 你在全国视图：下面是全国所有学校，找到母校直接写；找不到就点最右「＋找不到学校」留名。只想看一城的学校，先回首页「换个城市」。';
+    }
     /* 孤儿模式：最前面一枚"待开通学校"chip（cur）；点真实学校 chip 即脱离孤儿模式 */
     const orphanChip=this.orphanPlace
       ?'<button class="chip cur" onclick="Upload.pickOrphan()">📝 '+esc(this.orphanPlace)+'（待开通）</button>':'';
-    $('schChips').innerHTML=orphanChip+Store.db.entities.filter(e=>!Store.histIds[e.ste_id]).map(e=>{
+    $('schChips').innerHTML=orphanChip+Store.db.entities.filter(e=>!Home.viewIds||Home.viewIds[e.ste_id]).map(e=>{
       const gone=snapEndY(curSnap(e))!=null;
       return '<button class="chip'+(e.ste_id===this.sid&&!this.orphanPlace?' cur':'')+(gone?' gone':'')+'" onclick="Upload.pick(\''+e.ste_id+'\')">'+esc(shortName(e))+(gone?'（已撤并）':'')+'</button>';
     }).join('')+'<button class="chip" onclick="Upload.requestNew()">＋ 找不到学校</button>';
@@ -1551,6 +1716,7 @@ const Upload={
     Store.db.memos.push(memo);
     if(memo.author.startsWith('anon:')&&!Store.db.myTokens.includes(memo.author))Store.db.myTokens.push(memo.author);
     Store.save();
+    Api.pushMemo(memo); /* 真后端同步：分享接收方可见 */
     $('pubErr').style.display='none';
     if(!e){
       toast('已发布 · 学校开通后自动挂靠到你的记忆');
@@ -1582,8 +1748,8 @@ const Me={
             ?'<div class="tx" style="color:#9a9082">🪦 这条记忆已被作者删除，原文已彻底抹除</div>'
             :'<div class="tx">'+esc(m.text)+'</div>';
           return '<div class="memcard" style="margin:0 0 8px">'+body
-            +'<div class="ft"><span class="tag">'+esc(e?shortName(e):(m.place_text||'未关联'))+'</span>'
-            +(e?'':'<span class="badge axis">📝 待挂靠学校</span>')
+            +'<div class="ft"><span class="tag">'+esc(e?shortName(e):(m.ste_id?(m.place_text||'已挂靠学校（数据未加载）'):(m.place_text||'未关联')))+'</span>'
+            +(m.ste_id===null?'<span class="badge axis">📝 待挂靠学校</span>':'')
             +'<span class="badge '+(m.source_of_knowledge==='firsthand'?'fh':'sh')+'">'+(SOK_LAB[m.source_of_knowledge]||'')+'</span>'
             +(m.author_identity==='escrowed_anonymous'?'<span class="badge axis">托管匿名</span>':'')
             +(m.retracted?'':'<button class="retractbtn" onclick="Me.retract(\''+m.memo_id+'\')">撤回</button>')
@@ -1606,6 +1772,7 @@ const Me={
     const idx=Store.db.memos.findIndex(x=>x.memo_id===memoId);
     Store.db.memos[idx]=tomb;
     Store.save();
+    Api.pushMemo(tomb); /* 墓碑同步：服务端同步抹除原文 */
     toast('已删除，原文彻底抹除');
     this.open();
   },
@@ -1657,7 +1824,7 @@ const Admin={
   renderOrphans(){
     const list=this.orphans();
     if(!list.length){$('admOrphans').innerHTML='<div style="color:var(--sub);font-size:12px;padding:8px 0">没有待挂靠的记忆</div>';return;}
-    const schoolOpts=Store.db.entities.filter(e=>!Store.histIds[e.ste_id])
+    const schoolOpts=Store.db.entities /* 2026-08-27：包实体已可写，挂靠候选=当前库全部学校 */
       .map(e=>'<option value="'+e.ste_id+'">'+esc(e.name.primary)+'</option>').join('');
     $('admOrphans').innerHTML=list.map(m=>{
       const y=memoYear(m);
