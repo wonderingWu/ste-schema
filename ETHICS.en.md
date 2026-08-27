@@ -1,4 +1,6 @@
-# TimeTrace · Content & Ethics Charter v0.2
+# STE · Content & Ethics Charter v0.2
+
+> (Project brand: 时痕 · STE — formerly TimeTrace / 时迹, renamed 2026-08-27. Brand change only; no charter clause is affected.)
 
 > **Version note**: v0.2 completes the enforcement mechanisms on top of the v0.1 value statement. It has four parts: Beliefs (what we believe), Rules (how data is governed), Mechanism (how disputes are handled), Commitments (platform self-restraint).
 > Items marked ⚠️ depend on technical capabilities not yet implemented; see Appendix A for the rollout timeline.
@@ -22,7 +24,7 @@ The platform does not own memory; it merely provides a container and index. This
 When two narratives that both **meet the evidence standard** coexist, the platform shows the full evidence of both, rather than choosing for the user which is "correct".
 
 **5. We do not manufacture an "official version".**
-There is no "TimeTrace-certified" historical fact. The reliability of a fact is determined jointly by sources, evidence, and community confirmation — not by the platform.
+There is no "STE-certified" historical fact. The reliability of a fact is determined jointly by sources, evidence, and community confirmation — not by the platform.
 
 **6. The platform is neutral toward opinions, but not toward methods.**
 The precondition for a narrative to be displayed is not "someone believes it", but "it cites verifiable sources". Neutrality is the platform's attitude toward conclusions; non-neutrality is the evidence bar. Fabricating sources, tampering with historical materials, and organized manipulation of the confirmation mechanism are attacks on the evidence mechanism itself, and are not protected as "disagreement" under Belief 4.

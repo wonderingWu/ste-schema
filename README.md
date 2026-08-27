@@ -1,6 +1,6 @@
 # STE Schema (SpatioTemporal Entity)
 
-*Schema repository of the **时迹 · TimeTrace** project — a memory map over time. Every place carries its history.*
+*Schema repository of the **时痕 · STE** project (formerly 时迹 · TimeTrace, renamed 2026-08-27) — a memory map over time. Every place carries its history.*
 
 Add a time layer to the map. Every entity (school, building, street, park…) is not just "what it is now", but **what it used to be, when it changed, and why**.
 
@@ -128,12 +128,12 @@ Rules that JSON Schema cannot express. **Passing schema validation ≠ clean dat
 
 ## Live Demo
 
-[**曾经的母校 · Former Alma Maters**](https://wonderingWu.github.io/ste-schema/demo/) — a working map demo powered by STE data (the demo page also hosts the migrated old demo: 中山装年代记忆):
+[**曾经的母校 · Former Alma Maters**](https://wonderingWu.github.io/ste-schema/demo/) — a working map demo powered by STE data:
 
-- **77 real entities** built from curated CSV data of disappeared/renamed/relocated schools in Beijing & Shanghai (1950s–2026)
-- Each school is a STE entity: stable UUID, WGS84 coordinates (OSM geocoded), full `timeline[]` snapshots (opened → renamed/moved/demolished → resumed)
-- All data passes `v0.1/schema.json` (see `demo/data/schools.json`; 6 representative samples in `examples/valid/`)
-- Regenerate anytime: `node scripts/build-schools.mjs` (CSV → STE) then `node scripts/build-demo.mjs` (inject into demo page)
+- **89 schools with full timelines**: 77 documented disappeared/renamed/relocated primary & secondary schools in Beijing & Shanghai (1950s–2026), plus 12 historic institutions — including wartime relocations such as the National Southwestern Associated University, with moved campuses expressed as snapshot-level coordinates
+- A **national map** as the first view, per-city views, and a time slider (1879–today) that makes schools appear, rename, move, and vanish along their timelines
+- Visitors can attach memories (text & photos) to a school through the `ste-memo` profile, and file a name request for schools not yet covered — requests drive which city opens next
+- Curated packs live in `demo/data/` (all v0.2-validated). The Shijiazhuang pack is **clearly-marked synthetic sample data** for trying the contribution flow; the Beijing/Shanghai/historic packs are documented real schools
 
 ## Local Validation
 
