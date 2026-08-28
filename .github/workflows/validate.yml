@@ -11,15 +11,9 @@ on:
       - 'validator/**'
       - 'demo/ste-validator.js'
       - '.github/workflows/validate.yml'
+  # pull_request 不加 paths 过滤：main 受分支保护后一切改动走 PR，
+  # 文档类 PR（ETHICS/GOVERNANCE/README）也必须能触发必需检查，否则永远等不到 green。
   pull_request:
-    paths:
-      - 'v*/schema*.json'
-      - 'examples/**'
-      - 'test/**'
-      - 'scripts/**'
-      - 'validator/**'
-      - 'demo/ste-validator.js'
-      - '.github/workflows/validate.yml'
 
 jobs:
   validate:

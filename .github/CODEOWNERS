@@ -1,0 +1,18 @@
+# CODEOWNERS — 共同维护的 review 路由（GOVERNANCE.md §1）
+# 规则：匹配靠后行覆盖靠前行。被 @ 的人会在 PR 上自动被请求 review；
+# 配合 main 分支保护（Require pull request reviews + Require review from Code Owners）生效。
+
+# 默认全部归 BDFL
+* @wonderingWu
+
+# 协议内核、伦理章程、治理文件：BDFL 必审（不可旁路）
+/v0.1/ @wonderingWu
+/v0.2/ @wonderingWu
+/ETHICS.md @wonderingWu
+/ETHICS.en.md @wonderingWu
+/GOVERNANCE.md @wonderingWu
+
+# —— 共同维护者任命后，在下方按负责领域追加（示例，启用前去掉注释并替换用户名）——
+# /demo/                          @wonderingWu @new-maintainer
+# /docs/compatibility/            @wonderingWu @new-maintainer
+# /scripts/import-osm-overpass.mjs @wonderingWu @new-maintainer

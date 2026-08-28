@@ -5,10 +5,17 @@
 ## 1. 角色与决策
 
 - **BDFL（仁慈独裁者）**：@wonderingWu。内核 schema 与官方 profile 的最终合并权，**保持到内核 v1.0 发布**。
+- **共同维护者（maintainer）**：由 BDFL 任命，任命时将其 GitHub 用户名与负责领域写入本文件并同步授予仓库 Collaborator（Maintain 级）权限。决策规则：
+  - 各自负责领域内 maintainer 有初审与合并建议权；
+  - **schema 内核（`v0.*/`）、ETHICS、GOVERNANCE 的改动必须经 BDFL 过目**，由 `.github/CODEOWNERS` 强制；
+  - 跨领域分歧由 BDFL 裁决；一切裁决在 commit message 或 issue 中公开留痕；
+  - maintainer 的任命、领域调整与退出均在本文件留痕（含日期）。
 - **贡献者**：任何人通过 PR 提交；fixture（正/负向用例）与代码同权重。
 - **伦理争议**：按 ETHICS.md 三级机制，委员会为最终手段。
 
-治理成熟度应落后于采用度一个身位：v1.0 前不设委员会、不设投票，决策记录公开即可。
+**提交流程（两人及以上维护时强制）**：main 分支受保护——一切改动走 PR、CI（Validate STE Schema）绿才可合并；CODEOWNERS 指定的负责人必须 review。单人维护期间可保留直推，但协议内核改动仍须 CI 绿。
+
+治理成熟度应落后于采用度一个身位：v1.0 前不设委员会、不设投票，决策记录公开即可。维护者规模超过 3 人时，评估迁移到 GitHub Organization。
 
 ## 2. 许可
 
