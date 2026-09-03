@@ -4,3 +4,9 @@ node_modules/
 demo/data/geo-cache.json
 
 .openclaw/
+
+# User uploads (specs / research artifacts) — must not enter the repo
+*.mhtml
+*.pdf
+*.docx
+!docs/**/*.pdf
